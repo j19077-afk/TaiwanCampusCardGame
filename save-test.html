@@ -483,30 +483,5 @@ function useSkill(){if(state.playerHp<=0||state.enemyHp<=0||state.energy<35)retu
 function heal(){if(state.potions<=0||state.playerHp>=100||state.enemyHp<=0)return;snapshot();const team=readCollection().formation||[],active=roster.find(ch=>ch.id===state.activeMember)||roster[0],baseHeal=team.includes('yutong')?30:20;state.partyHp=state.partyHp||{};state.partyHp[active.id]=Math.min(100,(state.partyHp[active.id]??state.playerHp)+baseHeal);const a=state.partyHp[active.id]-state.playerHp;state.playerHp=state.partyHp[active.id];state.potions--;floatNumber('playerHpBar','+'+a,true);animateFighter('playerHpBar','hp-flash');addLog('使用補給，恢復 '+a+' 點生命值。');tell('補給生效！恢復 '+a+' 點生命值。');render()}
 function reset(){if(!confirm('確定要刪除目前進度並重新開始嗎？'))return;undoStack=[];state=defaults();$('victoryBanner')?.remove();$('log').innerHTML='<div class="logline">新旅程開始！祝你冒險順利。</div>';$('attackBtn').textContent='⚔️ 攻擊';$('attackBtn').onclick=attack;tell('冒險開始！按下「攻擊」挑戰眼前的敵人。');render();updateUndo()}
 $('attackBtn').onclick=attack;$('skillBtn').onclick=useSkill;$('healBtn').onclick=heal;$('resetBtn').onclick=reset;window.history.replaceState({screen:location.hash==='#game'?'game':'lobby'},'',location.hash==='#game'?'#game':'#lobby');const syncScreen=()=>{if(location.hash==='#game')showGame();else if(location.hash==='#archive')openArchive();else showLobby()};window.addEventListener('popstate',syncScreen);window.addEventListener('hashchange',syncScreen);if(!Number.isFinite(state.stage)||state.stage<1)state=defaults();if(false){state.stage=9;state.coins=0;state.cleared=0;state.enemyHp=0;state.playerHp=100;state.partyHp=state.partyHp||{};const team9=readCollection().formation||[];team9.forEach(id=>state.partyHp[id]=100);state.activeMember=team9[0]||'yuching';state.stageStorySeen=false;save();refreshLobby()}if(state.enemyHp<=0)state.enemyHp=enemy().hp;if(state.playerHp<=0)tell('你目前已經被擊倒。按「重新開始遊戲」再次挑戰。');render();if(location.hash==='#archive')openArchive();else if(location.hash==='#game')showGame();else showLobby()})();
-</script><style>
-#saveAudit{position:fixed;right:14px;bottom:62px;z-index:99999;width:min(360px,calc(100vw - 28px));background:#0b1728f5;border:1px solid #65d6c2;border-radius:12px;padding:14px;color:#eef6ff;font:14px/1.55 system-ui,sans-serif;box-shadow:0 8px 30px #0008}#saveAuditToggle{position:fixed;right:14px;bottom:14px;z-index:100000;border:1px solid #65d6c2;border-radius:999px;padding:9px 13px;background:#0b1728;color:#7be3d2;font-weight:700;cursor:pointer}#saveAudit[hidden]{display:none!important}
-#saveAudit h3{margin:0 0 8px;color:#7be3d2;font-size:16px}#saveAudit .auditrow{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #ffffff20;padding:4px 0}#saveAudit button{margin-top:8px;width:100%;padding:8px;border:0;border-radius:7px;background:#70ddc2;color:#102333;font-weight:700;cursor:pointer}#saveAudit small{display:block;color:#aabbd2;margin-top:6px}
-</style>
-<button id="saveAuditToggle" type="button" aria-expanded="false">🧪 存檔檢查</button><div id="saveAudit" aria-live="polite" hidden><h3>🧪 自動存檔驗證</h3><div id="saveAuditRows">正在讀取存檔…</div><button id="reloadAudit">重新讀取存檔</button><small>此頁不會重設關卡、金幣或首次獎勵紀錄。請重新整理後核對數值是否一致。</small></div>
-<script>
-(function(){
- const box=document.getElementById('saveAuditRows');
- function audit(){
-  let d={};try{d=JSON.parse(localStorage.getItem('campusCardMiniSave_test')||'{}')||{}}catch(e){}
-  const cleared=Array.isArray(d.clearedStages)?d.clearedStages:[];
-  const first=Array.isArray(d.bossFirstRewards)?d.bossFirstRewards:[];
-  const rows=[
-   ['目前關卡',d.stage??'—'],
-   ['金幣',d.coins??'—'],
-   ['最高通關關卡',d.cleared??'—'],
-   ['已通關紀錄',cleared.length?cleared.join('、'):'（尚無紀錄）'],
-   ['第10關首次獎勵紀錄',first.some(x=>String(x)==='10')?'已記錄':'未記錄'],
-   ['存檔時間',d._saveAuditAt||'（遊戲存檔未記錄時間）']
-  ];
-  box.innerHTML=rows.map(r=>'<div class="auditrow"><span>'+r[0]+'</span><strong>'+String(r[1]).replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</strong></div>').join('');
- }
- const panel=document.getElementById('saveAudit');const toggle=document.getElementById('saveAuditToggle');toggle.addEventListener('click',()=>{panel.hidden=!panel.hidden;toggle.setAttribute('aria-expanded',String(!panel.hidden));toggle.textContent=panel.hidden?'🧪 存檔檢查':'✕ 收起檢查';if(!panel.hidden)audit()});document.getElementById('reloadAudit').addEventListener('click',audit);
- window.addEventListener('pageshow',audit);audit();
-})();
 </script>
 </body></html>
