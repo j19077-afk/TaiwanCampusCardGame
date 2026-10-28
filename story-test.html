@@ -472,7 +472,9 @@ function stageTitle(n){return stageStories[n-1]?.[0]||('新的校園謎團（第
 function stageStory(n){return stageStories[n-1]?.[1]||('深入校園的冒險仍在繼續。新的線索指向第 '+n+' 關的危機，你必須擊敗守關敵人，才能追查下一段真相。')}
 function baseReward(n){return ({5:300,10:600,15:900,20:1500})[Number(n)]||100+Math.floor((n-1)/5)*40+(n-1)%5*10}
 function firstBossBonus(n){return ({5:500,10:800,15:1000,20:1500})[Number(n)]||0}
-function enemy(){const n=Math.max(1,Number(state.stage)||1),b=enemies[(n-1)%enemies.length],cycle=Math.floor((n-1)/4),boss=[5,10,15,20].includes(n),names={5:'體育館巨型感染體',10:'E-01 原型體',15:'重裝鎮壓型感染體',20:'E-00 原初母體'};return {...b,name:names[n]||b.name,desc:boss?'章節 BOSS：'+stageTitle(n):b.desc,icon:boss?'👑':b.icon,hp:Math.round((b.hp+cycle*35)*(boss?2.8:1)),atk:Math.round((b.atk+cycle*4)*(boss?1.7:1)),reward:baseReward(n)}}
+function enemy(){const n=Math.max(1,Number(state.stage)||1),base=enemies[(n-1)%enemies.length],cycle=Math.floor((n-1)/4),boss=[5,10,15,20].includes(n),data={
+1:['感染學生','🧟','剛轉化的感染者，動作遲緩卻持續逼近。'],2:['迅捷喪屍','🏃','高速感染者，會從走廊兩端包抄。'],3:['飢餓喪屍群','🧟','被餐廳聲響吸引而來的感染者。'],4:['感染護理員','🩺','身穿護理服的感染者，病歷留下 E-01 記號。'],5:['體育館巨型感染體','👹','體型龐大、力量驚人，能撞破臨時防線。'],6:['潛伏喪屍','👤','藏身在書架與陰影之間，等待獵物靠近。'],7:['寄生感染體','🪱','身上帶有異常寄生組織的危險感染者。'],8:['實驗型喪屍','🧪','經過研究設施測試，攻擊方式難以預測。'],9:['腐蝕型實驗體','☣️','會噴吐腐蝕性液體，守住實驗室入口。'],10:['E-01 原型體','👑','最早被記錄的特殊感染體，與病毒起源有關。'],11:['中庭感染群','🧟','受到未知訊號吸引而聚集的大批感染者。'],12:['宿舍潛伏感染者','🚪','混在倖存者附近，隨時可能突然暴起。'],13:['飛撲型變異體','🦇','擅長從高處突襲，速度與爆發力驚人。'],14:['裝甲感染體','🛡️','外層組織硬化，能承受大量攻擊。'],15:['重裝鎮壓型感染體','👑','保留部分戰鬥本能的重裝感染者，守住校園出口。'],16:['城市感染者','🚧','在街道徘徊，對聲響十分敏感。'],17:['研究中心守衛體','☣️','曾在研究中心接受測試，具備異常耐久力。'],18:['E-02 進化個體','🧬','能快速改變攻擊模式的高速進化感染體。'],19:['核心守衛感染體','🔒','守護訊號控制台的特殊感染體。'],20:['E-00 原初母體','👑','病毒計畫最初、最危險的感染體，能引導周圍感染者。']
+}[n];return {...base,name:data?.[0]||base.name,icon:data?.[1]||base.icon,desc:data?.[2]||(boss?'章節 BOSS：'+stageTitle(n):base.desc),hp:Math.round((base.hp+cycle*35)*(boss?2.8:1)),atk:Math.round((base.atk+cycle*4)*(boss?1.7:1)),reward:baseReward(n)}}
 function showStageStory(){
  const n=Math.max(1,Number(state.stage)||1),e=enemy(),kind=stageKind(n),bonus=firstBossBonus(n);
  let overlay=document.getElementById('stageStoryOverlay');
