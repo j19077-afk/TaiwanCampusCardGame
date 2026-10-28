@@ -264,6 +264,13 @@ html{scroll-behavior:auto}
 body{background:#101827!important}
 body::before,body::after,.lobby-hero::before,.lobby-hero::after{display:none!important}
 .panel,.lobby-hero,.feature-card,.card,.fighter,.battle-ally,.modal,.modal-content,.story-stage-card,.topline,.pill{box-shadow:none!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+
+/* Fix page scroll lock: keep the game page vertically scrollable */
+html,body{height:auto!important;min-height:100%;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:auto!important}
+body{position:static!important;touch-action:pan-y!important}
+#gameApp{min-height:100vh;overflow:visible!important}
+.modal-backdrop:not([hidden]){overflow-y:auto!important;overscroll-behavior:contain}
+.game-modal{max-height:calc(100dvh - 36px)!important;overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
@@ -355,7 +362,7 @@ function getCardStats(ch){const b=cardStats[ch.id]||cardStats.yuching,m=rarityMu
 
 function writeCollection(c){try{localStorage.setItem('campusCardCollection',JSON.stringify(c))}catch(e){}}
 function readGameSave(){try{return {...{stage:1,coins:0,cleared:0},...JSON.parse(localStorage.getItem('campusCardMiniSave')||'{}')}}catch(e){return {stage:1,coins:0,cleared:0}}}
-function showModal(title,html){modalTitle.textContent=title;modalBody.innerHTML=html;modal.hidden=false;document.body.style.overflow='hidden';$('modalClose').focus()}
+function showModal(title,html){modalTitle.textContent=title;modalBody.innerHTML=html;modal.hidden=false;document.body.style.overflow='';$('modalClose').focus()}
 function closeModal(){modal.hidden=true;modal.classList.remove('archive-fullscreen');document.body.style.overflow='';}
 $('modalClose').addEventListener('click',closeModal);
 modal.addEventListener('click',e=>{if(e.target.closest('#beginStageBattle')){state.stageStorySeen=true;save();closeModal();tell('戰鬥開始！擊敗 '+enemy().name+' 推進故事。');return}if(e.target.closest('#leaveStageStory')){closeModal();showLobby();return}const up=e.target.closest('[data-level-up]');if(up){const id=up.dataset.levelUp,c=readCollection(),ch=roster.find(x=>x.id===id),lv=getLevel(ch),cost=lv*20+(ch.rarity==='SSR'?80:ch.rarity==='SR'?40:0),g=readGameSave();if(!ch||lv>=50||g.coins<cost)return;g.coins-=cost;localStorage.setItem('campusCardMiniSave',JSON.stringify(g));c.levels=c.levels||{};c.levels[id]=lv+1;writeCollection(c);if(state.activeMember===id&&state.partyHp)state.partyHp[id]=Math.min(getCardStats(ch).hp,(state.partyHp[id]??getCardStats(ch).hp)+growthByRarity[ch.rarity].hp);openInventory();return;}if(e.target===modal)closeModal()});
@@ -372,7 +379,7 @@ function openArchive(){
  artLightbox.querySelector(".roster-art-lightbox-close").onclick=closeArtLightbox;
  artLightbox.onclick=e=>{if(e.target===artLightbox)closeArtLightbox()};
  if(!artLightbox.dataset.keysBound){document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!artLightbox.hidden)closeArtLightbox()});artLightbox.dataset.keysBound="1"}
- page.onclick=e=>{const img=e.target.closest(".roster-card-art img,.roster-detail-art img");if(!img||!page.contains(img)||!img.getAttribute("src"))return;e.preventDefault();e.stopPropagation();const large=artLightbox.querySelector("img");large.src=img.currentSrc||img.src;large.alt="";artLightbox.hidden=false;document.body.style.overflow="hidden";};
+ page.onclick=e=>{const img=e.target.closest(".roster-card-art img,.roster-detail-art img");if(!img||!page.contains(img)||!img.getAttribute("src"))return;e.preventDefault();e.stopPropagation();const large=artLightbox.querySelector("img");large.src=img.currentSrc||img.src;large.alt="";artLightbox.hidden=false;document.body.style.overflow="";};
 
  $("archiveBackBtn").onclick=()=>{window.history.replaceState({screen:"lobby"},"","#lobby");showLobby()};
  let activeRarity="ALL";const search=$("rosterSearch"),sort=$("rosterSort"),grid=$("rosterGrid");
