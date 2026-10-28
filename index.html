@@ -67,6 +67,21 @@
 .menu-card:hover,.lobby-card:not(.info-card):hover{border-color:#c6a96e;transform:translateY(-2px)}
 @media(max-width:650px){.lobby-hero{grid-template-columns:1fr;gap:22px;text-align:center;padding:26px 18px}.hero-copy .hero-actions{justify-content:center}.hero-text{margin-left:auto;margin-right:auto}.hero-emblem{min-height:0}.hero-portrait-frame{width:210px;height:220px}.portrait-placeholder{height:145px;width:132px}.hero-portrait-frame{transform:none}.hero-emblem .emblem-caption{margin-top:10px}}
 
+
+/* Character rarity polish: distinct, readable card treatments without requiring portrait files. */
+.character-card{isolation:isolate;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.character-card:hover{transform:translateY(-3px);box-shadow:0 14px 32px #0004}
+.character-card.r{border-color:#6683a8}
+.character-card.r .character-art{background:radial-gradient(circle at 50% 24%,#9bb8e055,transparent 68%),linear-gradient(145deg,#243b59,#141f32)}
+.character-card.sr{border-color:#b69a53;box-shadow:inset 0 0 0 1px #d8b86a20}
+.character-card.sr .character-art{background:radial-gradient(circle at 50% 24%,#ffd78055,transparent 68%),linear-gradient(145deg,#51442a,#1b2436)}
+.character-card.ssr{border-color:#a58adf;box-shadow:inset 0 0 0 1px #c8a8ff2b,0 0 22px #8b6bd31a}
+.character-card.ssr .character-art{background:radial-gradient(circle at 50% 24%,#c6a2ff66,transparent 68%),linear-gradient(145deg,#44335e,#171d32)}
+.character-card .rarity{z-index:2;box-shadow:0 3px 12px #0004}
+.character-card.sr .rarity{border-color:#d8b86a88;color:#ffe4a1}
+.character-card.ssr .rarity{border-color:#c7a8ff99;color:#eadbff}
+.character-card .character-art img{width:100%;height:100%;min-height:126px;object-fit:cover;object-position:center 22%;border-radius:12px;display:block}
+@media(prefers-reduced-motion:reduce){.character-card{transition:none}.character-card:hover{transform:none}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
