@@ -80,7 +80,7 @@
 .character-card .rarity{z-index:2;box-shadow:0 3px 12px #0004}
 .character-card.sr .rarity{border-color:#d8b86a88;color:#ffe4a1}
 .character-card.ssr .rarity{border-color:#c7a8ff99;color:#eadbff}
-.character-card .character-art{overflow:hidden}.character-card .character-art img{position:absolute;inset:0;width:100%;height:100%;min-height:0;object-fit:cover;object-position:center 18%;border-radius:12px;display:block;z-index:0}.character-card .character-art .rarity{z-index:3}.character-card .character-art:after{z-index:2;pointer-events:none}
+/* Portrait cards preserve the complete 2:3 R-card artwork without cropping or stretching. */.character-card .character-art{position:relative;overflow:hidden;aspect-ratio:2/3;min-height:0;height:auto;display:block;font-size:0;background:#17243a}.character-card .character-art img{position:absolute;inset:0;width:100%;height:100%;min-height:0;object-fit:contain;object-position:center center;border-radius:12px;display:block;z-index:0}.character-card .character-art .rarity{z-index:3}.character-card .character-art:after{z-index:2;pointer-events:none}@media(max-width:420px){.character-card .character-art{width:100%;aspect-ratio:2/3;min-height:0;height:auto}}
 @media(prefers-reduced-motion:reduce){.character-card{transition:none}.character-card:hover{transform:none}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
