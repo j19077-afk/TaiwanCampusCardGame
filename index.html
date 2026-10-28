@@ -108,6 +108,8 @@
 <section class="panel"><h2>🗒️ 戰鬥紀錄</h2><div class="log" id="log"><div class="logline">你踏入學園訓練場，準備開始冒險。</div></div><button class="btn danger" id="resetBtn" style="width:100%;margin-top:14px">重新開始遊戲</button></section></div><div class="foot">進度儲存在這個瀏覽器。清除瀏覽器資料或更換裝置可能會使存檔消失。</div></main>
 <script>
 (()=>{const $=id=>document.getElementById(id);const lobby=$('lobby'),gameApp=$('gameApp');
+// 戰鬥返回使用捕獲階段的全域點擊攔截，避免其他事件或畫面狀態令按鈕失效。
+document.addEventListener('click',function(ev){const btn=ev.target.closest('#gameBackBtn,#lobbyHomeBtn');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();gameApp.style.display='none';lobby.style.display='grid';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)},true);
 
 function refreshLobby(){let s={stage:1,coins:0,cleared:0};try{s={...s,...JSON.parse(localStorage.getItem('campusCardMiniSave')||'{}')}}catch(e){}$('lobbyStage').textContent=s.stage;$('lobbyCoins').textContent=s.coins;$('lobbyCleared').textContent=s.cleared;const day=new Date().toLocaleDateString('en-CA');const got=localStorage.getItem('campusDailyGift')===day;$('dailyBtn').disabled=got;$('dailyBtn').textContent=got?'✓ 今日已領取':'🎁 領取每日補給';$('dailyNote').textContent=got?'今日補給已領取，明天再來看看！':'每日補給：首次領取可獲得 20 枚金幣。';}
 
