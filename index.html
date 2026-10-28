@@ -99,6 +99,32 @@
 #archivePage .character-card button{margin-top:4px}
 @media(max-width:700px){#archivePage .character-card .character-art{height:250px;max-height:250px}#archivePage .character-card .character-art img{height:230px!important;max-height:230px}}
 @media(max-width:420px){#archivePage .character-card .character-art{height:auto;max-height:none;min-height:145px}#archivePage .character-card .character-art img{height:180px!important;max-height:180px}}
+
+/* Battle UI polish v1 */
+#gameApp{gap:16px;max-width:1120px;margin:0 auto;padding:clamp(12px,2vw,24px)}
+#gameApp .topline{align-items:center;gap:12px}
+#gameApp #battlePanel{padding:clamp(14px,2.5vw,26px);background:linear-gradient(145deg,#1c2d45,#101a2b);border:1px solid #405978;box-shadow:0 16px 42px #0003}
+#gameApp .arena{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:stretch;gap:clamp(10px,2vw,24px);margin-bottom:20px}
+#gameApp .fighter{position:relative;min-width:0;padding:clamp(12px,2vw,22px);border:1px solid #ffffff20;border-radius:18px;background:linear-gradient(160deg,#273b56,#172338);text-align:center;overflow:hidden}
+#gameApp .fighter.enemy{background:linear-gradient(160deg,#422d49,#211e35);border-color:#b58ad455}
+#gameApp .fighter .avatar{position:relative;display:grid;place-items:center;width:clamp(76px,10vw,118px);height:clamp(76px,10vw,118px);margin:0 auto 12px;border-radius:24px;background:radial-gradient(circle at 50% 25%,#7cdad055,transparent 70%),#0e1929;border:1px solid #ffffff25;font-size:clamp(2.5rem,5vw,4rem)}
+#gameApp .fighter.enemy .avatar{background:radial-gradient(circle at 50% 25%,#ce8bea55,transparent 70%),#1b172a}
+#gameApp .fighter h3{margin:6px 0;font-size:clamp(1rem,2vw,1.3rem)}
+#gameApp .fighter .muted{min-height:1.5em}
+#gameApp .hp-label{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:14px;font-size:.92rem}
+#gameApp .bar{height:12px;border-radius:99px;overflow:hidden;background:#080f1c;border:1px solid #ffffff1a}
+#gameApp .bar .fill{border-radius:99px;transition:width .28s ease}
+#gameApp .versus{align-self:center;font-weight:900;font-size:clamp(1rem,2vw,1.5rem);letter-spacing:.12em;color:#f4d58a;text-shadow:0 0 20px #f4d58a55}
+#gameApp .actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}
+#gameApp .actions .btn{min-height:48px;padding:10px 12px;white-space:normal}
+#gameApp .btn:disabled{opacity:.42;filter:saturate(.5);cursor:not-allowed}
+#gameApp .notice{margin-top:14px;padding:13px 15px;border-radius:12px;background:#0b1626;border:1px solid #ffffff16;line-height:1.55}
+#gameApp .lower{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:16px}
+#gameApp .panel{min-width:0}
+#gameApp .damage-float{z-index:5;font-size:1.35rem;font-weight:900;text-shadow:0 2px 8px #000;pointer-events:none}
+#gameApp .victory-banner{margin-top:16px;padding:16px;text-align:center;border:1px solid #f4d58a66;border-radius:14px;background:linear-gradient(90deg,#493c27,#24334b);font-weight:800;color:#ffe6a5}
+@media(max-width:640px){#gameApp .arena{gap:8px}#gameApp .fighter{padding:10px 8px;border-radius:14px}#gameApp .fighter .avatar{width:70px;height:70px;border-radius:18px;font-size:2.5rem}#gameApp .fighter .muted{font-size:.78rem}#gameApp .hp-label{font-size:.78rem;flex-wrap:wrap}#gameApp .bar{height:10px}#gameApp .actions{grid-template-columns:1fr;gap:8px}#gameApp .actions .btn{min-height:44px}#gameApp .lower{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){#gameApp .bar .fill{transition:none}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
