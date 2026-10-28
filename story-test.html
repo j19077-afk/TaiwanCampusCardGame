@@ -340,6 +340,7 @@ body{height:auto!important;min-height:100vh!important;overflow-y:auto!important;
 (()=>{const $=id=>document.getElementById(id);const lobby=$('lobby'),gameApp=$('gameApp');
 // 戰鬥返回使用捕獲階段的全域點擊攔截，避免其他事件或畫面狀態令按鈕失效。
 function forceLobby(){gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)}
+document.addEventListener('click',function(ev){const start=ev.target.closest('#startBtn,#continueBtn');if(!start)return;ev.preventDefault();ev.stopImmediatePropagation();try{if(new URLSearchParams(location.search).get('stage9')==='1'){state.stage=9;state.coins=0;state.cleared=0;state.enemyHp=enemy().hp;state.playerHp=100;state.partyHp=state.partyHp||{};const t=readCollection().formation||[];t.forEach(id=>state.partyHp[id]=100);state.activeMember=t[0]||'yuching';state.stageStorySeen=false;save()}window.history.replaceState({screen:'game'},'','#game');showGame()}catch(err){console.error('測試戰鬥啟動失敗',err);alert('測試戰鬥啟動失敗：'+(err&&err.message||err))}},true);
 document.addEventListener('click',function(ev){const btn=ev.target.closest('#gameBackBtn,#lobbyHomeBtn');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();forceLobby()},true);
 
 function localDayKey(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
