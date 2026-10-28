@@ -87,6 +87,18 @@
 
 /* Standalone archive page layout */
 #archivePage{min-height:calc(100vh - 120px);max-width:1200px}#archivePage .archive-page-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;padding:20px 0 10px}#archivePage .archive-page-top h2{font-size:clamp(1.6rem,4vw,2.4rem);margin:0 0 8px}#archivePage .character-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}#archivePage .character-card .character-art{min-height:260px}#archivePage .character-card button{margin-top:auto}#archivePage .archive-detail{scroll-margin-top:16px}@media(max-width:700px){#archivePage .character-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#archivePage .character-card .character-art{min-height:170px}}@media(max-width:420px){#archivePage .character-grid{grid-template-columns:1fr}#archivePage .character-card{display:grid;grid-template-columns:100px minmax(0,1fr);column-gap:12px}#archivePage .character-card .character-art{grid-row:1 / span 5;min-height:145px}#archivePage .character-card h3,#archivePage .character-card .character-role,#archivePage .character-card .character-desc,#archivePage .character-card .character-tags,#archivePage .character-card button{grid-column:2}}
+
+/* Archive whitespace reduction: compact portrait frames and tighter cards */
+#archivePage .character-card{gap:8px;padding:12px;align-self:start}
+#archivePage .character-card .character-art{height:320px;min-height:0;max-height:320px;overflow:hidden;align-self:stretch;flex:none}
+#archivePage .character-card .character-art img{display:block;width:100%!important;height:300px!important;max-height:300px;object-fit:contain;object-position:center center}
+#archivePage .character-card .character-role{margin-top:2px}
+#archivePage .character-card h3{margin:0;font-size:1.15rem}
+#archivePage .character-card .character-desc{margin:0;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#archivePage .character-card .character-tags{margin-top:2px}
+#archivePage .character-card button{margin-top:4px}
+@media(max-width:700px){#archivePage .character-card .character-art{height:250px;max-height:250px}#archivePage .character-card .character-art img{height:230px!important;max-height:230px}}
+@media(max-width:420px){#archivePage .character-card .character-art{height:auto;max-height:none;min-height:145px}#archivePage .character-card .character-art img{height:180px!important;max-height:180px}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
