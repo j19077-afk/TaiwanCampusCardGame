@@ -247,6 +247,16 @@
 
 /* Story-stage test system */
 .story-stage-card{max-width:620px;margin:0 auto;padding:22px;border:1px solid #7d79d8;border-radius:18px;background:linear-gradient(145deg,#111b35,#211a40);color:#f4f5ff}.story-stage-card h3{font-size:1.55rem;margin:8px 0 12px}.story-stage-card p{line-height:1.85;color:#d7def0}.story-stage-card .story-chip{display:inline-block;border:1px solid #ffffff30;border-radius:999px;padding:6px 11px;margin:4px;background:#ffffff0b}.story-stage-card .story-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+
+/* Performance pass: reduce expensive compositing on mobile browsers */
+html{scroll-behavior:auto}
+*,*::before,*::after{scroll-behavior:auto!important}
+.modal-backdrop,.modal,.feature-modal,.roster-art-lightbox{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.lobby-hero,.panel,.card,.fighter,.battle-ally,.feature-card,.story-stage-card{box-shadow:none!important}
+.damage-float{text-shadow:0 1px 3px #000;animation-duration:.55s}
+.victory-banner{animation-duration:.12s}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media(max-width:700px){.panel,.lobby-hero,.story-stage-card{box-shadow:none!important;filter:none!important}.fighter-hit,.attack-pulse{animation-duration:.15s!important}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
