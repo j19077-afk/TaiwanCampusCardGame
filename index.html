@@ -237,6 +237,14 @@
 .daily-streak-day.earned strong{color:#ffe49a}
 .daily-reward-close{width:100%;margin-top:18px;min-height:48px}
 @media(max-width:380px){.daily-streak-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Test: original-size character artwork lightbox */
+.roster-art-lightbox{position:fixed;inset:0;z-index:10050;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.88);backdrop-filter:blur(4px)}
+.roster-art-lightbox[hidden]{display:none}
+.roster-art-lightbox img{display:block;width:auto;height:auto;max-width:calc(100vw - 48px);max-height:calc(100vh - 48px);object-fit:contain;image-rendering:auto;cursor:default}
+.roster-art-lightbox-close{position:fixed;top:14px;right:16px;width:44px;height:44px;border:1px solid #ffffff66;border-radius:50%;background:#101522dd;color:#fff;font-size:28px;line-height:1;cursor:pointer}
+.roster-card-art img,.roster-detail-art img{cursor:zoom-in}
+@media(max-width:600px){.roster-art-lightbox{padding:12px}.roster-art-lightbox img{max-width:calc(100vw - 24px);max-height:calc(100vh - 24px)}.roster-art-lightbox-close{top:8px;right:8px}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
@@ -339,6 +347,14 @@ function openArchive(){
  html+='<section class="roster-tools" aria-label="角色名冊搜尋與篩選"><label class="roster-search">🔎 <input id="rosterSearch" type="search" placeholder="搜尋角色名稱、定位或技能…" autocomplete="off"></label><div class="roster-filters" role="group" aria-label="稀有度篩選"><button type="button" class="roster-filter active" data-rarity-filter="ALL">全部 <span>'+roster.length+'</span></button><button type="button" class="roster-filter" data-rarity-filter="SSR">SSR <span>'+roster.filter(x=>x.rarity==="SSR").length+'</span></button><button type="button" class="roster-filter" data-rarity-filter="SR">SR <span>'+roster.filter(x=>x.rarity==="SR").length+'</span></button><button type="button" class="roster-filter" data-rarity-filter="R">R <span>'+roster.filter(x=>x.rarity==="R").length+'</span></button><button type="button" class="roster-filter" data-rarity-filter="OWNED">✓ 已收藏</button></div><div class="roster-sort-wrap"><label for="rosterSort">排序方式</label><select id="rosterSort"><option value="rarity">稀有度優先</option><option value="name">角色名稱</option><option value="atk">攻擊力</option><option value="hp">生命值</option><option value="level">角色等級</option></select><span id="rosterResultCount" class="muted"></span></div></section><div id="rosterGrid" class="character-grid"></div><p id="rosterEmpty" class="panel muted" hidden>找不到符合條件的角色，請調整搜尋或篩選條件。</p><div id="rosterDetailHost"></div>';
  let page=$("archivePage");if(!page){page=document.createElement("main");page.id="archivePage";page.className="lobby-shell";page.style.display="none";$("lobby").parentNode.insertBefore(page,$("lobby").nextSibling)}
  page.innerHTML=html;page.style.display="grid";lobby.style.display="none";gameApp.style.display="none";modal.hidden=true;document.body.style.overflow="";try{window.history.replaceState({screen:"archive"},"","#archive")}catch(e){}window.scrollTo(0,0);
+ let artLightbox=document.getElementById("rosterArtLightbox");
+ if(!artLightbox){artLightbox=document.createElement("div");artLightbox.id="rosterArtLightbox";artLightbox.className="roster-art-lightbox";artLightbox.hidden=true;artLightbox.setAttribute("role","dialog");artLightbox.setAttribute("aria-modal","true");artLightbox.setAttribute("aria-label","角色圖片放大檢視");artLightbox.innerHTML='<button type="button" class="roster-art-lightbox-close" aria-label="關閉圖片">×</button><img alt="角色原圖放大檢視">';document.body.appendChild(artLightbox)}
+ const closeArtLightbox=()=>{artLightbox.hidden=true;artLightbox.querySelector("img").removeAttribute("src");document.body.style.overflow="";};
+ artLightbox.querySelector(".roster-art-lightbox-close").onclick=closeArtLightbox;
+ artLightbox.onclick=e=>{if(e.target===artLightbox)closeArtLightbox()};
+ if(!artLightbox.dataset.keysBound){document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!artLightbox.hidden)closeArtLightbox()});artLightbox.dataset.keysBound="1"}
+ page.onclick=e=>{const img=e.target.closest(".roster-card-art img,.roster-detail-art img");if(!img||!page.contains(img)||!img.getAttribute("src"))return;e.preventDefault();e.stopPropagation();const large=artLightbox.querySelector("img");large.src=img.currentSrc||img.src;large.alt="";artLightbox.hidden=false;document.body.style.overflow="hidden";};
+
  $("archiveBackBtn").onclick=()=>{window.history.replaceState({screen:"lobby"},"","#lobby");showLobby()};
  let activeRarity="ALL";const search=$("rosterSearch"),sort=$("rosterSort"),grid=$("rosterGrid");
  const rarityOrder={SSR:3,SR:2,R:1};
