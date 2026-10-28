@@ -47,15 +47,35 @@
 @keyframes bannerIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 #attackBtn{position:relative;overflow:hidden}#attackBtn:not(:disabled):active{transform:scale(.98)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+/* V1.1.0 brand refresh: premium campus-idol card presentation */
+.lobby-hero{grid-template-columns:1.1fr .9fr;min-height:330px;background:radial-gradient(circle at 78% 35%,#8d79c333,transparent 32%),radial-gradient(circle at 15% 0%,#78d7d022,transparent 38%),linear-gradient(125deg,#172943,#111c30 58%,#272044);border-color:#8e9fbb66}
+.lobby-hero:before{content:"";position:absolute;inset:12px;border:1px solid #e5d4a522;border-radius:17px;pointer-events:none}
+.hero-copy h2{letter-spacing:.01em;text-shadow:0 3px 20px #0004}
+.hero-copy h2 span{background:linear-gradient(90deg,#ffe9ae,#ffd780 48%,#f2c5ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-portrait-frame{position:relative;width:min(100%,255px);height:255px;border-radius:28px 28px 54px 28px;border:1px solid #e9d39a99;background:radial-gradient(ellipse at 50% 25%,#9f8ad744,transparent 42%),linear-gradient(150deg,#293f5c,#111a2b 68%,#3b2b54);display:grid;place-items:center;overflow:hidden;box-shadow:0 18px 45px #0005,inset 0 0 35px #e5d4a211;transform:rotate(2deg)}
+.hero-portrait-frame:before{content:"";position:absolute;inset:9px;border:1px solid #f4dfac44;border-radius:21px 21px 45px 21px}
+.portrait-orbit{position:absolute;width:170px;height:170px;border:1px solid #e8d39a33;border-radius:50%;box-shadow:0 0 0 18px #d8c6f00a,0 0 0 38px #d8c6f008}
+.orbit-one{top:18px;right:-28px}.orbit-two{bottom:-70px;left:-35px;width:210px;height:210px}
+.portrait-crest{position:absolute;top:22px;left:24px;color:#ffe6a0;font-size:1.7rem;text-shadow:0 0 20px #ffe6a066}
+.portrait-placeholder{position:relative;z-index:1;width:150px;height:168px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1px solid #e8d39a55;border-radius:80px 80px 24px 24px;background:linear-gradient(180deg,#d8c6f012,#8bb7d016);color:#f8edcf;box-shadow:0 0 35px #9f8ad71a}
+.portrait-uniform-icon{font-size:3rem;filter:drop-shadow(0 5px 8px #0005)}
+.portrait-placeholder strong{font-size:1.2rem;letter-spacing:.12em}.portrait-placeholder small{font-size:.72rem;color:#c6d8eb;letter-spacing:.1em}
+.portrait-rarity{position:absolute;bottom:13px;z-index:2;padding:5px 12px;border:1px solid #e8d39a66;border-radius:999px;background:#0b1425dd;color:#ffe7a4;font-size:.62rem;letter-spacing:.14em}
+.hero-emblem .emblem-caption{position:relative;bottom:auto;margin-top:14px;font-size:.68rem;letter-spacing:.2em}
+.menu-card,.lobby-card,.stat-card{box-shadow:0 9px 24px #00000012}
+.menu-card:hover,.lobby-card:not(.info-card):hover{border-color:#c6a96e;transform:translateY(-2px)}
+@media(max-width:650px){.lobby-hero{grid-template-columns:1fr;gap:22px;text-align:center;padding:26px 18px}.hero-copy .hero-actions{justify-content:center}.hero-text{margin-left:auto;margin-right:auto}.hero-emblem{min-height:0}.hero-portrait-frame{width:210px;height:220px}.portrait-placeholder{height:145px;width:132px}.hero-portrait-frame{transform:none}.hero-emblem .emblem-caption{margin-top:10px}}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
 <main id="lobby" class="lobby-shell">
 <section class="lobby-hero">
-<div class="hero-copy"><p class="eyebrow">WELCOME TO THE ACADEMY</p><h2>走進校園，<br><span>邂逅你的女神角色</span></h2><p class="hero-text">收藏校園女神、召喚心儀角色，展開你的卡牌冒險。</p>
+<div class="hero-copy"><p class="eyebrow">CAMPUS IDOL CHRONICLES · OFFICIAL</p><h2>心動從此刻開始，<br><span>收藏專屬你的校園女神</span></h2><p class="hero-text">真人風格女神角色、精緻校園制服與收藏卡牌冒險，等你開啟。</p>
 <div class="hero-actions"><button class="btn primary" id="startBtn">⚔️ 開始冒險</button><button class="btn secondary" id="dailyBtn">🎁 領取每日補給</button></div>
 <div class="daily-note" id="dailyNote">每日補給：首次領取可獲得 20 枚金幣。</div></div>
-<div class="hero-emblem" aria-hidden="true"><div class="emblem-ring">✦</div><div class="emblem-cap">🎓</div><div class="emblem-caption">CAMPUS<br>CHRONICLES</div></div>
+<div class="hero-emblem"><div class="hero-portrait-frame" aria-label="校園制服女神主視覺預留區"><div class="portrait-orbit orbit-one"></div><div class="portrait-orbit orbit-two"></div><div class="portrait-crest">✦</div><div class="portrait-placeholder"><span class="portrait-uniform-icon">🎓</span><strong>校園女神</strong><small>角色主視覺</small></div><div class="portrait-rarity">CAMPUS IDOL · SSR</div></div><div class="emblem-caption">CAMPUS IDOL<br>CHRONICLES</div></div>
 </section>
 <section class="lobby-stats">
 <div class="stat-card"><span>📍 冒險進度</span><strong>第 <b id="lobbyStage">1</b> 關</strong><small>持續突破新紀錄</small></div>
