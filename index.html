@@ -89,6 +89,25 @@
 #archivePage{min-height:calc(100vh - 120px);max-width:1200px}#archivePage .archive-page-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;padding:20px 0 10px}#archivePage .archive-page-top h2{font-size:clamp(1.6rem,4vw,2.4rem);margin:0 0 8px}#archivePage .character-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}#archivePage .character-card .character-art{min-height:260px}#archivePage .character-card button{margin-top:auto}#archivePage .archive-detail{scroll-margin-top:16px}@media(max-width:700px){#archivePage .character-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#archivePage .character-card .character-art{min-height:170px}}@media(max-width:420px){#archivePage .character-grid{grid-template-columns:1fr}#archivePage .character-card{display:grid;grid-template-columns:100px minmax(0,1fr);column-gap:12px}#archivePage .character-card .character-art{grid-row:1 / span 5;min-height:145px}#archivePage .character-card h3,#archivePage .character-card .character-role,#archivePage .character-card .character-desc,#archivePage .character-card .character-tags,#archivePage .character-card button{grid-column:2}}
 
 /* Archive whitespace reduction: compact portrait frames and tighter cards */
+
+/* Character roster test polish v2 */
+#archivePage .archive-page-top{padding:22px 0 16px;border-bottom:1px solid #34445e;margin-bottom:16px}
+#archivePage .archive-page-top .eyebrow{color:#ffd780}
+#archivePage .archive-page-top .muted{max-width:680px;line-height:1.7}
+#archivePage .character-grid{align-items:stretch}
+#archivePage .character-card{background:linear-gradient(155deg,#243852 0%,#17243a 60%,#111b2c 100%);box-shadow:0 10px 28px #0002}
+#archivePage .character-card .character-art{height:auto;aspect-ratio:2/3;max-height:none;min-height:0;border-radius:12px;background:radial-gradient(ellipse at 50% 25%,#ffffff12,transparent 70%);border:1px solid #ffffff12}
+#archivePage .character-card .character-art img{inset:0;width:100%!important;height:100%!important;max-height:none;object-fit:contain;object-position:center center;padding:5px}
+#archivePage .character-card .rarity{position:absolute;top:10px;left:10px;padding:5px 9px;border-radius:999px;background:#111827dd;backdrop-filter:blur(6px);font-weight:900;letter-spacing:.04em}
+#archivePage .character-card h3{font-size:1.25rem;letter-spacing:.02em}
+#archivePage .character-card .character-desc{-webkit-line-clamp:4;min-height:5em}
+#archivePage .character-card .character-tags span:first-child{font-weight:800;color:#ffe4a1}
+#archivePage .character-card button{border:1px solid #78d7d088;border-radius:11px;background:#78d7d012;color:#a7f3e9;padding:10px;font:inherit;font-weight:800;cursor:pointer}
+#archivePage .character-card button:hover{background:#78d7d026;border-color:#78d7d0}
+#archivePage .archive-detail{margin:22px 0;padding:20px;border-color:#8b78bd;background:linear-gradient(135deg,#282544,#17243a)}
+@media(max-width:700px){#archivePage .character-card .character-art{height:auto;max-height:none}#archivePage .character-card .character-desc{min-height:0;-webkit-line-clamp:4}}
+@media(max-width:420px){#archivePage .character-card{grid-template-columns:100px minmax(0,1fr)}#archivePage .character-card .character-art{aspect-ratio:2/3;grid-row:1/span 5}#archivePage .character-card .character-art img{height:100%!important}#archivePage .character-card .character-desc{min-height:0}}
+
 #archivePage .character-card{gap:8px;padding:12px;align-self:start}
 #archivePage .character-card .character-art{height:320px;min-height:0;max-height:320px;overflow:hidden;align-self:stretch;flex:none}
 #archivePage .character-card .character-art img{display:block;width:100%!important;height:300px!important;max-height:300px;object-fit:contain;object-position:center center}
