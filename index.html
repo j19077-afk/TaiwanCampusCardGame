@@ -22,6 +22,15 @@
 .character-detail{margin-top:13px;padding:14px 16px;border:1px solid #3c526f;border-radius:13px;background:#101b2c;color:#dbe8f8;min-height:50px}.collection-note{font-size:.82rem;color:var(--muted);margin:8px 0 0}
 @media(max-width:700px){.character-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.character-card{padding:11px;gap:8px}.character-art{min-height:105px;font-size:3rem}.character-desc{min-height:0;font-size:.82rem}}
 @media(max-width:420px){.character-grid{grid-template-columns:1fr}.character-card{display:grid;grid-template-columns:94px 1fr;align-items:start;column-gap:12px}.character-art{grid-row:1 / span 5;min-height:125px;font-size:2.8rem}.character-card .rarity{top:6px;left:6px;font-size:.62rem;padding:2px 5px}.character-card h3,.character-role,.character-desc,.character-tags,.character-card button{grid-column:2}.character-desc{min-height:0}.character-card button{margin-top:0}}
+
+.lobby-menu{padding:8px 0}.menu-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.menu-card{position:relative;min-height:155px;padding:17px 15px;border:1px solid #3b506d;border-radius:17px;background:linear-gradient(145deg,#20344e,#141f32);color:var(--text);text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:8px;font:inherit;cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
+.menu-card:hover{transform:translateY(-3px);border-color:var(--mint);background:linear-gradient(145deg,#294461,#17263b)}.menu-card:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+.menu-card .menu-icon{font-size:1.8rem}.menu-card strong{font-size:1rem}.menu-card small{font-size:.8rem;color:var(--muted);line-height:1.45}.menu-card .menu-arrow{margin-top:auto;color:var(--mint);font-size:.8rem;font-weight:800}.menu-card .menu-badge{position:absolute;right:10px;top:10px;border:1px solid #7d8ea5;border-radius:999px;padding:2px 6px;font-size:.65rem;color:#c6d3e6}
+.modal-backdrop{position:fixed;inset:0;z-index:20;background:#060b14cc;display:grid;place-items:center;padding:18px;backdrop-filter:blur(5px)}.modal-backdrop[hidden]{display:none}.game-modal{width:min(580px,100%);max-height:min(82vh,760px);overflow:auto;border:1px solid #526b8b;border-radius:20px;background:linear-gradient(150deg,#20334d,#111b2c);box-shadow:0 24px 90px #0009;padding:22px}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}.modal-head h2{margin:0}.modal-close{border:1px solid #536986;border-radius:10px;background:#17263a;color:var(--text);font:inherit;padding:7px 11px;cursor:pointer}.modal-close:disabled{opacity:.45;cursor:not-allowed}.modal-body{color:#dbe6f5}.modal-body p{color:var(--muted);margin:6px 0 14px}.modal-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.modal-actions .btn{flex:1;min-width:130px}
+.summon-banner{padding:18px;border:1px solid #6d5a9d;border-radius:15px;background:radial-gradient(circle at 80% 20%,#9c7ad044,transparent 35%),linear-gradient(130deg,#2b2c50,#19263c);text-align:center;margin:12px 0}.summon-banner .sigil{font-size:2.8rem}.summon-banner strong{display:block;font-size:1.25rem;color:#e2d2ff}.summon-result{margin-top:12px;padding:13px;border-radius:12px;border:1px solid #7b6aa7;background:#171d35}.inventory-list{display:grid;gap:8px}.inventory-item{display:flex;align-items:center;gap:11px;padding:10px;border:1px solid #3a4e6a;border-radius:12px;background:#111d2e}.inventory-item .inv-icon{font-size:1.6rem}.inventory-item .inv-meta{flex:1}.inventory-item small{display:block;color:var(--muted)}
+@media(max-width:700px){.menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.menu-card{min-height:140px;padding:14px}.game-modal{padding:17px}}@media(max-width:380px){.menu-grid{grid-template-columns:1fr}.menu-card{min-height:112px}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>幻境學園：卡牌戰紀</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
@@ -36,6 +45,19 @@
 <div class="stat-card"><span>🪙 累積金幣</span><strong id="lobbyCoins">0</strong><small>用於未來解鎖更多內容</small></div>
 <div class="stat-card"><span>🏆 通關數</span><strong id="lobbyCleared">0</strong><small>每次勝利都是成長</small></div>
 </section>
+
+
+<section class="lobby-menu">
+ <div class="section-heading"><div><p class="eyebrow">GAME CENTER</p><h2>🃏 遊戲功能中心</h2></div><span class="muted">選擇功能，開始收集之旅</span></div>
+ <div class="menu-grid">
+  <button class="menu-card" type="button" data-menu="archive"><span class="menu-icon">📚</span><strong>角色圖鑑</strong><small>查看角色資料與稀有度</small><span class="menu-arrow">查看圖鑑 →</span></button>
+  <button class="menu-card" type="button" data-menu="summon"><span class="menu-icon">✨</span><strong>卡牌召喚</strong><small>使用金幣進行原型抽卡</small><span class="menu-badge">測試版</span><span class="menu-arrow">前往召喚 →</span></button>
+  <button class="menu-card" type="button" data-menu="inventory"><span class="menu-icon">🎒</span><strong>角色背包</strong><small>查看已收藏的角色卡</small><span class="menu-arrow">查看收藏 →</span></button>
+  <button class="menu-card" type="button" data-menu="quests"><span class="menu-icon">📜</span><strong>新手任務</strong><small>完成冒險目標，領取金幣</small><span class="menu-arrow">查看任務 →</span></button>
+ </div>
+ <p class="collection-note">卡牌召喚、收藏與任務進度會儲存在目前瀏覽器。此版本尚未連接伺服器或跨裝置帳號。</p>
+</section>
+<div class="modal-backdrop" id="featureModal" hidden><section class="game-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalBody"><div class="modal-head"><div><p class="eyebrow">CAMPUS SYSTEM</p><h2 id="modalTitle">遊戲功能</h2></div><button class="modal-close" id="modalClose" type="button" aria-label="關閉視窗">✕</button></div><div class="modal-body" id="modalBody"></div></section></div>
 
 <section class="character-section">
  <div class="section-heading"><div><p class="eyebrow">ACADEMY CHARACTER ARCHIVE</p><h2>✦ 學園角色名冊</h2></div><span class="pill">角色總覽 · 6 位</span></div>
@@ -80,6 +102,35 @@ const characterProfiles={
  keqing:{name:'江可晴',rarity:'R',role:'園藝社・守護者',detail:'溫柔可靠的守護者，重視每位夥伴，是隊伍中令人安心的存在。'},
  zihan:{name:'顧紫涵',rarity:'SSR',role:'神祕學生・幻術系',detail:'氣質高雅且難以捉摸，與幻境深處的古老傳聞似乎有所關聯。'}
 };
+
+const starterCharacters=['yuching'];
+const roster=[
+ {id:'yuching',name:'林雨晴',rarity:'SR',icon:'🎓',role:'均衡型冒險者'},
+ {id:'yutong',name:'蘇語彤',rarity:'R',icon:'🌷',role:'友善支援'},
+ {id:'ruoxue',name:'沈若雪',rarity:'SSR',icon:'❄️',role:'冰霜系策略型'},
+ {id:'xingyao',name:'許星瑤',rarity:'SR',icon:'🌟',role:'敏捷型'},
+ {id:'keqing',name:'江可晴',rarity:'R',icon:'🍀',role:'守護型'},
+ {id:'zihan',name:'顧紫涵',rarity:'SSR',icon:'🌙',role:'幻術系'}
+];
+const modal=$('featureModal'),modalTitle=$('modalTitle'),modalBody=$('modalBody');
+function readCollection(){try{const v=JSON.parse(localStorage.getItem('campusCardCollection')||'null');if(v&&Array.isArray(v.owned))return {owned:[...new Set(v.owned.filter(id=>roster.some(c=>c.id===id)))],quests:v.quests&&typeof v.quests==='object'?v.quests:{}}}catch(e){}return {owned:starterCharacters.slice(),quests:{}}}
+function writeCollection(c){try{localStorage.setItem('campusCardCollection',JSON.stringify(c))}catch(e){}}
+function readGameSave(){try{return {...{stage:1,coins:0,cleared:0},...JSON.parse(localStorage.getItem('campusCardMiniSave')||'{}')}}catch(e){return {stage:1,coins:0,cleared:0}}}
+function showModal(title,html){modalTitle.textContent=title;modalBody.innerHTML=html;modal.hidden=false;document.body.style.overflow='hidden';$('modalClose').focus()}
+function closeModal(){modal.hidden=true;document.body.style.overflow='';}
+$('modalClose').addEventListener('click',closeModal);
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)closeModal()});
+function openArchive(){const c=readCollection();let html='<p>已收藏 '+c.owned.length+' / '+roster.length+' 位角色。尚未獲得的角色會顯示為未解鎖。</p><div class="inventory-list">';roster.forEach(ch=>{const owned=c.owned.includes(ch.id);html+='<div class="inventory-item"><span class="inv-icon">'+(owned?ch.icon:'🔒')+'</span><div class="inv-meta"><strong>'+(owned?ch.name:'？？？')+'</strong><small>'+(owned?ch.rarity+' · '+ch.role:'尚未收藏')+'</small></div><span class="pill">'+(owned?'已收藏':'未解鎖')+'</span></div>'});html+='</div>';showModal('📚 角色圖鑑',html)}
+function openInventory(){const c=readCollection(),list=roster.filter(ch=>c.owned.includes(ch.id));let html='<p>這裡列出目前已收藏的角色卡。初始提供主角林雨晴，其他角色可透過測試版召喚取得。</p><div class="inventory-list">';list.forEach(ch=>{html+='<div class="inventory-item"><span class="inv-icon">'+ch.icon+'</span><div class="inv-meta"><strong>'+ch.name+'</strong><small>'+ch.rarity+' · '+ch.role+'</small></div><span class="pill">持有</span></div>'});if(!list.length)html+='<p>目前尚無角色，先去召喚卡牌吧！</p>';html+='</div><div class="modal-actions"><button class="btn primary" type="button" data-modal-action="summon">✨ 前往召喚</button></div>';showModal('🎒 角色背包',html)}
+function openSummon(){const s=readGameSave(),cost=10;let html='<p>消耗 '+cost+' 枚金幣，隨機獲得一位尚未收藏的角色。這是單機原型，不涉及真實付款。</p><div class="summon-banner"><div class="sigil">✦ ✧ ✦</div><strong>幻境學園召喚陣</strong><span class="muted">目前金幣：'+Math.max(0,Number(s.coins)||0)+' · 單次召喚：'+cost+'</span></div><p>召喚機率：R 50%、SR 35%、SSR 15%。若抽到重複角色，會轉換為 5 枚金幣。</p><div class="modal-actions"><button class="btn primary" type="button" data-modal-action="do-summon" '+((Number(s.coins)||0)<cost?'disabled':'')+'>✨ 消耗 '+cost+' 金幣召喚</button><button class="btn secondary" type="button" data-modal-action="inventory">查看背包</button></div><div id="summonResult" aria-live="polite"></div>';showModal('✨ 卡牌召喚',html)}
+function saveCoins(s){try{localStorage.setItem('campusCardMiniSave',JSON.stringify({...JSON.parse(localStorage.getItem('campusCardMiniSave')||'{}'),...s}))}catch(e){}if(typeof state!=='undefined'){state.coins=s.coins;save();render()}refreshLobby()}
+function doSummon(){const s=readGameSave(),cost=10;if((Number(s.coins)||0)<cost){openSummon();return}const c=readCollection();s.coins-=cost;const pool=roster.filter(ch=>!c.owned.includes(ch.id));let result;if(pool.length===0){s.coins+=5;result={name:'收藏已完成',icon:'🌟',rarity:'BONUS',role:'已集齊所有角色，返還 5 枚金幣。',duplicate:true}}else{const roll=Math.random(),rarity=roll<.5?'R':roll<.85?'SR':'SSR';let choices=pool.filter(ch=>ch.rarity===rarity);if(!choices.length)choices=pool;result=choices[Math.floor(Math.random()*choices.length)];if(c.owned.includes(result.id)){s.coins+=5;result={...result,duplicate:true}}else{c.owned.push(result.id);writeCollection(c)}}saveCoins(s);openSummon();const box=$('summonResult');if(box){const card=document.createElement('div');card.className='summon-result';const title=document.createElement('strong');title.textContent=result.duplicate?'🔁 '+result.name:'🎉 召喚成功：'+result.name+'（'+result.rarity+'）';const p=document.createElement('p');p.textContent=result.duplicate?result.role:(result.icon+' '+result.role+' 已加入角色背包！');p.style.margin='7px 0 0';card.append(title,p);box.append(card)}}
+function openQuests(){const c=readCollection(),s=readGameSave(),wins=Number(s.cleared)||0;const qs=[{id:'first_win',title:'初次勝利',desc:'通過至少 1 個關卡',progress:Math.min(wins,1),goal:1,reward:15,complete:wins>=1},{id:'three_wins',title:'逐步成長',desc:'累積通過 3 個關卡',progress:Math.min(wins,3),goal:3,reward:30,complete:wins>=3},{id:'collect_three',title:'結識夥伴',desc:'收藏至少 3 位角色',progress:Math.min(c.owned.length,3),goal:3,reward:20,complete:c.owned.length>=3}];let html='<p>完成條件後即可領取獎勵。每項任務只可領取一次。</p><div class="inventory-list">';qs.forEach(q=>{const claimed=!!c.quests[q.id];html+='<div class="inventory-item"><span class="inv-icon">'+(q.complete?'🏆':'📌')+'</span><div class="inv-meta"><strong>'+q.title+'</strong><small>'+q.desc+'（'+q.progress+'/'+q.goal+'） · 獎勵 '+q.reward+' 金幣</small></div><button class="modal-close" type="button" data-claim="'+q.id+'" '+(!q.complete||claimed?'disabled':'')+'>'+(claimed?'已領取':q.complete?'領取':'未完成')+'</button></div>'});html+='</div>';showModal('📜 新手任務',html)}
+function claimQuest(id){const c=readCollection(),s=readGameSave(),wins=Number(s.cleared)||0;const qs={first_win:{complete:wins>=1,reward:15},three_wins:{complete:wins>=3,reward:30},collect_three:{complete:c.owned.length>=3,reward:20}};const q=qs[id];if(!q||!q.complete||c.quests[id])return;c.quests[id]=true;writeCollection(c);s.coins=(Number(s.coins)||0)+q.reward;saveCoins(s);openQuests()}
+document.querySelectorAll('[data-menu]').forEach(btn=>btn.addEventListener('click',()=>{switch(btn.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'quests':openQuests();break}}));
+modalBody.addEventListener('click',e=>{const a=e.target.closest('[data-modal-action]');if(a){switch(a.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'do-summon':doSummon();break}}const claim=e.target.closest('[data-claim]');if(claim)claimQuest(claim.dataset.claim)});
+
 document.querySelectorAll('[data-character]').forEach(btn=>btn.addEventListener('click',()=>{
  const c=characterProfiles[btn.dataset.character];if(!c)return;
  $('characterDetail').innerHTML='';
