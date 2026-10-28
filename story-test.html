@@ -484,6 +484,7 @@ function baseReward(n){return ({5:300,10:600,15:900,20:1500})[Number(n)]||100+Ma
 function firstBossBonus(n){return ({5:500,10:800,15:1000,20:1500})[Number(n)]||0}
 function enemyRarity(n){n=Number(n)||1;if([5,10,15,20].includes(n))return 'SSR';if([6,7,8,9,11,12,13,14,16,17,18,19].includes(n))return 'SR';return 'R'}
 function enemyImageUrl(n,name,desc){
+if(Number(n)===2){return './stage-02.png';}
    if (n === 1) {
     return "./stage-01.png";
   }
