@@ -901,6 +901,77 @@
  #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls .btn{min-height:44px!important;padding:7px 6px!important}
 }
 
+
+/* A1/B2: clearer HP bars and larger full-proportion fighter portraits */
+#gameApp .fighter .hp-label,
+#gameApp .fighter.enemy .hp-label{
+  font-size:clamp(1rem,1.3vw,1.12rem)!important;
+  font-weight:700!important;
+}
+#gameApp .fighter .hp-label b,
+#gameApp .fighter.enemy .hp-label b{
+  font-size:1.08em!important;
+  font-variant-numeric:tabular-nums!important;
+}
+#gameApp .fighter .bar,
+#gameApp .fighter.enemy .bar{
+  height:22px!important;
+  min-height:22px!important;
+  width:100%!important;
+  margin-top:7px!important;
+  border-radius:99px!important;
+  background:#080f1c!important;
+  border:1px solid #ffffff30!important;
+  overflow:hidden!important;
+}
+#gameApp .fighter .bar .fill,
+#gameApp .fighter.enemy .bar .fill{
+  height:100%!important;
+  min-height:100%!important;
+  border-radius:99px!important;
+}
+#gameApp .fighter .player-portrait{
+  width:clamp(132px,17vw,192px)!important;
+  height:clamp(168px,22vw,228px)!important;
+  margin-bottom:14px!important;
+}
+#gameApp .player-portrait img{
+  display:block!important;
+  width:100%!important;height:100%!important;
+  max-width:100%!important;max-height:100%!important;
+  object-fit:contain!important;object-position:center!important;
+}
+#gameApp .fighter.enemy .avatar{
+  width:clamp(132px,17vw,192px)!important;
+  height:clamp(168px,22vw,228px)!important;
+  margin-bottom:14px!important;
+}
+#gameApp .fighter.enemy .avatar img{
+  width:100%!important;height:100%!important;
+  max-width:100%!important;max-height:100%!important;
+  object-fit:contain!important;object-position:center!important;
+}
+@media(max-width:850px){
+ #gameApp .fighter .bar,#gameApp .fighter.enemy .bar{
+  height:15px!important;min-height:15px!important;margin-top:6px!important;
+ }
+ #gameApp .fighter .player-portrait,
+ #gameApp .fighter.enemy .avatar{
+  width:clamp(94px,25vw,145px)!important;
+  height:clamp(124px,34vw,184px)!important;
+ }
+}
+@media(max-width:380px){
+ #gameApp .fighter .bar,#gameApp .fighter.enemy .bar{
+  height:13px!important;min-height:13px!important;
+ }
+ #gameApp .fighter .player-portrait,
+ #gameApp .fighter.enemy .avatar{
+  width:clamp(82px,24vw,100px)!important;
+  height:clamp(110px,32vw,132px)!important;
+ }
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
