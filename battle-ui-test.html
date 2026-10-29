@@ -820,6 +820,17 @@
  #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls #attackBtn{grid-column:1/-1!important}
 }
 
+
+/* Put the battle status/notice line after the skill and action controls on every screen */
+#gameApp #battlePanel>#notice{
+ order:6!important;
+ margin:0!important;
+ width:100%!important;
+ box-sizing:border-box!important;
+}
+#gameApp #battlePanel>.combat-bottom-controls{order:5!important}
+#gameApp #battlePanel>.party-switch-hint{order:3!important}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
