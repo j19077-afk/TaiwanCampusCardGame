@@ -331,11 +331,12 @@
 #gameApp .battle-arena>.versus{grid-column:2;grid-row:1;align-self:center;justify-self:center}
 #gameApp .battle-arena>.fighter.enemy{grid-column:3;grid-row:1}
 #gameApp .battle-arena>.fighter{
-  box-sizing:border-box;min-width:0;position:relative;overflow:hidden;
+  box-sizing:border-box;width:100%;max-width:560px;min-width:0;min-height:800px;
+  position:relative;overflow:hidden;justify-self:center;
   display:grid;grid-template-columns:minmax(0,1fr) 12px;
   grid-template-rows:auto auto auto auto;align-content:start;align-items:start;
-  justify-items:stretch;column-gap:clamp(6px,1vw,12px);row-gap:8px;
-  padding:clamp(12px,1.4vw,18px);border:1px solid #385775;border-radius:17px;
+  justify-items:stretch;column-gap:12px;row-gap:8px;
+  padding:16px;border:1px solid #385775;border-radius:20px;
   background:linear-gradient(160deg,#203750,#19263b);text-align:center;
 }
 #gameApp .battle-arena>.fighter.enemy{
@@ -347,7 +348,7 @@
 #gameApp .battle-arena>.fighter.enemy>.avatar{grid-column:2;grid-row:1}
 #gameApp .battle-arena>.fighter.enemy>.bar{grid-column:1;grid-row:1}
 #gameApp .battle-arena>.fighter>.avatar{
-  box-sizing:border-box;width:clamp(180px,26vw,360px);height:clamp(270px,38.5vw,530px);
+  box-sizing:border-box;width:clamp(180px,26vw,400px);height:clamp(270px,38.5vw,600px);
   max-width:100%;min-width:0;margin:0;justify-self:center;align-self:start;
   display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:14px;
   background:transparent;border:0;font-size:1rem;
@@ -358,7 +359,7 @@
 }
 #gameApp .battle-arena>.fighter>.bar{
   box-sizing:border-box;display:flex;flex-direction:column;width:12px;
-  height:clamp(270px,38.5vw,530px);min-height:0;margin:0;padding:0;
+  height:clamp(270px,38.5vw,600px);min-height:0;margin:0;padding:0;
   align-self:start;justify-self:center;position:relative;overflow:hidden;border-radius:999px;
   background:#080f1c;border:1px solid #ffffff1a;
 }
@@ -419,9 +420,9 @@
 #gameApp .nav-btn{border:1px solid #4a5d79;border-radius:10px;padding:8px 12px;background:transparent;color:var(--text);font:inherit;font-size:12px;cursor:pointer}
 @media(max-width:900px){
   #gameApp #battlePanel>.battle-arena{gap:7px;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr)}
-  #gameApp .battle-arena>.fighter{padding:10px 8px;column-gap:6px;row-gap:7px}
-  #gameApp .battle-arena>.fighter>.avatar{width:clamp(125px,25vw,220px);height:clamp(188px,37.5vw,330px)}
-  #gameApp .battle-arena>.fighter>.bar{height:clamp(188px,37.5vw,330px);width:10px}
+  #gameApp .battle-arena>.fighter{min-height:0;padding:10px 8px;column-gap:8px;row-gap:7px;border-radius:clamp(14px,2vw,20px)}
+  #gameApp .battle-arena>.fighter>.avatar{width:clamp(125px,25vw,400px);height:clamp(188px,37.5vw,600px)}
+  #gameApp .battle-arena>.fighter>.bar{height:clamp(188px,37.5vw,600px);width:clamp(9px,1vw,12px)}
   #gameApp .battle-arena>.fighter{grid-template-columns:minmax(0,1fr) 10px}
   #gameApp .battle-arena>.fighter.enemy{grid-template-columns:10px minmax(0,1fr)}
   #gameApp .battle-action-layout{grid-template-columns:minmax(0,1fr);gap:10px}
@@ -430,9 +431,9 @@
 }
 @media(max-width:560px){
   #gameApp #battlePanel>.battle-arena{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:4px}
-  #gameApp .battle-arena>.fighter{padding:8px 5px;column-gap:4px;row-gap:6px}
-  #gameApp .battle-arena>.fighter>.avatar{width:clamp(82px,25vw,132px);height:clamp(123px,37.5vw,198px);border-radius:10px}
-  #gameApp .battle-arena>.fighter>.bar{height:clamp(123px,37.5vw,198px);width:8px}
+  #gameApp .battle-arena>.fighter{min-height:0;padding:8px 5px;column-gap:5px;row-gap:6px;border-radius:14px}
+  #gameApp .battle-arena>.fighter>.avatar{width:clamp(82px,25vw,180px);height:clamp(123px,37.5vw,270px);border-radius:10px}
+  #gameApp .battle-arena>.fighter>.bar{height:clamp(123px,37.5vw,270px);width:8px}
   #gameApp .battle-arena>.fighter{grid-template-columns:minmax(0,1fr) 8px}
   #gameApp .battle-arena>.fighter.enemy{grid-template-columns:8px minmax(0,1fr)}
   #gameApp .battle-arena>.fighter>h3{font-size:clamp(.82rem,3.4vw,1rem)}
