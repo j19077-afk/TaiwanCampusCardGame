@@ -650,6 +650,46 @@
   #gameApp .battle-ally>span{font-size:.64rem!important}
   #gameApp .compact-combat-controls .btn{font-size:.8rem!important}
 }
+
+/* Cross-platform party selector: under stage header; no thumbnails in party buttons */
+#gameApp .battle-ally img{display:none!important}
+#gameApp .battle-ally{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;gap:5px!important;text-align:center!important;min-height:78px!important;padding:9px 7px!important}
+#gameApp .battle-ally>span{width:100%!important;min-width:0!important;font-size:.82rem!important;line-height:1.25!important;overflow-wrap:anywhere!important}
+#gameApp .battle-ally b{display:block!important;font-size:.78rem!important}
+#gameApp .battle-ally small{display:block!important;font-size:.7rem!important;line-height:1.2!important;overflow-wrap:anywhere!important}
+#gameApp .battle-ally .mini-hp{display:block!important;width:100%!important;height:6px!important;margin-top:3px!important}
+#gameApp .battle-ally.active:after{content:"✓ 操作中";display:block;color:#9cefe0;font-size:.68rem;font-weight:800;line-height:1.2}
+@media(min-width:851px){
+ #gameApp .party-sidebar{grid-column:1;grid-row:1;align-self:stretch}
+ #gameApp .battle-arena{grid-template-columns:minmax(150px,.72fr) minmax(0,1fr) 34px minmax(0,1fr)!important}
+}
+@media(max-width:850px){
+ #gameApp .battle-arena{grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr)!important;gap:8px!important}
+ #gameApp .party-sidebar{grid-column:1/-1!important;grid-row:1!important;align-self:stretch!important;margin:0 0 2px!important}
+ #gameApp .party-sidebar>h3{margin:0 0 8px!important;text-align:left!important}
+ #gameApp .battle-party{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;margin:0!important}
+ #gameApp .battle-ally{min-width:0!important;min-height:76px!important;padding:8px 5px!important}
+ #gameApp .player-fighter{grid-column:1!important;grid-row:2!important}
+ #gameApp .battle-arena>.versus{grid-column:2!important;grid-row:2!important;position:static!important;transform:none!important;align-self:center!important;justify-self:center!important;width:28px!important;height:28px!important}
+ #gameApp .fighter.enemy{grid-column:3!important;grid-row:2!important}
+}
+@media(max-width:600px){
+ #gameApp .battle-arena{grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr)!important;gap:5px!important}
+ #gameApp .party-sidebar{padding:9px!important}
+ #gameApp .battle-party{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}
+ #gameApp .battle-ally{min-height:78px!important;padding:7px 4px!important}
+ #gameApp .battle-ally>span{font-size:.72rem!important}
+ #gameApp .battle-ally b{font-size:.7rem!important}
+ #gameApp .battle-ally small{font-size:.64rem!important}
+ #gameApp .battle-ally.active:after{font-size:.62rem}
+ #gameApp .player-fighter,#gameApp .fighter.enemy{grid-row:2!important}
+}
+@media(max-width:380px){
+ #gameApp .battle-ally{min-height:74px!important;padding:6px 3px!important}
+ #gameApp .battle-ally>span{font-size:.66rem!important}
+ #gameApp .battle-ally small{font-size:.59rem!important}
+ #gameApp .battle-ally.active:after{font-size:.57rem}
+}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
