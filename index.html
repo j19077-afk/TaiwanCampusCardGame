@@ -148,6 +148,14 @@
 #gameApp .fighter.enemy{background:linear-gradient(160deg,#422d49,#211e35);border-color:#b58ad455}
 #gameApp .fighter .avatar{position:relative;display:grid;place-items:center;width:clamp(76px,10vw,118px);height:clamp(76px,10vw,118px);margin:0 auto 12px;border-radius:24px;background:radial-gradient(circle at 50% 25%,#7cdad055,transparent 70%),#0e1929;border:1px solid #ffffff25;font-size:clamp(2.5rem,5vw,4rem)}
 #gameApp .fighter.enemy .avatar{background:radial-gradient(circle at 50% 25%,#ce8bea55,transparent 70%),#1b172a}
+/* 敵方卡牌與玩家卡牌尺寸、文字層級一致 */
+#gameApp .fighter .avatar{width:clamp(130px,14vw,180px);height:clamp(190px,20vw,264px);border-radius:14px;overflow:hidden;margin:0 auto 12px;background:transparent;border:0;font-size:1rem}
+#gameApp .fighter .avatar img{display:block;width:100%;height:100%;object-fit:contain;border-radius:14px}
+#gameApp .fighter h3{font-size:1.08rem;line-height:1.5;font-weight:800}
+#gameApp .fighter .muted{font-size:.9rem;line-height:1.5;min-height:2.7em;display:flex;align-items:flex-start;justify-content:center}
+#gameApp .fighter .hp-label{font-size:.9rem}
+@media(max-width:640px){#gameApp .fighter .avatar{width:clamp(90px,28vw,130px);height:clamp(135px,42vw,190px);border-radius:12px}#gameApp .fighter .muted{font-size:.82rem;min-height:3.6em}}
+
 #gameApp .fighter h3{margin:6px 0;font-size:clamp(1rem,2vw,1.3rem)}
 #gameApp .fighter .muted{min-height:1.5em}
 #gameApp .hp-label{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:14px;font-size:.92rem}
