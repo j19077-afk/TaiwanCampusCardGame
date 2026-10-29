@@ -445,6 +445,33 @@
 @media(prefers-reduced-motion:reduce){#gameApp .battle-arena>.fighter>.bar>.fill{transition:none}}
 
 
+/* Approved: scale the complete battle cards and frames down by about 15%. */
+#gameApp #battlePanel{padding:clamp(12px,2.1vw,22px);gap:12px}
+#gameApp #battlePanel>.party-sidebar{padding:10px}
+#gameApp #battlePanel>.party-sidebar h3{font-size:13px;margin-bottom:7px}
+#gameApp #battlePanel>.battle-arena{grid-template-columns:minmax(0,1fr) clamp(20px,3vw,36px) minmax(0,1fr);gap:clamp(7px,1.2vw,15px)}
+#gameApp .battle-arena>.fighter{max-width:476px;min-height:680px;grid-template-columns:minmax(0,1fr) 10px;column-gap:10px;row-gap:7px;padding:14px;border-radius:17px}
+#gameApp .battle-arena>.fighter.enemy{grid-template-columns:10px minmax(0,1fr)}
+#gameApp .battle-arena>.fighter>.avatar{width:clamp(153px,22.1vw,340px);height:clamp(230px,32.7vw,510px);border-radius:12px}
+#gameApp .battle-arena>.fighter>.bar{width:10px;height:clamp(230px,32.7vw,510px)}
+#gameApp .battle-arena>.fighter>h3{font-size:clamp(.9rem,1.3vw,1.15rem)}
+#gameApp .battle-arena>.fighter>.hp-label{font-size:clamp(.75rem,1.1vw,.86rem);gap:7px}
+#gameApp .battle-arena>.fighter>.fighter-attack{font-size:clamp(.72rem,1vw,.82rem)}
+#gameApp .battle-arena>.versus{font-size:clamp(1rem,1.7vw,1.45rem)}
+@media(max-width:760px){
+  #gameApp #battlePanel{padding:10px;gap:10px}
+  #gameApp #battlePanel>.party-sidebar{padding:9px}
+  #gameApp #battlePanel>.battle-arena{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:4px}
+  #gameApp .battle-arena>.fighter{min-height:0;padding:7px 4px;column-gap:4px;row-gap:5px;border-radius:12px;grid-template-columns:minmax(0,1fr) 7px}
+  #gameApp .battle-arena>.fighter.enemy{grid-template-columns:7px minmax(0,1fr)}
+  #gameApp .battle-arena>.fighter>.avatar{width:clamp(70px,21.25vw,153px);height:clamp(105px,31.9vw,230px);border-radius:8px}
+  #gameApp .battle-arena>.fighter>.bar{width:7px;height:clamp(105px,31.9vw,230px)}
+  #gameApp .battle-arena>.fighter>h3{font-size:clamp(.72rem,2.9vw,.85rem)}
+  #gameApp .battle-arena>.fighter>.hp-label{font-size:clamp(.58rem,2.3vw,.7rem);gap:3px}
+  #gameApp .battle-arena>.fighter>.fighter-attack{font-size:clamp(.58rem,2.1vw,.68rem)}
+  #gameApp .battle-arena>.versus{font-size:1rem}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
