@@ -258,6 +258,123 @@
 .roster-art-lightbox-close{position:fixed;top:14px;right:16px;width:44px;height:44px;border:1px solid #ffffff66;border-radius:50%;background:#101522dd;color:#fff;font-size:28px;line-height:1;cursor:pointer}
 .roster-card-art img,.roster-detail-art img{cursor:zoom-in}
 @media(max-width:600px){.roster-art-lightbox{padding:12px}.roster-art-lightbox img{max-width:calc(100vw - 24px);max-height:calc(100vh - 24px)}.roster-art-lightbox-close{top:8px;right:8px}}
+
+/* Combat parity patch: keep both fighter cards, labels, and battle stats visually aligned.
+   Appended last on purpose so earlier legacy/mobile rules cannot shrink the enemy card. */
+#gameApp .arena{
+  grid-template-columns:minmax(0,1fr) clamp(30px,4vw,48px) minmax(0,1fr);
+  gap:clamp(8px,1.8vw,20px);
+}
+#gameApp .fighter{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+#gameApp .fighter .player-portrait,
+#gameApp .fighter.enemy .avatar{
+  flex:0 0 auto;
+  width:clamp(110px,14vw,160px);
+  height:clamp(140px,18vw,190px);
+  margin:0 auto 12px;
+  border-radius:16px;
+  overflow:hidden;
+}
+#gameApp .fighter .player-portrait{
+  background:linear-gradient(145deg,#2c4964,#101a2b);
+  border:1px solid #ffffff20;
+}
+#gameApp .fighter.enemy .avatar{
+  display:grid;
+  place-items:center;
+  background:#1b172a;
+  border:1px solid #b58ad455;
+}
+#gameApp .fighter .player-portrait img,
+#gameApp .fighter.enemy .avatar img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:inherit;
+}
+#gameApp .fighter h3,
+#gameApp .fighter.enemy h3{
+  width:100%;
+  margin:6px 0;
+  font-size:clamp(1rem,2vw,1.3rem);
+  line-height:1.5;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+#gameApp .fighter .muted,
+#gameApp .fighter.enemy .muted{
+  width:100%;
+  min-height:2.7em;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  margin:0;
+  font-size:clamp(.84rem,1.2vw,.9rem);
+  line-height:1.5;
+  overflow-wrap:anywhere;
+}
+#gameApp .fighter .hp-label,
+#gameApp .fighter.enemy .hp-label{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:14px;
+  font-size:clamp(.78rem,1.2vw,.9rem);
+  line-height:1.4;
+}
+#gameApp .fighter .bar,
+#gameApp .fighter.enemy .bar{width:100%;height:12px}
+#gameApp .fighter .energy-bar{width:100%}
+@media(max-width:640px){
+  #gameApp .arena{
+    grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);
+    gap:6px;
+  }
+  #gameApp .fighter{padding:10px 7px}
+  #gameApp .fighter .player-portrait,
+  #gameApp .fighter.enemy .avatar{
+    width:clamp(80px,25vw,112px);
+    height:clamp(112px,35vw,150px);
+    border-radius:12px;
+    margin-bottom:10px;
+  }
+  #gameApp .fighter .player-portrait img,
+  #gameApp .fighter.enemy .avatar img{border-radius:inherit}
+  #gameApp .fighter h3,
+  #gameApp .fighter.enemy h3{
+    font-size:clamp(.88rem,3.2vw,1.08rem);
+    line-height:1.4;
+  }
+  #gameApp .fighter .muted,
+  #gameApp .fighter.enemy .muted{
+    min-height:3.6em;
+    font-size:clamp(.74rem,2.6vw,.82rem);
+    line-height:1.45;
+  }
+  #gameApp .fighter .hp-label,
+  #gameApp .fighter.enemy .hp-label{
+    gap:3px;
+    font-size:clamp(.68rem,2.35vw,.78rem);
+  }
+  #gameApp .fighter .bar,
+  #gameApp .fighter.enemy .bar{height:9px}
+}
+@media(max-width:360px){
+  #gameApp .arena{grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr);gap:4px}
+  #gameApp .fighter{padding:8px 5px}
+  #gameApp .fighter .player-portrait,
+  #gameApp .fighter.enemy .avatar{width:76px;height:106px}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
