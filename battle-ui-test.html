@@ -1251,7 +1251,132 @@
  #gameApp .battle-arena .fighter h3{font-size:1rem!important}
  #gameApp .battle-arena .fighter .hp-label{font-size:.8rem!important;gap:6px!important}
 }
-</style></head><body>
+</style>
+<style id="battle-layout-polish-v2">
+/* Battle screen polish: stable symmetrical cards, image-adjacent vertical HP bars */
+#battlePanel .battle-arena{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;
+  align-items:stretch!important;
+  gap:clamp(10px,1.5vw,22px)!important;
+}
+#battlePanel .battle-arena > .fighter{
+  box-sizing:border-box!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:auto!important;
+  padding:clamp(14px,1.6vw,24px)!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 12px!important;
+  grid-template-rows:auto auto auto auto!important;
+  align-content:start!important;
+  align-items:start!important;
+  justify-items:stretch!important;
+  column-gap:clamp(8px,1vw,14px)!important;
+  row-gap:8px!important;
+}
+#battlePanel .battle-arena > .fighter.player-fighter > .avatar{
+  grid-column:1!important;grid-row:1!important;
+  width:clamp(180px,25vw,340px)!important;
+  height:clamp(270px,37.5vw,510px)!important;
+  max-width:100%!important;min-width:0!important;
+  margin:0 auto!important;
+  align-self:start!important;
+}
+#battlePanel .battle-arena > .fighter.player-fighter > .bar{
+  grid-column:2!important;grid-row:1!important;
+  width:12px!important;
+  height:clamp(270px,37.5vw,510px)!important;
+  min-height:0!important;max-height:none!important;
+  margin:0!important;align-self:start!important;
+  overflow:hidden!important;
+}
+#battlePanel .battle-arena > .fighter.enemy{
+  grid-template-columns:12px minmax(0,1fr)!important;
+}
+#battlePanel .battle-arena > .fighter.enemy > .avatar{
+  grid-column:2!important;grid-row:1!important;
+  width:clamp(180px,25vw,340px)!important;
+  height:clamp(270px,37.5vw,510px)!important;
+  max-width:100%!important;min-width:0!important;
+  margin:0 auto!important;
+  align-self:start!important;
+}
+#battlePanel .battle-arena > .fighter.enemy > .bar{
+  grid-column:1!important;grid-row:1!important;
+  width:12px!important;
+  height:clamp(270px,37.5vw,510px)!important;
+  min-height:0!important;max-height:none!important;
+  margin:0!important;align-self:start!important;
+  overflow:hidden!important;
+}
+#battlePanel .battle-arena > .fighter > h3{
+  grid-column:1/-1!important;grid-row:2!important;
+  width:100%!important;margin:4px 0 0!important;
+  text-align:center!important;line-height:1.25!important;
+}
+#battlePanel .battle-arena > .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){
+  display:none!important;
+}
+#battlePanel .battle-arena > .fighter > .hp-label{
+  grid-column:1/-1!important;grid-row:3!important;
+  display:flex!important;justify-content:center!important;
+  align-items:center!important;gap:10px!important;
+  flex-wrap:wrap!important;margin:2px 0 0!important;
+  text-align:center!important;
+}
+#battlePanel .battle-arena > .fighter > .muted:has(#playerAtk),
+#battlePanel .battle-arena > .fighter > .muted:has(#enemyAtk){
+  grid-column:1/-1!important;grid-row:4!important;
+  display:flex!important;justify-content:center!important;
+  align-items:center!important;margin:0!important;
+  min-height:1.4em!important;text-align:center!important;
+}
+#battlePanel .battle-arena > .fighter > .bar .fill{
+  display:block!important;width:100%!important;
+  min-height:0!important;max-height:100%!important;
+  align-self:flex-end!important;
+  transition:height .25s ease!important;
+}
+#battlePanel .battle-arena > .fighter.player-fighter > .bar .fill{
+  background:linear-gradient(180deg,#a4efbe,#43d3a2)!important;
+}
+#battlePanel .battle-arena > .fighter.enemy > .bar .fill{
+  background:linear-gradient(180deg,#ffb36b,#ff587a)!important;
+}
+#battlePanel .battle-arena > .versus{
+  align-self:center!important;justify-self:center!important;
+  margin:0!important;padding:0 2px!important;
+}
+#battlePanel .battle-action-layout{
+  display:grid!important;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)!important;
+  gap:14px!important;align-items:stretch!important;margin-top:14px!important;
+}
+#battlePanel .battle-action-left,#battlePanel .battle-action-right{min-width:0!important}
+#battlePanel .battle-action-right .notice{height:100%!important;min-height:170px!important;box-sizing:border-box!important}
+@media(max-width:700px){
+  #battlePanel .battle-arena{gap:6px!important}
+  #battlePanel .battle-arena > .fighter{padding:9px 6px!important;column-gap:5px!important;row-gap:7px!important}
+  #battlePanel .battle-arena > .fighter.player-fighter > .avatar,
+  #battlePanel .battle-arena > .fighter.enemy > .avatar{
+    width:clamp(90px,25vw,170px)!important;
+    height:clamp(135px,37.5vw,255px)!important;
+  }
+  #battlePanel .battle-arena > .fighter.player-fighter > .bar,
+  #battlePanel .battle-arena > .fighter.enemy > .bar{
+    width:8px!important;height:clamp(135px,37.5vw,255px)!important;
+  }
+  #battlePanel .battle-arena > .fighter.enemy{grid-template-columns:8px minmax(0,1fr)!important}
+  #battlePanel .battle-arena > .fighter{grid-template-columns:minmax(0,1fr) 8px!important}
+  #battlePanel .battle-arena > .fighter h3{font-size:clamp(.85rem,3.2vw,1rem)!important}
+  #battlePanel .battle-arena > .fighter .hp-label{font-size:.8rem!important;gap:4px!important}
+  #battlePanel .battle-arena > .fighter .muted:has(#playerAtk),
+  #battlePanel .battle-arena > .fighter .muted:has(#enemyAtk){font-size:.78rem!important}
+  #battlePanel .battle-action-layout{grid-template-columns:1fr!important;gap:10px!important}
+  #battlePanel .battle-action-right .notice{min-height:100px!important}
+}
+</style>
+</head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
 <main id="lobby" class="lobby-shell">
