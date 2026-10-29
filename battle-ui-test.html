@@ -690,6 +690,46 @@
  #gameApp .battle-ally small{font-size:.59rem!important}
  #gameApp .battle-ally.active:after{font-size:.57rem}
 }
+
+/* Cross-platform party selector placement: below stage header, above fighters */
+#gameApp #battlePanel{display:flex!important;flex-direction:column!important;gap:14px!important}
+#gameApp .party-sidebar{order:0!important;width:100%!important;grid-column:auto!important;grid-row:auto!important;margin:0!important;padding:12px 14px!important}
+#gameApp .party-sidebar>h3{margin:0 0 9px!important;text-align:left!important}
+#gameApp .battle-party{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;margin:0!important}
+#gameApp .battle-ally{display:flex!important;align-items:center!important;min-width:0!important;min-height:76px!important;padding:10px 12px!important;text-align:left!important;gap:10px!important}
+#gameApp .battle-ally img{display:none!important}
+#gameApp .battle-ally>span{min-width:0!important;width:100%!important;font-size:.84rem!important;overflow-wrap:anywhere!important}
+#gameApp .battle-ally b{font-size:.9rem!important}
+#gameApp .battle-ally small{font-size:.72rem!important;line-height:1.3!important}
+#gameApp .battle-arena{order:1!important;display:grid!important;grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr)!important;gap:12px!important;width:100%!important}
+#gameApp .battle-arena>.player-fighter{grid-column:1!important;grid-row:1!important}
+#gameApp .battle-arena>.versus{grid-column:2!important;grid-row:1!important;position:static!important;transform:none!important;justify-self:center!important;align-self:center!important}
+#gameApp .battle-arena>.fighter.enemy{grid-column:3!important;grid-row:1!important}
+#gameApp .party-switch-hint{order:2!important}
+@media(max-width:850px){
+ #gameApp #battlePanel{gap:12px!important}
+ #gameApp .party-sidebar{padding:10px!important}
+ #gameApp .battle-party{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+ #gameApp .battle-ally{min-height:76px!important;padding:8px!important}
+ #gameApp .battle-ally>span{font-size:.76rem!important}
+ #gameApp .battle-ally b{font-size:.78rem!important}
+ #gameApp .battle-ally small{font-size:.67rem!important}
+ #gameApp .battle-arena{grid-template-columns:minmax(0,1fr) 26px minmax(0,1fr)!important;gap:7px!important}
+}
+@media(max-width:600px){
+ #gameApp .battle-party{gap:5px!important}
+ #gameApp .battle-ally{min-height:76px!important;padding:7px 5px!important}
+ #gameApp .battle-ally>span{font-size:.72rem!important}
+ #gameApp .battle-ally b{font-size:.7rem!important}
+ #gameApp .battle-ally small{font-size:.64rem!important}
+ #gameApp .battle-arena{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr)!important;gap:5px!important}
+ #gameApp .fighter{padding:9px 7px!important}
+}
+@media(max-width:380px){
+ #gameApp .battle-party{grid-template-columns:1fr!important}
+ #gameApp .battle-ally{min-height:62px!important}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
@@ -737,8 +777,7 @@
 <div class="lobby-footer">校園女神錄 <span>· 真人角色收藏 × 校園卡牌冒險</span></div>
 </main>
 <main id="gameApp" class="wrap" style="display:none"><nav class="nav-toolbar" aria-label="戰鬥導覽"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="nav-btn" id="gameBackBtn" type="button">← 返回遊戲大廳</button><button class="nav-btn" id="undoBtn" type="button" disabled>↶ 上一步</button></div><span class="nav-hint" id="historyHint">每次操作前會保留最近一步</span></nav><section class="topline"><div><p class="eyebrow">STAGE <span id="stageTop">1</span></p><h2 id="stageTitle">第 1 關：訓練場的挑戰</h2><div class="muted">點擊攻擊，打敗敵人即可前往下一關。</div></div><div class="pill">🪙 金幣 <span id="coinsTop">0</span></div></section>
-<section class="panel" id="battlePanel"><div class="arena battle-arena">
-<aside class="party-sidebar"><h3>出戰隊員</h3><div id="battleParty" class="battle-party" aria-label="目前上陣隊伍"></div></aside>
+<section class="panel" id="battlePanel"><aside class="party-sidebar"><h3>出戰隊員</h3><div id="battleParty" class="battle-party" aria-label="目前上陣隊伍"></div></aside><div class="arena battle-arena">
 <div class="fighter player-fighter"><div class="avatar player-portrait" id="playerAvatar"><img src="images/characters/lin-yuqing-sr.png" alt="三上悠亞" onerror="this.remove();this.parentElement.textContent='🎓'"></div><h3>三上悠亞</h3><div class="muted">學園新生・玩家</div><div class="hp-label"><span>生命值</span><b id="playerHpText">100 / 100</b></div><div class="bar"><div class="fill" id="playerHpBar"></div></div><div class="muted" style="margin-top:9px">攻擊力：<b id="playerAtk">18</b></div></div><div class="versus">VS</div>
 <div class="fighter enemy"><div class="avatar" id="enemyAvatar">👾</div><h3 id="enemyName">校園史萊姆</h3><div class="muted" id="enemyDesc">第一個練習對手</div><div class="hp-label"><span>生命值</span><b id="enemyHpText">55 / 55</b></div><div class="bar"><div class="fill" id="enemyHpBar"></div></div><div class="muted" style="margin-top:9px">攻擊力：<b id="enemyAtk">7</b></div></div></div>
 <p class="muted party-switch-hint">點選左側隊員切換操作角色；敵人會優先攻擊目前操作的隊員。</p><div class="hp-label"><span>✦ 星輝能量</span><b id="energyText">60 / 100</b></div><div class="bar energy-bar"><div class="fill energy-fill" id="energyBar"></div></div><div class="muted" style="margin-top:6px">普通攻擊恢復 15 點能量；技能消耗 35 點。</div><div class="compact-combat-controls"><button class="btn secondary skill-quick-btn" id="skillBtn" type="button">✨ 星輝衝擊 <small>35 能量</small></button><button class="btn primary" id="attackBtn">⚔️ 攻擊</button><button class="btn secondary" id="healBtn">🧪 補給 <small>回復 20</small></button></div><div class="muted skill-hint">切換隊員後，技能會自動切換為該角色的專屬技能。</div><div class="notice" id="notice" role="status" aria-live="polite">冒險開始！按下「攻擊」挑戰眼前的敵人。</div></section>
