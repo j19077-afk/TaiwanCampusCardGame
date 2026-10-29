@@ -1173,20 +1173,19 @@
  #gameApp .battle-action-right #notice{min-height:64px!important}
  #gameApp .lower{grid-template-columns:minmax(0,1fr)!important}
 }
-/* TEST FIX v3: compact mirrored battle layout, larger portraits, aligned HP labels */
+/* TEST FIX v4: symmetric compact battle cards; hide character descriptions */
 #gameApp .battle-arena .fighter{
  display:grid!important;
  grid-template-columns:minmax(0,1fr) 12px auto!important;
- grid-template-rows:auto auto auto auto auto!important;
+ grid-template-rows:auto auto auto auto!important;
  align-items:start!important;
  justify-items:stretch!important;
- row-gap:10px!important;
+ row-gap:8px!important;
  column-gap:7px!important;
- padding:clamp(12px,1.5vw,20px)!important;
+ padding:clamp(12px,1.4vw,18px)!important;
  text-align:center!important;
 }
-#gameApp .battle-arena .fighter.player-fighter .avatar,
-#gameApp .battle-arena .fighter.enemy .avatar{
+#gameApp .battle-arena .fighter .avatar{
  grid-row:1!important;
  width:clamp(190px,20vw,300px)!important;
  height:clamp(285px,30vw,440px)!important;
@@ -1199,8 +1198,7 @@
 #gameApp .battle-arena .fighter.enemy{grid-template-columns:auto 12px minmax(0,1fr)!important}
 #gameApp .battle-arena .fighter.enemy .avatar{grid-column:3!important}
 #gameApp .battle-arena .fighter.enemy > .bar{grid-column:2!important;grid-row:1!important}
-#gameApp .battle-arena .fighter.player-fighter > .bar,
-#gameApp .battle-arena .fighter.enemy > .bar{
+#gameApp .battle-arena .fighter > .bar{
  display:flex!important;
  flex-direction:column!important;
  width:12px!important;
@@ -1222,40 +1220,33 @@
  align-self:flex-start!important;
  transition:height .25s ease!important;
 }
-#gameApp .battle-arena .fighter > h3,
-#gameApp .battle-arena .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){
- grid-column:1/-1!important;
- width:100%!important;
+#gameApp .battle-arena .fighter > h3{
+ grid-column:1/-1!important;grid-row:2!important;
+ width:100%!important;margin:2px 0 0!important;min-height:0!important
 }
-#gameApp .battle-arena .fighter > h3{grid-row:2!important;margin:2px 0 0!important;min-height:0!important}
-#gameApp .battle-arena .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){
- grid-row:3!important;min-height:2.3em!important;height:auto!important;margin:0!important;align-items:center!important
-}
+/* Character description is intentionally hidden; keep attack-power line visible. */
+#gameApp .battle-arena .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){display:none!important}
 #gameApp .battle-arena .fighter > .hp-label{
- grid-column:1/-1!important;grid-row:4!important;
- display:flex!important;justify-content:center!important;gap:12px!important;
- align-items:center!important;margin:2px 0 0!important;
+ grid-column:1/-1!important;grid-row:3!important;
+ display:flex!important;justify-content:center!important;gap:10px!important;
+ align-items:center!important;margin:0!important;
 }
 #gameApp .battle-arena .fighter > .muted:has(#playerAtk),
 #gameApp .battle-arena .fighter > .muted:has(#enemyAtk){
- grid-column:1/-1!important;grid-row:5!important;
+ grid-column:1/-1!important;grid-row:4!important;
  margin:0!important;min-height:1.5em!important;height:auto!important;
  display:flex!important;justify-content:center!important;align-items:center!important;
 }
 @media(max-width:900px){
- #gameApp .battle-arena .fighter.player-fighter .avatar,
- #gameApp .battle-arena .fighter.enemy .avatar{width:clamp(130px,21vw,200px)!important;height:clamp(195px,31.5vw,300px)!important}
- #gameApp .battle-arena .fighter.player-fighter > .bar,
- #gameApp .battle-arena .fighter.enemy > .bar{height:clamp(195px,31.5vw,300px)!important;width:10px!important}
+ #gameApp .battle-arena .fighter .avatar{width:clamp(130px,21vw,200px)!important;height:clamp(195px,31.5vw,300px)!important}
+ #gameApp .battle-arena .fighter > .bar{height:clamp(195px,31.5vw,300px)!important;width:10px!important}
  #gameApp .battle-arena .fighter{grid-template-columns:minmax(0,1fr) 10px auto!important;column-gap:6px!important}
  #gameApp .battle-arena .fighter.enemy{grid-template-columns:auto 10px minmax(0,1fr)!important}
 }
 @media(max-width:560px){
- #gameApp .battle-arena .fighter.player-fighter .avatar,
- #gameApp .battle-arena .fighter.enemy .avatar{width:clamp(85px,25vw,130px)!important;height:clamp(128px,37.5vw,195px)!important}
- #gameApp .battle-arena .fighter.player-fighter > .bar,
- #gameApp .battle-arena .fighter.enemy > .bar{height:clamp(128px,37.5vw,195px)!important;width:8px!important}
- #gameApp .battle-arena .fighter{grid-template-columns:minmax(0,1fr) 8px auto!important;column-gap:4px!important;padding:10px 6px!important;row-gap:7px!important}
+ #gameApp .battle-arena .fighter .avatar{width:clamp(85px,25vw,130px)!important;height:clamp(128px,37.5vw,195px)!important}
+ #gameApp .battle-arena .fighter > .bar{height:clamp(128px,37.5vw,195px)!important;width:8px!important}
+ #gameApp .battle-arena .fighter{grid-template-columns:minmax(0,1fr) 8px auto!important;column-gap:4px!important;padding:10px 6px!important;row-gap:6px!important}
  #gameApp .battle-arena .fighter.enemy{grid-template-columns:auto 8px minmax(0,1fr)!important}
  #gameApp .battle-arena .fighter h3{font-size:1rem!important}
  #gameApp .battle-arena .fighter .hp-label{font-size:.8rem!important;gap:6px!important}
