@@ -1163,6 +1163,34 @@
  #gameApp #battlePanel>.battle-action-layout .battle-action-right .notice{min-height:64px!important}
 }
 
+
+/* Merge the live battle message and battle history into one compact panel */
+#gameApp .battle-action-right{
+ display:flex!important;flex-direction:column!important;gap:10px!important;
+ min-width:0!important;align-self:stretch!important;
+}
+#gameApp .battle-action-right #notice{
+ flex:0 0 auto!important;min-height:0!important;margin:0!important;
+ padding:12px 14px!important;border-radius:12px 12px 0 0!important;
+}
+#gameApp .battle-action-right .battle-history-panel{
+ display:block!important;min-width:0!important;margin:0!important;
+ padding:12px 14px!important;border-radius:0 0 12px 12px!important;
+ border-top:0!important;box-shadow:none!important;
+}
+#gameApp .battle-action-right .battle-history-heading{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#gameApp .battle-action-right .battle-history-heading h2{font-size:1rem;margin:0}
+#gameApp .battle-action-right .battle-history-hint{font-size:.76rem;margin:5px 0 8px}
+#gameApp .battle-action-right #log{max-height:140px!important;min-height:0!important}
+#gameApp .battle-action-right #resetBtn{margin-top:8px!important}
+#gameApp .lower{display:none!important}
+@media(max-width:850px){
+ #gameApp .battle-action-right{gap:0!important}
+ #gameApp .battle-action-right #notice{padding:10px 12px!important}
+ #gameApp .battle-action-right .battle-history-panel{padding:10px 12px!important}
+ #gameApp .battle-action-right #log{max-height:120px!important}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
@@ -1416,4 +1444,10 @@ function heal(){const active=roster.find(ch=>ch.id===state.activeMember)||roster
 function bindPartySwitch(){const party=$('battleParty');if(!party||party.dataset.switchBound)return;party.dataset.switchBound='1';party.addEventListener('click',function(ev){const btn=ev.target.closest('button[data-active-member]');if(!btn||!party.contains(btn)||btn.disabled)return;const id=btn.getAttribute('data-active-member');const col=readCollection(),team=(col.formation||[]).map(mid=>roster.find(ch=>ch.id===mid)).filter(Boolean);if(!team.some(ch=>ch.id===id)||!Number.isFinite(state.partyHp?.[id])||state.partyHp[id]<=0)return;state.activeMember=id;state.playerHp=state.partyHp[id];tell('已切換操作角色：'+(roster.find(ch=>ch.id===id)?.name||id)+'。');render();});}
 function reset(){if(!confirm('確定要刪除目前進度並重新開始嗎？'))return;$('notice').classList.remove('victory-notice');undoStack=[];state=defaults();$('victoryBanner')?.remove();$('log').innerHTML='<div class="logline">新旅程開始！祝你冒險順利。</div>';$('attackBtn').textContent='⚔️ 攻擊';$('attackBtn').disabled=false;$('attackBtn').onclick=attack;tell('冒險開始！按下「攻擊」挑戰眼前的敵人。');save();refreshLobby();render();updateUndo()}
 bindPartySwitch();const logBox=$('log'),logToggle=$('toggleFullLog');if(logBox&&logToggle){logToggle.onclick=()=>{const all=logBox.classList.toggle('show-all');logToggle.textContent=all?'收合紀錄 ↑':'查看全部紀錄 ↓';logToggle.setAttribute('aria-expanded',String(all));const hint=document.querySelector('.battle-history-hint');if(hint)hint.textContent=all?'完整戰鬥歷史 · 最新紀錄置頂':'最新 3 筆紀錄 · 點擊可查看完整戰鬥歷史';}};$('attackBtn').onclick=attack;$('skillBtn').onclick=useSkill;$('healBtn').onclick=heal;$('resetBtn').onclick=reset;window.history.replaceState({screen:location.hash==='#game'?'game':'lobby'},'',location.hash==='#game'?'#game':'#lobby');const syncScreen=()=>{if(location.hash==='#game')showGame();else if(location.hash==='#archive')openArchive();else showLobby()};window.addEventListener('popstate',syncScreen);window.addEventListener('hashchange',syncScreen);if(!Number.isFinite(state.stage)||state.stage<1)state=defaults();if(state.enemyHp<=0)state.enemyHp=enemy().hp;if(state.playerHp<=0)tell('你目前已經被擊倒。按「重新開始遊戲」再次挑戰。');render();if(location.hash==='#archive')openArchive();else if(location.hash==='#game')showGame();else showLobby()})();
-</script></body></html>
+</script>
+<script>
+/* Keep the existing live notice and history controls, but place them together. */
+(()=>{const right=document.querySelector('#gameApp .battle-action-right');const history=document.querySelector('#gameApp .battle-history-panel');if(right&&history){right.appendChild(history);history.setAttribute('aria-label','戰鬥訊息與紀錄');}})();
+</script>
+
+</body></html>
