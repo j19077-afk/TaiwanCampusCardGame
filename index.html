@@ -472,6 +472,15 @@
   #gameApp .battle-arena>.versus{font-size:1rem}
 }
 
+/* Hotfix: HP fill is pinned to the TOP of the vertical track and drains downward. */
+#gameApp .battle-arena>.fighter>.bar{position:relative!important;display:block!important;overflow:hidden!important}
+#gameApp .battle-arena>.fighter>.bar>.fill{
+  position:absolute!important;top:0!important;bottom:auto!important;left:0!important;right:0!important;
+  width:100%!important;height:100%;margin:0!important;flex:none!important;
+  align-self:auto!important;transform-origin:top center!important;
+}
+
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
