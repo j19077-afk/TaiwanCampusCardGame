@@ -623,6 +623,86 @@
  #gameApp .battle-arena .fighter .hp-label{font-size:.8rem!important;gap:6px!important}
 }
 
+
+/* TEST FIX v4: symmetric compact battle cards; hide character descriptions */
+#gameApp .battle-arena .fighter{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr) 12px auto!important;
+ grid-template-rows:auto auto auto auto!important;
+ align-items:start!important;
+ justify-items:stretch!important;
+ row-gap:8px!important;
+ column-gap:7px!important;
+ padding:clamp(12px,1.4vw,18px)!important;
+ text-align:center!important;
+}
+#gameApp .battle-arena .fighter .avatar{
+ grid-row:1!important;
+ width:clamp(190px,20vw,300px)!important;
+ height:clamp(285px,30vw,440px)!important;
+ margin:0!important;
+ justify-self:center!important;
+ align-self:start!important;
+}
+#gameApp .battle-arena .fighter.player-fighter .avatar{grid-column:1!important}
+#gameApp .battle-arena .fighter.player-fighter > .bar{grid-column:2!important;grid-row:1!important}
+#gameApp .battle-arena .fighter.enemy{grid-template-columns:auto 12px minmax(0,1fr)!important}
+#gameApp .battle-arena .fighter.enemy .avatar{grid-column:3!important}
+#gameApp .battle-arena .fighter.enemy > .bar{grid-column:2!important;grid-row:1!important}
+#gameApp .battle-arena .fighter > .bar{
+ display:flex!important;
+ flex-direction:column!important;
+ width:12px!important;
+ height:clamp(285px,30vw,440px)!important;
+ min-height:0!important;
+ padding:0!important;
+ margin:0!important;
+ align-self:start!important;
+ justify-self:center!important;
+ overflow:hidden!important;
+ border-radius:999px!important;
+}
+#gameApp .battle-arena .fighter > .bar .fill{
+ display:block!important;
+ width:100%!important;
+ height:100%!important;
+ min-height:0!important;
+ flex:0 0 auto!important;
+ align-self:flex-start!important;
+ transition:height .25s ease!important;
+}
+#gameApp .battle-arena .fighter > h3{
+ grid-column:1/-1!important;grid-row:2!important;
+ width:100%!important;margin:2px 0 0!important;min-height:0!important
+}
+/* Character description is intentionally hidden; keep attack-power line visible. */
+#gameApp .battle-arena .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){display:none!important}
+#gameApp .battle-arena .fighter > .hp-label{
+ grid-column:1/-1!important;grid-row:3!important;
+ display:flex!important;justify-content:center!important;gap:10px!important;
+ align-items:center!important;margin:0!important;
+}
+#gameApp .battle-arena .fighter > .muted:has(#playerAtk),
+#gameApp .battle-arena .fighter > .muted:has(#enemyAtk){
+ grid-column:1/-1!important;grid-row:4!important;
+ margin:0!important;min-height:1.5em!important;height:auto!important;
+ display:flex!important;justify-content:center!important;align-items:center!important;
+}
+@media(max-width:900px){
+ #gameApp .battle-arena .fighter .avatar{width:clamp(130px,21vw,200px)!important;height:clamp(195px,31.5vw,300px)!important}
+ #gameApp .battle-arena .fighter > .bar{height:clamp(195px,31.5vw,300px)!important;width:10px!important}
+ #gameApp .battle-arena .fighter{grid-template-columns:minmax(0,1fr) 10px auto!important;column-gap:6px!important}
+ #gameApp .battle-arena .fighter.enemy{grid-template-columns:auto 10px minmax(0,1fr)!important}
+}
+@media(max-width:560px){
+ #gameApp .battle-arena .fighter .avatar{width:clamp(85px,25vw,130px)!important;height:clamp(128px,37.5vw,195px)!important}
+ #gameApp .battle-arena .fighter > .bar{height:clamp(128px,37.5vw,195px)!important;width:8px!important}
+ #gameApp .battle-arena .fighter{grid-template-columns:minmax(0,1fr) 8px auto!important;column-gap:4px!important;padding:10px 6px!important;row-gap:6px!important}
+ #gameApp .battle-arena .fighter.enemy{grid-template-columns:auto 8px minmax(0,1fr)!important}
+ #gameApp .battle-arena .fighter h3{font-size:1rem!important}
+ #gameApp .battle-arena .fighter .hp-label{font-size:.8rem!important;gap:6px!important}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
