@@ -1173,83 +1173,79 @@
  #gameApp .battle-action-right #notice{min-height:64px!important}
  #gameApp .lower{grid-template-columns:minmax(0,1fr)!important}
 }
-/* TEST FIX v4: symmetric compact battle cards; hide character descriptions */
-#gameApp .battle-arena .fighter{
- display:grid!important;
- grid-template-columns:minmax(0,1fr) 12px auto!important;
- grid-template-rows:auto auto auto auto!important;
- align-items:start!important;
- justify-items:stretch!important;
- row-gap:8px!important;
- column-gap:7px!important;
- padding:clamp(12px,1.4vw,18px)!important;
- text-align:center!important;
+/* Approved battle layout reference: mirrored portrait cards, inner vertical HP bars, compact aligned stats. */
+#gameApp #battlePanel>.battle-arena{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) clamp(24px,3.5vw,42px) minmax(0,1fr);
+  align-items:stretch;
+  gap:clamp(8px,1.4vw,18px);
 }
-#gameApp .battle-arena .fighter .avatar{
- grid-row:1!important;
- width:clamp(190px,20vw,300px)!important;
- height:clamp(285px,30vw,440px)!important;
- margin:0!important;
- justify-self:center!important;
- align-self:start!important;
+#gameApp .battle-arena>.party-sidebar{grid-column:1/-1;grid-row:2}
+#gameApp .battle-arena>.player-fighter{grid-column:1;grid-row:1}
+#gameApp .battle-arena>.versus{grid-column:2;grid-row:1;align-self:center;justify-self:center}
+#gameApp .battle-arena>.fighter.enemy{grid-column:3;grid-row:1}
+#gameApp .battle-arena>.fighter{
+  box-sizing:border-box;min-width:0;
+  display:grid;grid-template-columns:minmax(0,1fr) 12px;
+  grid-template-rows:auto auto auto auto;align-content:start;align-items:start;
+  justify-items:stretch;column-gap:clamp(6px,1vw,12px);row-gap:8px;
+  padding:clamp(12px,1.4vw,18px);text-align:center;
 }
-#gameApp .battle-arena .fighter.player-fighter .avatar{grid-column:1!important}
-#gameApp .battle-arena .fighter.player-fighter > .bar{grid-column:2!important;grid-row:1!important}
-#gameApp .battle-arena .fighter.enemy{grid-template-columns:auto 12px minmax(0,1fr)!important}
-#gameApp .battle-arena .fighter.enemy .avatar{grid-column:3!important}
-#gameApp .battle-arena .fighter.enemy > .bar{grid-column:2!important;grid-row:1!important}
-#gameApp .battle-arena .fighter > .bar{
- display:flex!important;
- flex-direction:column!important;
- width:12px!important;
- height:clamp(285px,30vw,440px)!important;
- min-height:0!important;
- padding:0!important;
- margin:0!important;
- align-self:start!important;
- justify-self:center!important;
- overflow:hidden!important;
- border-radius:999px!important;
+#gameApp .battle-arena>.fighter.enemy{grid-template-columns:12px minmax(0,1fr)}
+#gameApp .battle-arena>.player-fighter>.avatar{grid-column:1;grid-row:1}
+#gameApp .battle-arena>.player-fighter>.bar{grid-column:2;grid-row:1}
+#gameApp .battle-arena>.fighter.enemy>.avatar{grid-column:2;grid-row:1}
+#gameApp .battle-arena>.fighter.enemy>.bar{grid-column:1;grid-row:1}
+#gameApp .battle-arena>.fighter>.avatar{
+  box-sizing:border-box;width:clamp(180px,26vw,360px);height:clamp(270px,38.5vw,530px);
+  max-width:100%;min-width:0;margin:0;justify-self:center;align-self:start;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:14px;
 }
-#gameApp .battle-arena .fighter > .bar .fill{
- display:block!important;
- width:100%!important;
- height:100%!important;
- min-height:0!important;
- flex:0 0 auto!important;
- align-self:flex-start!important;
- transition:height .25s ease!important;
+#gameApp .battle-arena>.fighter>.avatar img{
+  display:block;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;
+  object-fit:contain!important;object-position:center;border-radius:inherit;
 }
-#gameApp .battle-arena .fighter > h3{
- grid-column:1/-1!important;grid-row:2!important;
- width:100%!important;margin:2px 0 0!important;min-height:0!important
+#gameApp .battle-arena>.fighter>.bar{
+  box-sizing:border-box;display:flex;flex-direction:column;width:12px;
+  height:clamp(270px,38.5vw,530px);min-height:0;margin:0;padding:0;
+  align-self:start;justify-self:center;overflow:hidden;border-radius:999px;
 }
-/* Character description is intentionally hidden; keep attack-power line visible. */
-#gameApp .battle-arena .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){display:none!important}
-#gameApp .battle-arena .fighter > .hp-label{
- grid-column:1/-1!important;grid-row:3!important;
- display:flex!important;justify-content:center!important;gap:10px!important;
- align-items:center!important;margin:0!important;
+#gameApp .battle-arena>.fighter>.bar>.fill{
+  display:block;width:100%!important;height:100%;min-height:0;flex:0 0 auto;
+  align-self:flex-start;transition:height .25s ease,background .12s ease;
 }
-#gameApp .battle-arena .fighter > .muted:has(#playerAtk),
-#gameApp .battle-arena .fighter > .muted:has(#enemyAtk){
- grid-column:1/-1!important;grid-row:4!important;
- margin:0!important;min-height:1.5em!important;height:auto!important;
- display:flex!important;justify-content:center!important;align-items:center!important;
+#gameApp .battle-arena>.fighter>h3{
+  grid-column:1/-1;grid-row:2;width:100%;min-width:0;margin:2px 0 0;
+  font-size:clamp(1rem,1.5vw,1.35rem);line-height:1.35;overflow-wrap:anywhere;
 }
+#gameApp .battle-arena>.fighter>.fighter-description{display:none!important}
+#gameApp .battle-arena>.fighter>.hp-label{
+  grid-column:1/-1;grid-row:3;display:flex;justify-content:center;align-items:center;
+  flex-wrap:wrap;gap:8px;width:100%;margin:0;text-align:center;font-size:clamp(.82rem,1.3vw,1rem);
+}
+#gameApp .battle-arena>.fighter>.fighter-attack{
+  grid-column:1/-1;grid-row:4;display:flex;justify-content:center;align-items:center;
+  width:100%;min-height:1.4em;margin:0!important;font-size:clamp(.8rem,1.2vw,.95rem);
+}
+#gameApp .battle-arena>.versus{font-size:clamp(1.1rem,2vw,1.7rem);color:var(--gold)}
 @media(max-width:900px){
- #gameApp .battle-arena .fighter .avatar{width:clamp(130px,21vw,200px)!important;height:clamp(195px,31.5vw,300px)!important}
- #gameApp .battle-arena .fighter > .bar{height:clamp(195px,31.5vw,300px)!important;width:10px!important}
- #gameApp .battle-arena .fighter{grid-template-columns:minmax(0,1fr) 10px auto!important;column-gap:6px!important}
- #gameApp .battle-arena .fighter.enemy{grid-template-columns:auto 10px minmax(0,1fr)!important}
+  #gameApp #battlePanel>.battle-arena{gap:7px;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr)}
+  #gameApp .battle-arena>.fighter{padding:10px 8px;column-gap:6px;row-gap:7px}
+  #gameApp .battle-arena>.fighter>.avatar{width:clamp(125px,25vw,220px);height:clamp(188px,37.5vw,330px)}
+  #gameApp .battle-arena>.fighter>.bar{height:clamp(188px,37.5vw,330px);width:10px}
+  #gameApp .battle-arena>.fighter{grid-template-columns:minmax(0,1fr) 10px}
+  #gameApp .battle-arena>.fighter.enemy{grid-template-columns:10px minmax(0,1fr)}
 }
 @media(max-width:560px){
- #gameApp .battle-arena .fighter .avatar{width:clamp(85px,25vw,130px)!important;height:clamp(128px,37.5vw,195px)!important}
- #gameApp .battle-arena .fighter > .bar{height:clamp(128px,37.5vw,195px)!important;width:8px!important}
- #gameApp .battle-arena .fighter{grid-template-columns:minmax(0,1fr) 8px auto!important;column-gap:4px!important;padding:10px 6px!important;row-gap:6px!important}
- #gameApp .battle-arena .fighter.enemy{grid-template-columns:auto 8px minmax(0,1fr)!important}
- #gameApp .battle-arena .fighter h3{font-size:1rem!important}
- #gameApp .battle-arena .fighter .hp-label{font-size:.8rem!important;gap:6px!important}
+  #gameApp #battlePanel>.battle-arena{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:4px}
+  #gameApp .battle-arena>.fighter{padding:8px 5px;column-gap:4px;row-gap:6px}
+  #gameApp .battle-arena>.fighter>.avatar{width:clamp(82px,25vw,132px);height:clamp(123px,37.5vw,198px);border-radius:10px}
+  #gameApp .battle-arena>.fighter>.bar{height:clamp(123px,37.5vw,198px);width:8px}
+  #gameApp .battle-arena>.fighter{grid-template-columns:minmax(0,1fr) 8px}
+  #gameApp .battle-arena>.fighter.enemy{grid-template-columns:8px minmax(0,1fr)}
+  #gameApp .battle-arena>.fighter>h3{font-size:clamp(.82rem,3.4vw,1rem)}
+  #gameApp .battle-arena>.fighter>.hp-label{font-size:clamp(.66rem,2.7vw,.82rem);gap:4px}
+  #gameApp .battle-arena>.fighter>.fighter-attack{font-size:clamp(.66rem,2.5vw,.8rem)}
 }
 </style>
 <style id="battle-layout-polish-v2">
@@ -1424,8 +1420,8 @@
 </main>
 <main id="gameApp" class="wrap" style="display:none"><nav class="nav-toolbar" aria-label="戰鬥導覽"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="nav-btn" id="gameBackBtn" type="button">← 返回遊戲大廳</button><button class="nav-btn" id="undoBtn" type="button" disabled>↶ 上一步</button></div><span class="nav-hint" id="historyHint">每次操作前會保留最近一步</span></nav><section class="topline"><div><p class="eyebrow">STAGE <span id="stageTop">1</span></p><h2 id="stageTitle">第 1 關：訓練場的挑戰</h2><div class="muted">點擊攻擊，打敗敵人即可前往下一關。</div></div><div class="pill">🪙 金幣 <span id="coinsTop">0</span></div></section>
 <section class="panel" id="battlePanel"><aside class="party-sidebar"><h3>出戰隊員</h3><div id="battleParty" class="battle-party" aria-label="目前上陣隊伍"></div></aside><div class="arena battle-arena">
-<div class="fighter player-fighter"><div class="avatar player-portrait" id="playerAvatar"><img src="images/characters/lin-yuqing-sr.png" alt="三上悠亞" onerror="this.remove();this.parentElement.textContent='🎓'"></div><h3>三上悠亞</h3><div class="muted">學園新生・玩家</div><div class="hp-label"><span>生命值</span><b id="playerHpText">100 / 100</b></div><div class="bar"><div class="fill" id="playerHpBar"></div></div><div class="muted" style="margin-top:9px">攻擊力：<b id="playerAtk">18</b></div></div><div class="versus">VS</div>
-<div class="fighter enemy"><div class="avatar" id="enemyAvatar">👾</div><h3 id="enemyName">校園史萊姆</h3><div class="muted" id="enemyDesc">第一個練習對手</div><div class="hp-label"><span>生命值</span><b id="enemyHpText">55 / 55</b></div><div class="bar"><div class="fill" id="enemyHpBar"></div></div><div class="muted" style="margin-top:9px">攻擊力：<b id="enemyAtk">7</b></div></div></div>
+<div class="fighter player-fighter"><div class="avatar player-portrait" id="playerAvatar"><img src="images/characters/lin-yuqing-sr.png" alt="三上悠亞" onerror="this.remove();this.parentElement.textContent='🎓'"></div><h3>三上悠亞</h3><div class="muted fighter-description">學園新生・玩家</div><div class="hp-label"><span>生命值</span><b id="playerHpText">100 / 100</b></div><div class="bar"><div class="fill" id="playerHpBar"></div></div><div class="muted fighter-attack">攻擊力：<b id="playerAtk">18</b></div></div><div class="versus">VS</div>
+<div class="fighter enemy"><div class="avatar" id="enemyAvatar">👾</div><h3 id="enemyName">校園史萊姆</h3><div class="muted fighter-description" id="enemyDesc">第一個練習對手</div><div class="hp-label"><span>生命值</span><b id="enemyHpText">55 / 55</b></div><div class="bar"><div class="fill" id="enemyHpBar"></div></div><div class="muted fighter-attack">攻擊力：<b id="enemyAtk">7</b></div></div></div>
 <div class="battle-action-layout"><div class="battle-action-left"><div class="combat-bottom-controls"><div class="hp-label"><span>✦ 星輝能量</span><b id="energyText">60 / 100</b></div><div class="bar energy-bar"><div class="fill energy-fill" id="energyBar"></div></div><div class="muted" style="margin-top:6px">普通攻擊恢復 15 點能量；技能消耗 35 點。</div><div class="compact-combat-controls"><button class="btn secondary skill-quick-btn" id="skillBtn" type="button">✨ 星輝衝擊 <small>35 能量</small></button><button class="btn primary" id="attackBtn">⚔️ 攻擊</button><button class="btn secondary" id="healBtn">🧪 補給 <small>回復 20</small></button></div><div class="muted skill-hint">切換隊員後，技能會自動切換為該角色的專屬技能。</div></div></div><div class="battle-action-right"><div class="notice" id="notice" role="status" aria-live="polite">冒險開始！按下「攻擊」挑戰眼前的敵人。</div></div></div></section>
 <div class="lower"><section class="panel adventure-record-panel"><h2>📘 冒險紀錄</h2><div class="muted" style="margin-bottom:12px">每次勝利都會獲得金幣，敵人也會逐漸變強。</div><div class="topline"><span>已通過關卡</span><strong id="cleared">0</strong></div><div class="topline" style="margin-top:9px"><span>本關勝利獎勵</span><strong class="reward" id="reward">+10 金幣</strong></div><div class="topline" style="margin-top:9px"><span>補給次數</span><strong id="potions">3</strong></div></section>
 <section class="panel battle-history-panel"><div class="battle-history-heading"><h2>🗒️ 戰鬥紀錄</h2><button type="button" class="nav-btn" id="toggleFullLog" aria-expanded="false">查看全部紀錄 ↓</button></div><p class="muted battle-history-hint">最新 3 筆紀錄 · 點擊可查看完整戰鬥歷史</p><div class="log recent-three" id="log"><div class="logline">你踏入學園訓練場，準備開始冒險。</div></div><button class="btn danger" id="resetBtn" style="width:100%;margin-top:14px">重新開始遊戲</button></section></div><div class="foot">進度儲存在這個瀏覽器。清除瀏覽器資料或更換裝置可能會使存檔消失。</div></main>
