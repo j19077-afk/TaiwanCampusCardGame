@@ -565,14 +565,22 @@
 #gameApp .fighter > .muted{
   width:100%;
   min-width:0;
+  height:42px;
   min-height:42px;
+  box-sizing:border-box;
   margin:0;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-  line-height:1.45;
+  line-height:1.35;
   overflow-wrap:anywhere;
+}
+#gameApp .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
 }
 #gameApp .fighter .hp-label{
   flex:0 0 auto;
@@ -603,7 +611,7 @@
   #gameApp .fighter{gap:7px;padding:11px 8px}
   #gameApp .fighter .avatar{width:100%;max-width:180px;height:240px;margin-bottom:3px}
   #gameApp .fighter h3{min-height:38px;font-size:1rem}
-  #gameApp .fighter > .muted{min-height:46px;font-size:.8rem}
+  #gameApp .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){height:46px;min-height:46px;font-size:.8rem} #gameApp .fighter > .muted:has(#playerAtk),#gameApp .fighter > .muted:has(#enemyAtk){height:28px;min-height:28px}
   #gameApp .fighter .bar{height:10px}
 }
 </style></head><body>
