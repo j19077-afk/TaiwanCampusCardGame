@@ -303,6 +303,14 @@ body{height:auto!important;min-height:100vh!important;overflow-y:auto!important;
 #gameApp .fighter.enemy.rarity-SSR{--enemy-rarity:#ff6b8b;box-shadow:0 0 22px #ff6b8b35}
 #gameApp .fighter.enemy.rarity-SSR .avatar{box-shadow:0 0 22px #ff6b8b55,inset 0 0 0 1px #fff5}
 @media(max-width:640px){#gameApp .fighter.enemy .avatar{width:86px;height:112px;border-radius:12px}}
+
+/* Force visible selected/focused filter state on touch browsers */
+.inventory-filters .inventory-filter{ -webkit-tap-highlight-color:rgba(215,189,114,.28);touch-action:manipulation; }
+.inventory-filters .inventory-filter.active,
+.inventory-filters .inventory-filter[aria-pressed="true"]{background:#d7bd72!important;color:#182337!important;border-color:#f0d995!important;box-shadow:inset 0 0 0 1px #f0d995,0 0 0 2px rgba(215,189,114,.14)!important}
+.inventory-filters .inventory-filter:focus-visible{outline:2px solid #f0d995;outline-offset:2px}
+.inventory-filters .inventory-filter:active{background:#c6a956;color:#182337}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
