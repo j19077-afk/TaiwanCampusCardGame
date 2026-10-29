@@ -1055,6 +1055,57 @@
  #gameApp .battle-arena .fighter .bar{flex-basis:13px!important}
 }
 
+
+/* A1 final refinement: same compact card frame for both sides, preserve full card art */
+#gameApp .battle-arena .fighter .avatar,
+#gameApp .battle-arena .fighter .player-portrait{
+  width:clamp(150px,15vw,184px)!important;
+  height:clamp(225px,22.5vw,276px)!important;
+  aspect-ratio:2/3!important;
+  padding:0!important;
+  border-radius:18px!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  flex:0 0 auto!important;
+  align-self:center!important;
+  margin:0 auto 18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+#gameApp .battle-arena .fighter .avatar img,
+#gameApp .battle-arena .fighter .player-portrait img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+  margin:0!important;
+  padding:0!important;
+}
+#gameApp .battle-arena .fighter .avatar{
+  background-size:contain!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+}
+@media(max-width:850px){
+ #gameApp .battle-arena .fighter .avatar,
+ #gameApp .battle-arena .fighter .player-portrait{
+   width:clamp(100px,24vw,138px)!important;
+   height:clamp(150px,36vw,207px)!important;
+   margin-bottom:12px!important;
+ }
+}
+@media(max-width:380px){
+ #gameApp .battle-arena .fighter .avatar,
+ #gameApp .battle-arena .fighter .player-portrait{
+   width:clamp(88px,23vw,100px)!important;
+   height:clamp(132px,34.5vw,150px)!important;
+ }
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
