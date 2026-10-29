@@ -483,6 +483,13 @@
 .inventory-filters .inventory-filter:focus-visible{outline:2px solid #f0d995;outline-offset:2px}
 .inventory-filters .inventory-filter:active{background:#c6a956;color:#182337}
 
+
+/* High-specificity filter states for mobile embedded browsers */
+.inventory-filters button.inventory-filter{background:#17263b!important;color:#dce7f5!important;border:1px solid #607895!important;box-shadow:none!important;border-radius:999px!important}
+.inventory-filters button.inventory-filter.active,
+.inventory-filters button.inventory-filter[aria-pressed="true"]{background:linear-gradient(180deg,#f5dc91,#d7bd72)!important;color:#172337!important;border:2px solid #fff0bd!important;box-shadow:0 2px 0 #9c7a36,inset 0 0 0 1px rgba(92,65,15,.18)!important;font-weight:800!important}
+.inventory-filters button.inventory-filter:active{filter:brightness(.92)}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
@@ -628,7 +635,7 @@ if(inventorySort==='level')return lb-la||rarityRank[a.rarity]-rarityRank[b.rarit
 if(inventorySort==='cost')return ca-cb||rarityRank[a.rarity]-rarityRank[b.rarity];
 return rarityRank[a.rarity]-rarityRank[b.rarity]||lb-la||a.name.localeCompare(b.name,'zh-Hant');
 });
-let html='<p>消耗金幣提升卡牌等級，等級上限 50。SR、SSR 每級成長更高。升級後會自動保存。</p><div class="inventory-balance">🪙 <span>目前可用金幣</span><strong>'+coins.toLocaleString('zh-TW')+'</strong></div><div class="inventory-toolbar"><div class="inventory-filters">'+[['all','全部'],['SSR','SSR'],['SR','SR'],['R','R'],['upgrade','可升級']].map(([v,label])=>'<button type="button" class="inventory-filter '+(inventoryFilter===v?'active':'')+'" data-inventory-filter="'+v+'">'+label+'</button>').join('')+'</div><label class="inventory-sort">排序方式<select id="inventorySort"><option value="rarity" '+(inventorySort==='rarity'?'selected':'')+'>稀有度優先</option><option value="level" '+(inventorySort==='level'?'selected':'')+'>等級由高至低</option><option value="cost" '+(inventorySort==='cost'?'selected':'')+'>升級費用由低至高</option></select></label></div><div class="inventory-count">顯示 '+list.length+' / '+owned.length+' 位角色</div><div class="inventory-list">';
+let html='<p>消耗金幣提升卡牌等級，等級上限 50。SR、SSR 每級成長更高。升級後會自動保存。</p><div class="inventory-balance">🪙 <span>目前可用金幣</span><strong>'+coins.toLocaleString('zh-TW')+'</strong></div><div class="inventory-toolbar"><div class="inventory-filters">'+[['all','全部'],['SSR','SSR'],['SR','SR'],['R','R'],['upgrade','可升級']].map(([v,label])=>'<button type="button" class="inventory-filter '+(inventoryFilter===v?'active':'')+'" aria-pressed="'+(inventoryFilter===v?'true':'false')+'" data-inventory-filter="'+v+'">'+label+'</button>').join('')+'</div><label class="inventory-sort">排序方式<select id="inventorySort"><option value="rarity" '+(inventorySort==='rarity'?'selected':'')+'>稀有度優先</option><option value="level" '+(inventorySort==='level'?'selected':'')+'>等級由高至低</option><option value="cost" '+(inventorySort==='cost'?'selected':'')+'>升級費用由低至高</option></select></label></div><div class="inventory-count">顯示 '+list.length+' / '+owned.length+' 位角色</div><div class="inventory-list">';
 list.forEach(ch=>{const lv=getLevel(ch),st=getCardStats(ch),cost=lv*20+(ch.rarity==='SSR'?80:ch.rarity==='SR'?40:0),canUpgrade=lv<50&&coins>=cost;html+='<div class="inventory-item"><img src="'+(ch.image||'')+'" alt="'+ch.name+'" onerror="this.replaceWith(Object.assign(document.createElement(\'span\'),{className:\'inv-icon\',textContent:\''+ch.icon+'\'}))" style="width:64px;height:82px;object-fit:cover;object-position:center 20%;border-radius:10px;border:1px solid #9b80d2"><div class="inv-meta"><strong>'+ch.name+' <span class="inventory-rarity">'+ch.rarity+'</span> · Lv.'+lv+'</strong><small>⚔️ 攻擊 '+st.atk+'　✨ 技能 '+st.skill+'</small><small>❤️ 生命 '+st.hp+'</small><small>升級費用：'+(lv>=50?'已達等級上限':cost+' 金幣')+'</small></div><button class="btn secondary" type="button" data-level-up="'+ch.id+'" '+(!canUpgrade?'disabled':'')+'>'+(lv>=50?'已滿級':coins<cost?'金幣不足':'升級')+'</button></div>'});
 if(!list.length)html+='<div class="inventory-empty">'+(inventoryFilter==='upgrade'?'目前沒有金幣足夠且尚未滿級的角色。':'這個分類目前沒有角色。')+'</div>';
 html+='</div><div class="modal-actions"><button class="btn primary" type="button" data-modal-action="summon">✨ 前往召喚</button></div>';showModal('🎒 角色背包與培養',html)
