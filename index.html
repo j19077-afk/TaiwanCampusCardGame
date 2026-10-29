@@ -488,7 +488,10 @@
 /* Approved layout: keep controls on the left; place text-only party cards below right-side battle messages. */
 #gameApp .battle-action-layout{grid-template-columns:minmax(0,45fr) minmax(0,55fr);align-items:start}
 #gameApp .battle-action-right{display:flex;flex-direction:column;gap:12px}
-#gameApp .battle-action-right .notice{height:auto;min-height:245px;flex:0 0 auto}
+#gameApp .battle-action-right .notice{height:auto;min-height:0;max-height:200px;flex:0 1 auto;overflow-y:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:12px 14px;line-height:1.5}
+#gameApp .battle-action-right .notice:empty{display:none}
+@media(max-width:900px){#gameApp .battle-action-right .notice{max-height:180px}}
+@media(max-width:520px){#gameApp .battle-action-right .notice{max-height:150px;padding:10px 12px}}
 #gameApp .battle-action-right .party-sidebar{order:2;width:100%;min-width:0;box-sizing:border-box;margin:0;background:#142237;border:1px solid #344b68;border-radius:14px;padding:12px}
 #gameApp .battle-action-right .party-sidebar h3{margin:0 0 8px;color:var(--mint);font-size:14px}
 #gameApp .battle-action-right .battle-party{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0}
