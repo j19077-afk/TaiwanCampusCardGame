@@ -549,7 +549,7 @@
 function forceLobby(){gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)}
 document.addEventListener('click',function(ev){const btn=ev.target.closest('#gameBackBtn,#lobbyHomeBtn');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();forceLobby()},true);
 
-function localDayKey(d=new Date()){const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));return p.year+'-'+p.month+'-'+p.day}
+function localDayKey(d=new Date()){try{const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));if(p.year&&p.month&&p.day)return p.year+'-'+p.month+'-'+p.day}catch(e){console.error('台灣日期判斷失敗，改用本機日期',e)}return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 
 function readDailyMissionProgress(){const today=localDayKey(),key='campusDailyMissions';try{const v=JSON.parse(localStorage.getItem(key)||'null');if(v&&v.day===today)return {day:today,wins:Number(v.wins)||0,summons:Number(v.summons)||0};}catch(e){}const fresh={day:today,wins:0,summons:0};try{localStorage.setItem(key,JSON.stringify(fresh))}catch(e){}return fresh}
 function trackDailyMission(type){const p=readDailyMissionProgress();if(type==='win')p.wins++;if(type==='summon')p.summons++;try{localStorage.setItem('campusDailyMissions',JSON.stringify(p))}catch(e){}}
