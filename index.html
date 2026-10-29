@@ -259,187 +259,6 @@
 .roster-card-art img,.roster-detail-art img{cursor:zoom-in}
 @media(max-width:600px){.roster-art-lightbox{padding:12px}.roster-art-lightbox img{max-width:calc(100vw - 24px);max-height:calc(100vh - 24px)}.roster-art-lightbox-close{top:8px;right:8px}}
 
-/* Combat parity patch: keep both fighter cards, labels, and battle stats visually aligned.
-   Appended last on purpose so earlier legacy/mobile rules cannot shrink the enemy card. */
-#gameApp .arena{
-  grid-template-columns:minmax(0,1fr) clamp(30px,4vw,48px) minmax(0,1fr);
-  gap:clamp(8px,1.8vw,20px);
-}
-#gameApp .fighter{
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-#gameApp .fighter .player-portrait,
-#gameApp .fighter.enemy .avatar{
-  flex:0 0 auto;
-  width:clamp(110px,14vw,160px);
-  height:clamp(140px,18vw,190px);
-  margin:0 auto 12px;
-  border-radius:16px;
-  overflow:hidden;
-}
-#gameApp .fighter .player-portrait{
-  background:linear-gradient(145deg,#2c4964,#101a2b);
-  border:1px solid #ffffff20;
-}
-#gameApp .fighter.enemy .avatar{
-  display:grid;
-  place-items:center;
-  background:#1b172a;
-  border:1px solid #b58ad455;
-}
-#gameApp .fighter .player-portrait img,
-#gameApp .fighter.enemy .avatar img{
-  display:block;
-  width:auto;
-  height:auto;
-  max-width:100%;
-  max-height:100%;
-  object-fit:contain;
-  object-position:center center;
-  border-radius:inherit;
-}
-#gameApp .fighter h3,
-#gameApp .fighter.enemy h3{
-  width:100%;
-  margin:6px 0;
-  font-size:clamp(1rem,2vw,1.3rem);
-  line-height:1.5;
-  font-weight:800;
-  overflow-wrap:anywhere;
-}
-#gameApp .fighter .muted,
-#gameApp .fighter.enemy .muted{
-  width:100%;
-  min-height:2.7em;
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-  margin:0;
-  font-size:clamp(.84rem,1.2vw,.9rem);
-  line-height:1.5;
-  overflow-wrap:anywhere;
-}
-#gameApp .fighter .hp-label,
-#gameApp .fighter.enemy .hp-label{
-  width:100%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:14px;
-  font-size:clamp(.78rem,1.2vw,.9rem);
-  line-height:1.4;
-}
-#gameApp .fighter .bar,
-#gameApp .fighter.enemy .bar{width:100%;height:12px}
-#gameApp .fighter .energy-bar{width:100%}
-@media(max-width:640px){
-  #gameApp .arena{
-    grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);
-    gap:6px;
-  }
-  #gameApp .fighter{padding:10px 7px}
-  #gameApp .fighter .player-portrait,
-  #gameApp .fighter.enemy .avatar{
-    width:clamp(80px,25vw,112px);
-    height:clamp(112px,35vw,150px);
-    border-radius:12px;
-    margin-bottom:10px;
-  }
-  #gameApp .fighter .player-portrait img,
-  #gameApp .fighter.enemy .avatar img{border-radius:inherit}
-  #gameApp .fighter h3,
-  #gameApp .fighter.enemy h3{
-    font-size:clamp(.88rem,3.2vw,1.08rem);
-    line-height:1.4;
-  }
-  #gameApp .fighter .muted,
-  #gameApp .fighter.enemy .muted{
-    min-height:3.6em;
-    font-size:clamp(.74rem,2.6vw,.82rem);
-    line-height:1.45;
-  }
-  #gameApp .fighter .hp-label,
-  #gameApp .fighter.enemy .hp-label{
-    gap:3px;
-    font-size:clamp(.68rem,2.35vw,.78rem);
-  }
-  #gameApp .fighter .bar,
-  #gameApp .fighter.enemy .bar{height:9px}
-}
-@media(max-width:360px){
-  #gameApp .arena{grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr);gap:4px}
-  #gameApp .fighter{padding:8px 5px}
-  #gameApp .fighter .player-portrait,
-  #gameApp .fighter.enemy .avatar{width:76px;height:106px}
-}
-
-
-/* Final battle artwork fix v2: higher-specificity rules override legacy avatar sizing. */
-#gameApp .fighter .avatar.player-portrait{
-  box-sizing:border-box;
-  width:clamp(112px,14vw,160px)!important;
-  height:auto!important;
-  aspect-ratio:2/3;
-  min-height:0;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-#gameApp .fighter .avatar.player-portrait img{
-  display:block!important;
-  width:100%!important;
-  height:100%!important;
-  max-width:100%!important;
-  max-height:100%!important;
-  object-fit:contain!important;
-  object-position:center center!important;
-  flex:0 0 auto;
-}
-#gameApp .fighter.enemy .avatar{
-  box-sizing:border-box;
-  width:clamp(112px,14vw,160px)!important;
-  height:auto!important;
-  aspect-ratio:2/3;
-  min-height:0;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-#gameApp .fighter.enemy .avatar img{
-  display:block!important;
-  width:100%!important;
-  height:100%!important;
-  max-width:100%!important;
-  max-height:100%!important;
-  object-fit:contain!important;
-  object-position:center center!important;
-  flex:0 0 auto;
-}
-@media(max-width:640px){
-  #gameApp .fighter .avatar.player-portrait,
-  #gameApp .fighter.enemy .avatar{
-    width:clamp(86px,25vw,112px)!important;
-    height:auto!important;
-    aspect-ratio:2/3;
-  }
-}
-@media(max-width:360px){
-  #gameApp .fighter .avatar.player-portrait,
-  #gameApp .fighter.enemy .avatar{
-    width:76px!important;
-    height:auto!important;
-    aspect-ratio:2/3;
-  }
-}
-
-
 /* Character inventory/cultivation UI — keep production styling aligned with story test */
 .inventory-balance{display:flex;align-items:center;gap:12px;box-sizing:border-box;width:100%;padding:14px 16px;margin:14px 0 16px;border:1px solid #b89543;border-radius:14px;background:linear-gradient(120deg,#3b3428,#18263a);color:#f6d47b}
 .inventory-balance span{color:#d6dfed;font-weight:700}
@@ -491,25 +310,92 @@
 .inventory-filters button.inventory-filter:active{filter:brightness(.92)}
 
 
-/* Screenshot-approved combat layout: separated live message and battle history */
-#gameApp #battlePanel{display:flex;flex-direction:column;align-items:stretch;gap:14px}
-#gameApp #battlePanel>.party-sidebar{order:1;width:100%;min-width:0;box-sizing:border-box;background:#142237;border:1px solid #344b68;border-radius:14px;padding:12px}
+/* Approved battle layout: symmetric portrait cards, inner vertical HP bars, aligned stats. */
+#gameApp #battlePanel{
+  display:flex;flex-direction:column;align-items:stretch;gap:14px;
+  padding:clamp(14px,2.5vw,26px);
+  background:linear-gradient(145deg,#1c2d45,#101a2b);
+  border:1px solid #405978;box-shadow:0 16px 42px #0003;
+}
+#gameApp #battlePanel>.party-sidebar{
+  order:1;width:100%;min-width:0;box-sizing:border-box;
+  background:#142237;border:1px solid #344b68;border-radius:14px;padding:12px;
+}
 #gameApp #battlePanel>.party-sidebar h3{margin:0 0 8px;color:var(--mint);font-size:14px}
-#gameApp #battlePanel>.battle-arena{order:2;width:100%;min-width:0;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);align-items:stretch;gap:12px}
-#gameApp .battle-arena .fighter{min-width:0;padding:18px;background:linear-gradient(160deg,#203750,#19263b);border:1px solid #385775;border-radius:17px;text-align:center}
-#gameApp .battle-arena .fighter.enemy{background:linear-gradient(160deg,#402b46,#251f37);border-color:#64436d}
-#gameApp .battle-arena .player-portrait,#gameApp .battle-arena .fighter .avatar{width:clamp(112px,15vw,172px);height:clamp(168px,22vw,255px);margin:4px auto 16px;border-radius:13px;overflow:hidden}
-#gameApp .battle-arena .player-portrait img{width:100%;height:100%;object-fit:cover}
-#gameApp .battle-arena .fighter h3{margin:0 0 8px}
-#gameApp .battle-arena .hp-label{margin-top:24px;text-align:left}
-#gameApp .battle-arena .bar{height:20px;margin-top:10px}
-#gameApp .battle-arena .versus{align-self:center;font-size:22px;color:var(--gold)}
-#gameApp .battle-action-layout{order:3;width:100%;min-width:0;display:grid;grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:16px;align-items:stretch}
+#gameApp #battlePanel>.battle-arena{
+  order:2;width:100%;min-width:0;box-sizing:border-box;
+  display:grid;grid-template-columns:minmax(0,1fr) clamp(24px,3.5vw,42px) minmax(0,1fr);
+  align-items:stretch;gap:clamp(8px,1.4vw,18px);
+}
+#gameApp .battle-arena>.player-fighter{grid-column:1;grid-row:1}
+#gameApp .battle-arena>.versus{grid-column:2;grid-row:1;align-self:center;justify-self:center}
+#gameApp .battle-arena>.fighter.enemy{grid-column:3;grid-row:1}
+#gameApp .battle-arena>.fighter{
+  box-sizing:border-box;min-width:0;position:relative;overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,1fr) 12px;
+  grid-template-rows:auto auto auto auto;align-content:start;align-items:start;
+  justify-items:stretch;column-gap:clamp(6px,1vw,12px);row-gap:8px;
+  padding:clamp(12px,1.4vw,18px);border:1px solid #385775;border-radius:17px;
+  background:linear-gradient(160deg,#203750,#19263b);text-align:center;
+}
+#gameApp .battle-arena>.fighter.enemy{
+  grid-template-columns:12px minmax(0,1fr);
+  background:linear-gradient(160deg,#402b46,#251f37);border-color:#64436d;
+}
+#gameApp .battle-arena>.player-fighter>.avatar{grid-column:1;grid-row:1}
+#gameApp .battle-arena>.player-fighter>.bar{grid-column:2;grid-row:1}
+#gameApp .battle-arena>.fighter.enemy>.avatar{grid-column:2;grid-row:1}
+#gameApp .battle-arena>.fighter.enemy>.bar{grid-column:1;grid-row:1}
+#gameApp .battle-arena>.fighter>.avatar{
+  box-sizing:border-box;width:clamp(180px,26vw,360px);height:clamp(270px,38.5vw,530px);
+  max-width:100%;min-width:0;margin:0;justify-self:center;align-self:start;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:14px;
+  background:transparent;border:0;font-size:1rem;
+}
+#gameApp .battle-arena>.fighter>.avatar img{
+  display:block;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;
+  object-fit:contain!important;object-position:center;border-radius:inherit;
+}
+#gameApp .battle-arena>.fighter>.bar{
+  box-sizing:border-box;display:flex;flex-direction:column;width:12px;
+  height:clamp(270px,38.5vw,530px);min-height:0;margin:0;padding:0;
+  align-self:start;justify-self:center;overflow:hidden;border-radius:999px;
+  background:#080f1c;border:1px solid #ffffff1a;
+}
+#gameApp .battle-arena>.fighter>.bar>.fill{
+  display:block;width:100%!important;height:100%;min-height:0;flex:0 0 auto;
+  align-self:flex-start;border-radius:999px;transition:height .25s ease,background .12s ease;
+}
+#gameApp .battle-arena>.fighter>h3{
+  grid-column:1/-1;grid-row:2;width:100%;min-width:0;margin:2px 0 0;
+  font-size:clamp(1rem,1.5vw,1.35rem);line-height:1.35;overflow-wrap:anywhere;
+}
+#gameApp .battle-arena>.fighter>.fighter-description{display:none!important}
+#gameApp .battle-arena>.fighter>.hp-label{
+  grid-column:1/-1;grid-row:3;display:flex;justify-content:center;align-items:center;
+  flex-wrap:wrap;gap:8px;width:100%;margin:0;text-align:center;
+  font-size:clamp(.82rem,1.3vw,1rem);line-height:1.4;
+}
+#gameApp .battle-arena>.fighter>.fighter-attack{
+  grid-column:1/-1;grid-row:4;display:flex;justify-content:center;align-items:center;
+  width:100%;min-height:1.4em;margin:0!important;font-size:clamp(.8rem,1.2vw,.95rem);
+}
+#gameApp .battle-arena>.versus{
+  font-weight:900;font-size:clamp(1.1rem,2vw,1.7rem);letter-spacing:.12em;
+  color:var(--gold);text-shadow:0 0 20px #f4d58a55;
+}
+#gameApp .battle-action-layout{
+  order:3;width:100%;min-width:0;display:grid;
+  grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:16px;align-items:stretch;
+}
 #gameApp .battle-action-left,#gameApp .battle-action-right{min-width:0}
 #gameApp .battle-action-left .combat-bottom-controls{margin:0;height:100%;padding:0;background:transparent;border:0}
 #gameApp .compact-combat-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
 #gameApp .compact-combat-controls #skillBtn{grid-column:1/-1}
-#gameApp .battle-action-right .notice{height:100%;min-height:245px;margin:0;padding:14px 16px;white-space:pre-wrap;overflow-wrap:anywhere}
+#gameApp .battle-action-right .notice{
+  height:100%;min-height:245px;margin:0;padding:14px 16px;
+  white-space:pre-wrap;overflow-wrap:anywhere;
+}
 #gameApp .lower{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:16px}
 #gameApp .adventure-record-panel{display:none!important}
 #gameApp .battle-history-panel{display:block!important}
@@ -519,101 +405,32 @@
 #gameApp .log.recent-three:not(.show-all) .logline:nth-child(n+4){display:none}
 #gameApp .log.show-all{max-height:420px}
 #gameApp .nav-btn{border:1px solid #4a5d79;border-radius:10px;padding:8px 12px;background:transparent;color:var(--text);font:inherit;font-size:12px;cursor:pointer}
-@media(max-width:850px){#gameApp #battlePanel{gap:11px}#gameApp .battle-arena .fighter{padding:10px}#gameApp .battle-arena .player-portrait,#gameApp .battle-arena .fighter .avatar{width:clamp(88px,23vw,120px);height:clamp(132px,34.5vw,180px)}#gameApp .battle-action-layout{grid-template-columns:minmax(0,1fr);gap:10px}#gameApp .battle-action-right .notice{min-height:90px}#gameApp .compact-combat-controls{grid-template-columns:repeat(2,minmax(0,1fr))}#gameApp .compact-combat-controls #skillBtn{grid-column:1/-1}}
-@media(max-width:420px){#gameApp .battle-arena{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:5px}#gameApp .battle-arena .fighter{padding:8px}#gameApp .battle-arena .hp-label{margin-top:12px}}
-/* Battle card symmetry: compact vertical spacing with aligned content */
-#gameApp .arena{align-items:stretch}
-#gameApp .fighter{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  justify-content:flex-start;
-  gap:10px;
-  min-width:0;
+@media(max-width:900px){
+  #gameApp #battlePanel>.battle-arena{gap:7px;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr)}
+  #gameApp .battle-arena>.fighter{padding:10px 8px;column-gap:6px;row-gap:7px}
+  #gameApp .battle-arena>.fighter>.avatar{width:clamp(125px,25vw,220px);height:clamp(188px,37.5vw,330px)}
+  #gameApp .battle-arena>.fighter>.bar{height:clamp(188px,37.5vw,330px);width:10px}
+  #gameApp .battle-arena>.fighter{grid-template-columns:minmax(0,1fr) 10px}
+  #gameApp .battle-arena>.fighter.enemy{grid-template-columns:10px minmax(0,1fr)}
+  #gameApp .battle-action-layout{grid-template-columns:minmax(0,1fr);gap:10px}
+  #gameApp .battle-action-right .notice{min-height:90px}
+  #gameApp .compact-combat-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-#gameApp .fighter .avatar{
-  flex:0 0 auto;
-  width:260px;
-  height:360px;
-  max-width:100%;
-  box-sizing:border-box;
-  justify-self:center;
-  align-self:center;
-  margin:0 0 6px;
-  border-radius:18px;
-  overflow:hidden;
-  display:grid;
-  place-items:center;
+@media(max-width:560px){
+  #gameApp #battlePanel>.battle-arena{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:4px}
+  #gameApp .battle-arena>.fighter{padding:8px 5px;column-gap:4px;row-gap:6px}
+  #gameApp .battle-arena>.fighter>.avatar{width:clamp(82px,25vw,132px);height:clamp(123px,37.5vw,198px);border-radius:10px}
+  #gameApp .battle-arena>.fighter>.bar{height:clamp(123px,37.5vw,198px);width:8px}
+  #gameApp .battle-arena>.fighter{grid-template-columns:minmax(0,1fr) 8px}
+  #gameApp .battle-arena>.fighter.enemy{grid-template-columns:8px minmax(0,1fr)}
+  #gameApp .battle-arena>.fighter>h3{font-size:clamp(.82rem,3.4vw,1rem)}
+  #gameApp .battle-arena>.fighter>.hp-label{font-size:clamp(.66rem,2.7vw,.82rem);gap:4px}
+  #gameApp .battle-arena>.fighter>.fighter-attack{font-size:clamp(.66rem,2.5vw,.8rem)}
+  #gameApp .battle-action-right .notice{min-height:64px}
+  #gameApp .compact-combat-controls #skillBtn{grid-column:1/-1}
 }
-#gameApp .fighter .avatar img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  display:block;
-}
-#gameApp .fighter h3{
-  width:100%;
-  min-width:0;
-  min-height:42px;
-  margin:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow-wrap:anywhere;
-}
-#gameApp .fighter > .muted{
-  width:100%;
-  min-width:0;
-  height:42px;
-  min-height:42px;
-  box-sizing:border-box;
-  margin:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  line-height:1.35;
-  overflow-wrap:anywhere;
-}
-#gameApp .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){
-  display:-webkit-box;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
-  overflow:hidden;
-}
-#gameApp .fighter .hp-label{
-  flex:0 0 auto;
-  align-self:end;
-  width:100%;
-  min-height:28px;
-  margin:6px 0 0;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  text-align:left;
-}
-#gameApp .fighter .bar{
-  flex:0 0 auto;
-  width:100%;
-  height:12px;
-  align-self:stretch;
-}
-#gameApp .fighter > .muted:has(#playerAtk),
-#gameApp .fighter > .muted:has(#enemyAtk){
-  min-height:28px;
-  margin:0!important;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-@media(max-width:650px){
-  #gameApp .fighter{gap:7px;padding:11px 8px}
-  #gameApp .fighter .avatar{width:100%;max-width:180px;height:240px;margin-bottom:3px}
-  #gameApp .fighter h3{min-height:38px;font-size:1rem}
-  #gameApp .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){height:46px;min-height:46px;font-size:.8rem} #gameApp .fighter > .muted:has(#playerAtk),#gameApp .fighter > .muted:has(#enemyAtk){height:28px;min-height:28px}
-  #gameApp .fighter .bar{height:10px}
-}
+@media(prefers-reduced-motion:reduce){#gameApp .battle-arena>.fighter>.bar>.fill{transition:none}}
+
 
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
@@ -663,8 +480,8 @@
 </main>
 <main id="gameApp" class="wrap" style="display:none"><nav class="nav-toolbar" aria-label="戰鬥導覽"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="nav-btn" id="gameBackBtn" type="button">← 返回遊戲大廳</button></div></nav><section class="topline"><div><p class="eyebrow">STAGE <span id="stageTop">1</span></p><h2 id="stageTitle">第 1 關：訓練場的挑戰</h2><div class="muted">點擊攻擊，打敗敵人即可前往下一關。</div></div><div class="pill">🪙 金幣 <span id="coinsTop">0</span></div></section>
 <section class="panel" id="battlePanel"><aside class="party-sidebar"><h3>出戰隊員</h3><div id="battleParty" class="battle-party" aria-label="目前上陣隊伍"></div></aside><div class="arena battle-arena">
-<div class="fighter player-fighter"><div class="avatar player-portrait" id="playerAvatar"><img src="images/characters/lin-yuqing-sr.png" alt="三上悠亞" onerror="this.remove();this.parentElement.textContent='🎓'"></div><h3>三上悠亞</h3><div class="muted">學園新生・玩家</div><div class="hp-label"><span>生命值</span><b id="playerHpText">100 / 100</b></div><div class="bar"><div class="fill" id="playerHpBar"></div></div><div class="muted" style="margin-top:9px">攻擊力：<b id="playerAtk">18</b></div></div><div class="versus">VS</div>
-<div class="fighter enemy"><div class="avatar" id="enemyAvatar">👾</div><h3 id="enemyName">校園史萊姆</h3><div class="muted" id="enemyDesc">第一個練習對手</div><div class="hp-label"><span>生命值</span><b id="enemyHpText">55 / 55</b></div><div class="bar"><div class="fill" id="enemyHpBar"></div></div><div class="muted" style="margin-top:9px">攻擊力：<b id="enemyAtk">7</b></div></div></div>
+<div class="fighter player-fighter"><div class="avatar player-portrait" id="playerAvatar"><img src="images/characters/lin-yuqing-sr.png" alt="三上悠亞" onerror="this.remove();this.parentElement.textContent='🎓'"></div><h3>三上悠亞</h3><div class="muted fighter-description">學園新生・玩家</div><div class="hp-label"><span>生命值</span><b id="playerHpText">100 / 100</b></div><div class="bar"><div class="fill" id="playerHpBar"></div></div><div class="muted fighter-attack">攻擊力：<b id="playerAtk">18</b></div></div><div class="versus">VS</div>
+<div class="fighter enemy"><div class="avatar" id="enemyAvatar">👾</div><h3 id="enemyName">校園史萊姆</h3><div class="muted fighter-description" id="enemyDesc">第一個練習對手</div><div class="hp-label"><span>生命值</span><b id="enemyHpText">55 / 55</b></div><div class="bar"><div class="fill" id="enemyHpBar"></div></div><div class="muted fighter-attack">攻擊力：<b id="enemyAtk">7</b></div></div></div>
 <div class="battle-action-layout"><div class="battle-action-left"><div class="combat-bottom-controls"><div class="hp-label"><span>✦ 星輝能量</span><b id="energyText">60 / 100</b></div><div class="bar energy-bar"><div class="fill energy-fill" id="energyBar"></div></div><div class="muted" style="margin-top:6px">普通攻擊恢復 15 點能量；技能消耗 35 點。</div><div class="compact-combat-controls"><button class="btn secondary skill-quick-btn" id="skillBtn" type="button">❄️ 霜華重擊 <small>35 能量</small></button><button class="btn primary" id="attackBtn">⚔️ 攻擊</button><button class="btn secondary" id="healBtn">🧪 補給 <small>回復 20</small></button></div><div class="muted skill-hint">切換隊員後，技能會自動切換為該角色的專屬技能。</div></div></div><div class="battle-action-right"><div class="notice" id="notice" role="status" aria-live="polite">冒險開始！按下「攻擊」挑戰眼前的敵人。</div></div></div></section>
 <div class="lower"><section class="panel adventure-record-panel"><h2>📘 冒險紀錄</h2><div class="muted" style="margin-bottom:12px">每次勝利都會獲得金幣，敵人也會逐漸變強。</div><div class="topline"><span>已通過關卡</span><strong id="cleared">0</strong></div><div class="topline" style="margin-top:9px"><span>本關勝利獎勵</span><strong class="reward" id="reward">+10 金幣</strong></div><div class="topline" style="margin-top:9px"><span>補給次數</span><strong id="potions">3</strong></div></section>
 <section class="panel battle-history-panel"><div class="battle-history-heading"><h2>🗒️ 戰鬥紀錄</h2><button type="button" class="nav-btn" id="toggleFullLog" aria-expanded="false">查看全部紀錄 ↓</button></div><p class="muted battle-history-hint">最新 3 筆紀錄 · 點擊可查看完整戰鬥歷史</p><div class="log recent-three" id="log"><div class="logline">你踏入學園訓練場，準備開始冒險。</div></div><button class="btn danger" id="resetBtn" style="width:100%;margin-top:14px">重新開始遊戲</button></section></div><div class="foot">進度儲存在這個瀏覽器。清除瀏覽器資料或更換裝置可能會使存檔消失。</div></main>
