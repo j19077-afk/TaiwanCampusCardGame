@@ -579,12 +579,12 @@ function localDayKey(d=new Date()){try{const parts=new Intl.DateTimeFormat('en-C
 function refreshLobby(){let s={stage:1,coins:0,cleared:0};try{s={...s,...JSON.parse(localStorage.getItem('campusCardMiniSave')||'{}')}}catch(e){}$('lobbyStage').textContent=Number(s.stage)||1;$('lobbyCoins').textContent=Math.max(0,Number(s.coins)||0).toLocaleString('en-US');$('lobbyCleared').textContent=Number(s.cleared)||0;const testDaily=new URLSearchParams(location.search).get('testDaily')==='1';const day=localDayKey(),got=!testDaily&&localStorage.getItem('campusDailyGift')===day;let streak=0;try{streak=Number(localStorage.getItem('campusDailyStreak')||0)}catch(e){}$('dailyBtn').disabled=got;$('dailyBtn').textContent=got?'✓ 今日已領取':(testDaily?'🧪 測試每日補給':'🎁 領取每日補給');$('dailyNote').textContent=got?'今日補給已領取！目前連續登入 '+streak+' 天。':'每日登入可領 20 金幣；連續登入 '+(streak+1)+' 天還可獲得額外獎勵（最多連續 7 天）。';}
 
 const characterProfiles={
- yuching:{name:'三上悠亞',rarity:'SR',role:'學園新生・主角',detail:'感染警報響起後，原本平凡的校園生活徹底改變。她從最初的慌亂中逐漸成長，為了保護同伴，決定深入校園與研究設施，追查災難背後的真相。'},
- yutong:{name:'蘇語彤',rarity:'R',role:'社團夥伴・支援',detail:'細心善良，擅長照顧傷患並整理有限的醫療物資。她在校園危機中學會處理戰鬥傷勢，成為小隊逃亡途中不可或缺的支援者。'},
- ruoxue:{name:'沈若雪',rarity:'SSR',role:'菁英學生・冰霜系',detail:'感染災變爆發後，她冷靜分析感染者的行動規律，逐步掌握變異體的弱點。她相信只要保持理智，就能在絕境中找到生路。'},
- xingyao:{name:'許星瑤',rarity:'SR',role:'表演社・敏捷派',detail:'反應敏捷、行動果斷，擅長利用速度穿越被感染者封鎖的走廊。無論救援倖存者或突襲敵人弱點，她總能在危險時刻找到行動機會。'},
- keqing:{name:'江可晴',rarity:'R',role:'園藝社・守護者',detail:'溫柔可靠，總把同伴的安全放在第一位。感染危機爆發後，她努力守住撤離路線、保護受傷的倖存者，即使面對龐大的變異感染體也不輕易退縮。'},
- zihan:{name:'顧紫涵',rarity:'SSR',role:'神祕學生・幻術系',detail:'擅長觀察敵人的行動，並利用環境、光影與聲音製造錯覺。在感染者遍布的校園裡，她總能找到敵人視線的死角，帶領小隊避開致命包圍。'}
+ yuching:{name:'三上悠亞',rarity:'SR',role:'啦啦隊隊長・女主角',detail:'感染警報響起後，原本平凡的校園生活徹底改變。她從最初的慌亂中逐漸成長，為了保護同伴，決定深入校園與研究設施，追查災難背後的真相。'},
+ yutong:{name:'蘇語彤',rarity:'R',role:'護理系・一年級',detail:'細心善良，擅長照顧傷患並整理有限的醫療物資。她在校園危機中學會處理戰鬥傷勢，成為小隊逃亡途中不可或缺的支援者。'},
+ ruoxue:{name:'沈若雪',rarity:'SSR',role:'醫學系・三年級',detail:'感染災變爆發後，她冷靜分析感染者的行動規律，逐步掌握變異體的弱點。她相信只要保持理智，就能在絕境中找到生路。'},
+ xingyao:{name:'許星瑤',rarity:'SR',role:'體育系・二年級',detail:'反應敏捷、行動果斷，擅長利用速度穿越被感染者封鎖的走廊。無論救援倖存者或突襲敵人弱點，她總能在危險時刻找到行動機會。'},
+ keqing:{name:'江可晴',rarity:'R',role:'園藝系・二年級',detail:'溫柔可靠，總把同伴的安全放在第一位。感染危機爆發後，她努力守住撤離路線、保護受傷的倖存者，即使面對龐大的變異感染體也不輕易退縮。'},
+ zihan:{name:'顧紫涵',rarity:'SSR',role:'資訊工程系・四年級',detail:'擅長觀察敵人的行動，並利用環境、光影與聲音製造錯覺。在感染者遍布的校園裡，她總能找到敵人視線的死角，帶領小隊避開致命包圍。'}
 };
 
 const starterCharacters=['yuching'];
