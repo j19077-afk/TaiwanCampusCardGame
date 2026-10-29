@@ -831,6 +831,54 @@
 #gameApp #battlePanel>.combat-bottom-controls{order:5!important}
 #gameApp #battlePanel>.party-switch-hint{order:3!important}
 
+
+/* B1 compact two-tier combat controls: full-width skill, two actions below */
+#gameApp #battlePanel>.combat-bottom-controls{padding-top:10px!important}
+#gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+ grid-template-rows:auto auto!important;
+ gap:8px!important;
+ margin-top:10px!important;
+}
+#gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls #skillBtn{
+ grid-column:1/-1!important;
+ grid-row:1!important;
+ min-height:48px!important;
+ padding:8px 12px!important;
+ display:flex!important;flex-direction:row!important;gap:8px!important;
+ align-items:center!important;justify-content:center!important;
+ background:linear-gradient(135deg,#34415f,#283752)!important;
+ border:1px solid #8275bd!important;color:#f3edff!important;
+}
+#gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls #skillBtn small{
+ display:inline!important;font-size:.78em!important;opacity:.9!important;margin:0!important;
+}
+#gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls #attackBtn{
+ grid-column:1!important;grid-row:2!important;
+ background:linear-gradient(135deg,#65d8c9,#82e4b3)!important;color:#102b32!important;
+}
+#gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls #healBtn{
+ grid-column:2!important;grid-row:2!important;
+ background:linear-gradient(135deg,#293d4f,#203349)!important;color:#d5f6df!important;
+ border:1px solid #527968!important;
+}
+#gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls .btn{
+ min-height:46px!important;padding:7px 10px!important;line-height:1.2!important;
+ border-radius:11px!important;box-shadow:none!important;
+}
+#gameApp #battlePanel>.combat-bottom-controls .skill-hint{margin-top:8px!important}
+@media(max-width:850px){
+ #gameApp #battlePanel>.combat-bottom-controls{padding-top:8px!important}
+ #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls{gap:7px!important;margin-top:8px!important}
+ #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls .btn{min-height:46px!important;font-size:.8rem!important}
+ #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls #skillBtn{min-height:46px!important}
+}
+@media(max-width:380px){
+ #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+ #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls #attackBtn{grid-column:1!important;grid-row:2!important}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
