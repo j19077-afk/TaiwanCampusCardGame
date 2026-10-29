@@ -451,7 +451,7 @@
 </section>
 <section class="lobby-stats">
 <div class="stat-card"><span>📍 冒險進度</span><strong>第 <b id="lobbyStage">1</b> 關</strong><small>持續突破新紀錄</small></div>
-<div class="stat-card"><span>🪙 累積金幣</span><strong id="lobbyCoins">0</strong><small>用於未來解鎖更多內容</small></div>
+<div class="stat-card"><span>🪙 目前可用金幣</span><strong id="lobbyCoins">0</strong><small>可用於角色升級與卡牌召喚</small></div>
 <div class="stat-card"><span>🏆 通關數</span><strong id="lobbyCleared">0</strong><small>每次勝利都是成長</small></div>
 </section>
 
@@ -499,7 +499,7 @@ function forceLobby(){gameApp.style.display='none';lobby.style.display='grid';co
 document.addEventListener('click',function(ev){const btn=ev.target.closest('#gameBackBtn,#lobbyHomeBtn');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();forceLobby()},true);
 
 function localDayKey(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function refreshLobby(){let s={stage:1,coins:0,cleared:0};try{s={...s,...JSON.parse(localStorage.getItem('campusCardMiniSave')||'{}')}}catch(e){}$('lobbyStage').textContent=s.stage;$('lobbyCoins').textContent=s.coins;$('lobbyCleared').textContent=s.cleared;const testDaily=new URLSearchParams(location.search).get('testDaily')==='1';const day=localDayKey(),got=!testDaily&&localStorage.getItem('campusDailyGift')===day;let streak=0;try{streak=Number(localStorage.getItem('campusDailyStreak')||0)}catch(e){}$('dailyBtn').disabled=got;$('dailyBtn').textContent=got?'✓ 今日已領取':(testDaily?'🧪 測試每日補給':'🎁 領取每日補給');$('dailyNote').textContent=got?'今日補給已領取！目前連續登入 '+streak+' 天。':'每日登入可領 20 金幣；連續登入 '+(streak+1)+' 天還可獲得額外獎勵（最多連續 7 天）。';}
+function refreshLobby(){let s={stage:1,coins:0,cleared:0};try{s={...s,...JSON.parse(localStorage.getItem('campusCardMiniSave')||'{}')}}catch(e){}$('lobbyStage').textContent=Number(s.stage)||1;$('lobbyCoins').textContent=Math.max(0,Number(s.coins)||0).toLocaleString('en-US');$('lobbyCleared').textContent=Number(s.cleared)||0;const testDaily=new URLSearchParams(location.search).get('testDaily')==='1';const day=localDayKey(),got=!testDaily&&localStorage.getItem('campusDailyGift')===day;let streak=0;try{streak=Number(localStorage.getItem('campusDailyStreak')||0)}catch(e){}$('dailyBtn').disabled=got;$('dailyBtn').textContent=got?'✓ 今日已領取':(testDaily?'🧪 測試每日補給':'🎁 領取每日補給');$('dailyNote').textContent=got?'今日補給已領取！目前連續登入 '+streak+' 天。':'每日登入可領 20 金幣；連續登入 '+(streak+1)+' 天還可獲得額外獎勵（最多連續 7 天）。';}
 
 const characterProfiles={
  yuching:{name:'三上悠亞',rarity:'SR',role:'學園新生・主角',detail:'勇敢踏入校園的新生。她將從訓練場開始，逐步揭開學園異象的謎團。'},
@@ -534,7 +534,7 @@ function readGameSave(){try{return {...{stage:1,coins:0,cleared:0},...JSON.parse
 function showModal(title,html){modalTitle.textContent=title;modalBody.innerHTML=html;modal.hidden=false;document.body.style.overflow='hidden';$('modalClose').focus()}
 function closeModal(){modal.hidden=true;modal.classList.remove('archive-fullscreen');document.body.style.overflow='';}
 $('modalClose').addEventListener('click',closeModal);
-modal.addEventListener('click',e=>{const up=e.target.closest('[data-level-up]');if(up){const id=up.dataset.levelUp,c=readCollection(),ch=roster.find(x=>x.id===id),lv=getLevel(ch),cost=lv*20+(ch.rarity==='SSR'?80:ch.rarity==='SR'?40:0),g=readGameSave();if(!ch||lv>=50||g.coins<cost)return;g.coins-=cost;localStorage.setItem('campusCardMiniSave',JSON.stringify(g));c.levels=c.levels||{};c.levels[id]=lv+1;writeCollection(c);if(state.activeMember===id&&state.partyHp)state.partyHp[id]=Math.min(getCardStats(ch).hp,(state.partyHp[id]??getCardStats(ch).hp)+growthByRarity[ch.rarity].hp);openInventory();return;}if(e.target===modal)closeModal()});
+modal.addEventListener('click',e=>{const up=e.target.closest('[data-level-up]');if(up){const id=up.dataset.levelUp,c=readCollection(),ch=roster.find(x=>x.id===id),lv=getLevel(ch),cost=lv*20+(ch.rarity==='SSR'?80:ch.rarity==='SR'?40:0),g=readGameSave();if(!ch||lv>=50||g.coins<cost)return;g.coins-=cost;if(typeof state!=='undefined'&&state){state.coins=g.coins;save()}else{localStorage.setItem('campusCardMiniSave',JSON.stringify(g))}refreshLobby();c.levels=c.levels||{};c.levels[id]=lv+1;writeCollection(c);if(state.activeMember===id&&state.partyHp)state.partyHp[id]=Math.min(getCardStats(ch).hp,(state.partyHp[id]??getCardStats(ch).hp)+growthByRarity[ch.rarity].hp);openInventory();return;}if(e.target===modal)closeModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)closeModal()});
 function openArchive(){
  const col=readCollection();
