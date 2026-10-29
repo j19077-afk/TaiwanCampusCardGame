@@ -506,6 +506,16 @@
 .notice.victory-notice{border-color:#9a7b3b;background:linear-gradient(110deg,#40321c,#1c2c43);color:#ffe29a}
 .victory-banner{display:none!important}
 @media(max-width:520px){.skill-quick-row{gap:7px;padding:7px}.skill-quick-btn{padding:7px 10px!important;font-size:.78rem!important}.skill-quick-label{font-size:.75rem}#log{max-height:160px}}
+
+/* Layout A: party -> energy -> compact skill/attack/supply row */
+.compact-combat-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:stretch;margin:12px 0 5px}
+.compact-combat-controls .btn{width:100%;min-width:0;min-height:44px;padding:9px 10px!important;font-size:.88rem!important;white-space:normal;line-height:1.2}
+.compact-combat-controls .skill-quick-btn{display:flex;flex-direction:column;gap:2px}
+.compact-combat-controls .skill-quick-btn small,.compact-combat-controls #healBtn small{font-size:.72rem;opacity:.82}
+.skill-hint{font-size:.76rem;margin:0 0 8px 2px}
+#log{max-height:190px;overflow:auto;overscroll-behavior:contain}
+@media(max-width:600px){.compact-combat-controls{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.compact-combat-controls .btn{padding:8px 5px!important;font-size:.76rem!important}.compact-combat-controls .skill-quick-btn small,.compact-combat-controls #healBtn small{font-size:.65rem}}
+@media(max-width:360px){.compact-combat-controls{grid-template-columns:1fr 1fr}.compact-combat-controls #attackBtn{grid-column:1/-1}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
@@ -556,7 +566,7 @@
 <section class="panel" id="battlePanel"><div class="arena">
 <div class="fighter"><div class="avatar player-portrait" id="playerAvatar"><img src="images/characters/lin-yuqing-sr.png" alt="三上悠亞" onerror="this.remove();this.parentElement.textContent='🎓'"></div><h3>三上悠亞</h3><div class="muted">學園新生・玩家</div><div class="hp-label"><span>生命值</span><b id="playerHpText">100 / 100</b></div><div class="bar"><div class="fill" id="playerHpBar"></div></div><div class="muted" style="margin-top:9px">攻擊力：<b id="playerAtk">18</b></div></div><div class="versus">VS</div>
 <div class="fighter enemy"><div class="avatar" id="enemyAvatar">👾</div><h3 id="enemyName">校園史萊姆</h3><div class="muted" id="enemyDesc">第一個練習對手</div><div class="hp-label"><span>生命值</span><b id="enemyHpText">55 / 55</b></div><div class="bar"><div class="fill" id="enemyHpBar"></div></div><div class="muted" style="margin-top:9px">攻擊力：<b id="enemyAtk">7</b></div></div></div>
-<div id="battleParty" class="battle-party" aria-label="目前上陣隊伍"></div><p class="muted">點選隊員切換操作角色；敵人會優先攻擊目前操作的隊員。</p><div class="hp-label"><span>✦ 星輝能量</span><b id="energyText">60 / 100</b></div><div class="bar energy-bar"><div class="fill energy-fill" id="energyBar"></div></div><div class="muted" style="margin-top:6px">普通攻擊恢復 15 點能量；技能消耗 35 點。</div><div class="skill-quick-row"><span class="skill-quick-label">技能</span><button class="btn secondary skill-quick-btn" id="skillBtn" type="button">✨ 星輝衝擊 <small>35 能量</small></button></div><div class="muted skill-hint">選擇隊員後，技能會自動切換為該角色的專屬技能。</div><div class="actions"><button class="btn primary" id="attackBtn">⚔️ 攻擊</button><button class="btn secondary" id="healBtn">🧪 使用補給（回復 20）</button></div><div class="notice" id="notice" role="status" aria-live="polite">冒險開始！按下「攻擊」挑戰眼前的敵人。</div></section>
+<div id="battleParty" class="battle-party" aria-label="目前上陣隊伍"></div><p class="muted">點選隊員切換操作角色；敵人會優先攻擊目前操作的隊員。</p><div class="hp-label"><span>✦ 星輝能量</span><b id="energyText">60 / 100</b></div><div class="bar energy-bar"><div class="fill energy-fill" id="energyBar"></div></div><div class="muted" style="margin-top:6px">普通攻擊恢復 15 點能量；技能消耗 35 點。</div><div class="compact-combat-controls"><button class="btn secondary skill-quick-btn" id="skillBtn" type="button">✨ 星輝衝擊 <small>35 能量</small></button><button class="btn primary" id="attackBtn">⚔️ 攻擊</button><button class="btn secondary" id="healBtn">🧪 補給 <small>回復 20</small></button></div><div class="muted skill-hint">切換隊員後，技能會自動切換為該角色的專屬技能。</div><div class="notice" id="notice" role="status" aria-live="polite">冒險開始！按下「攻擊」挑戰眼前的敵人。</div></section>
 <div class="lower"><section class="panel"><h2>📘 冒險紀錄</h2><div class="muted" style="margin-bottom:12px">每次勝利都會獲得金幣，敵人也會逐漸變強。</div><div class="topline"><span>已通過關卡</span><strong id="cleared">0</strong></div><div class="topline" style="margin-top:9px"><span>本關勝利獎勵</span><strong class="reward" id="reward">+10 金幣</strong></div><div class="topline" style="margin-top:9px"><span>補給次數</span><strong id="potions">3</strong></div></section>
 <section class="panel"><h2>🗒️ 戰鬥紀錄</h2><div class="log" id="log"><div class="logline">你踏入學園訓練場，準備開始冒險。</div></div><button class="btn danger" id="resetBtn" style="width:100%;margin-top:14px">重新開始遊戲</button></section></div><div class="foot">進度儲存在這個瀏覽器。清除瀏覽器資料或更換裝置可能會使存檔消失。</div></main>
 <script>
