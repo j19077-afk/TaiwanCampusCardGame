@@ -972,6 +972,89 @@
  }
 }
 
+
+/* A1/B1: mirror enemy portrait and stats layout to player side */
+#gameApp .battle-arena .fighter{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  box-sizing:border-box!important;
+}
+#gameApp .battle-arena .fighter .avatar,
+#gameApp .battle-arena .fighter .player-portrait{
+  width:clamp(132px,17vw,192px)!important;
+  height:clamp(168px,22vw,228px)!important;
+  min-width:0!important;min-height:0!important;
+  flex:0 0 auto!important;
+  align-self:center!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+  margin:0 auto 14px!important;
+}
+#gameApp .battle-arena .fighter .avatar img{
+  display:block!important;
+  width:100%!important;height:100%!important;
+  max-width:100%!important;max-height:100%!important;
+  object-fit:contain!important;object-position:center!important;
+  flex:0 0 auto!important;
+}
+#gameApp .battle-arena .fighter h3{
+  min-height:1.35em!important;
+  margin-top:0!important;
+  margin-bottom:8px!important;
+  text-align:center!important;
+}
+#gameApp .battle-arena .fighter h3 + .muted{
+  min-height:2.8em!important;
+  margin:0 0 12px!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  text-align:center!important;
+  line-height:1.4!important;
+}
+#gameApp .battle-arena .fighter .hp-label{
+  margin-top:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+#gameApp .battle-arena .fighter .bar{
+  width:100%!important;
+  box-sizing:border-box!important;
+  flex:0 0 22px!important;
+}
+#gameApp .battle-arena .fighter .bar .fill{width:100%;box-sizing:border-box!important}
+#gameApp .battle-arena .fighter .hp-label b{white-space:nowrap!important}
+#gameApp .battle-arena .fighter .hp-label + .bar + .muted{
+  margin-top:9px!important;
+  text-align:center!important;
+}
+@media(max-width:850px){
+ #gameApp .battle-arena .fighter .avatar,
+ #gameApp .battle-arena .fighter .player-portrait{
+  width:clamp(94px,25vw,145px)!important;
+  height:clamp(124px,34vw,184px)!important;
+  margin-bottom:12px!important;
+ }
+ #gameApp .battle-arena .fighter h3 + .muted{min-height:3.8em!important;margin-bottom:8px!important}
+ #gameApp .battle-arena .fighter .bar{flex-basis:15px!important}
+}
+@media(max-width:380px){
+ #gameApp .battle-arena .fighter .avatar,
+ #gameApp .battle-arena .fighter .player-portrait{
+  width:clamp(82px,24vw,100px)!important;
+  height:clamp(110px,32vw,132px)!important;
+ }
+ #gameApp .battle-arena .fighter .bar{flex-basis:13px!important}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
