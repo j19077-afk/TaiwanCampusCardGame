@@ -1173,43 +1173,71 @@
  #gameApp .battle-action-right #notice{min-height:64px!important}
  #gameApp .lower{grid-template-columns:minmax(0,1fr)!important}
 }
-/* TEST ONLY: vertical HP bars beside character art, facing the VS center */
-#gameApp .fighter{
-  display:grid;
-  grid-template-rows:360px 42px 48px 28px 12px 28px;
-  grid-template-columns:minmax(0,1fr) 260px 16px minmax(0,1fr);
-  align-content:start;
-  align-items:start;
-  justify-items:stretch;
-  gap:8px 0;
-  text-align:center;
-  min-width:0;
-  position:relative;
+/* TEST FIX v2: actual battle markup uses .fighter > .bar and .avatar */
+#gameApp .battle-arena .fighter{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr) 14px!important;
+ grid-template-rows:auto auto auto auto auto auto!important;
+ align-items:start!important;
+ justify-items:stretch!important;
+ row-gap:8px!important;
+ column-gap:10px!important;
 }
-#gameApp .fighter.player-fighter .avatar{grid-column:2;grid-row:1;justify-self:center;align-self:start;width:260px;height:360px;margin:0}
-#gameApp .fighter.enemy .avatar{grid-column:3;grid-row:1;justify-self:center;align-self:start;width:260px;height:360px;margin:0}
-#gameApp .fighter.player-fighter .bar{grid-column:3;grid-row:1;width:12px;height:360px;justify-self:start;align-self:start;margin:0;border-radius:999px;overflow:hidden}
-#gameApp .fighter.enemy .bar{grid-column:2;grid-row:1;width:12px;height:360px;justify-self:end;align-self:start;margin:0;border-radius:999px;overflow:hidden}
-#gameApp .fighter .bar .fill{width:100%;height:100%;transition:height .25s ease,width .25s ease;align-self:start;flex:none}
-#gameApp .fighter h3{grid-column:1/-1;grid-row:2;align-self:center;width:100%;height:42px;min-height:42px;margin:0;display:flex;align-items:center;justify-content:center}
-#gameApp .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){grid-column:1/-1;grid-row:3;height:48px;min-height:48px;margin:0;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.35;overflow:hidden}
-#gameApp .fighter .hp-label{grid-column:1/-1;grid-row:4;width:100%;height:28px;min-height:28px;margin:0;display:flex;align-items:center;justify-content:space-between}
-#gameApp .fighter .muted:has(#playerAtk),#gameApp .fighter .muted:has(#enemyAtk){grid-column:1/-1;grid-row:6;height:28px;min-height:28px;margin:0!important;display:flex;align-items:center;justify-content:center}
-#gameApp .fighter .bar:not(.energy-bar){grid-row:1}
+#gameApp .battle-arena .fighter.player-fighter .avatar,
+#gameApp .battle-arena .fighter.enemy .avatar{
+ grid-row:1!important;
+ width:clamp(130px,14vw,180px)!important;
+ height:clamp(190px,20vw,264px)!important;
+ margin:0!important;
+ justify-self:center!important;
+ align-self:start!important;
+}
+#gameApp .battle-arena .fighter.player-fighter .avatar{grid-column:1!important}
+#gameApp .battle-arena .fighter.enemy{grid-template-columns:14px minmax(0,1fr)!important}
+#gameApp .battle-arena .fighter.enemy .avatar{grid-column:2!important}
+#gameApp .battle-arena .fighter.player-fighter > .bar,
+#gameApp .battle-arena .fighter.enemy > .bar{
+ grid-row:1!important;
+ display:flex!important;
+ flex-direction:column!important;
+ width:12px!important;
+ height:clamp(190px,20vw,264px)!important;
+ min-height:0!important;
+ padding:0!important;
+ margin:0!important;
+ align-self:start!important;
+ justify-self:center!important;
+ overflow:hidden!important;
+ border-radius:999px!important;
+}
+#gameApp .battle-arena .fighter.player-fighter > .bar{grid-column:2!important}
+#gameApp .battle-arena .fighter.enemy > .bar{grid-column:1!important}
+#gameApp .battle-arena .fighter > h3,
+#gameApp .battle-arena .fighter > .muted,
+#gameApp .battle-arena .fighter > .hp-label{
+ grid-column:1/-1!important;
+ width:100%!important;
+}
+#gameApp .battle-arena .fighter > h3{grid-row:2!important;margin:4px 0!important;min-height:0!important}
+#gameApp .battle-arena .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){grid-row:3!important;min-height:2.7em!important;height:auto!important;margin:0!important}
+#gameApp .battle-arena .fighter > .hp-label{grid-row:4!important;display:flex!important;justify-content:space-between!important;align-items:center!important;margin-top:8px!important}
+#gameApp .battle-arena .fighter > .bar .fill{
+ display:block!important;
+ width:100%!important;
+ height:100%!important;
+ min-height:0!important;
+ flex:0 0 auto!important;
+ transition:height .25s ease!important;
+}
+#gameApp .battle-arena .fighter > .muted:has(#playerAtk),
+#gameApp .battle-arena .fighter > .muted:has(#enemyAtk){grid-row:6!important;margin:0!important;min-height:1.5em!important;height:auto!important;justify-content:center!important}
 @media(max-width:900px){
- #gameApp .fighter{grid-template-columns:minmax(0,1fr) 180px 14px minmax(0,1fr);grid-template-rows:260px 40px 46px 28px 10px 28px;gap:7px 0}
- #gameApp .fighter.player-fighter .avatar{width:180px;height:260px}
- #gameApp .fighter.enemy .avatar{width:180px;height:260px}
- #gameApp .fighter.player-fighter .bar{height:260px;width:10px}
- #gameApp .fighter.enemy .bar{height:260px;width:10px}
+ #gameApp .battle-arena .fighter > .avatar{width:clamp(100px,18vw,150px)!important;height:clamp(150px,27vw,220px)!important}
+ #gameApp .battle-arena .fighter > .bar{height:clamp(150px,27vw,220px)!important;width:10px!important}
 }
 @media(max-width:560px){
- #gameApp .fighter{grid-template-columns:minmax(0,1fr) 120px 10px minmax(0,1fr);grid-template-rows:175px 36px 48px 28px 8px 28px}
- #gameApp .fighter.player-fighter .avatar{width:120px;height:175px}
- #gameApp .fighter.enemy .avatar{width:120px;height:175px}
- #gameApp .fighter.player-fighter .bar{height:175px;width:8px}
- #gameApp .fighter.enemy .bar{height:175px;width:8px}
- #gameApp .fighter h3{font-size:1rem}
+ #gameApp .battle-arena .fighter > .avatar{width:clamp(72px,22vw,110px)!important;height:clamp(108px,33vw,165px)!important}
+ #gameApp .battle-arena .fighter > .bar{height:clamp(108px,33vw,165px)!important;width:8px!important}
 }
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
