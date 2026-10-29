@@ -1173,6 +1173,44 @@
  #gameApp .battle-action-right #notice{min-height:64px!important}
  #gameApp .lower{grid-template-columns:minmax(0,1fr)!important}
 }
+/* TEST ONLY: vertical HP bars beside character art, facing the VS center */
+#gameApp .fighter{
+  display:grid;
+  grid-template-rows:360px 42px 48px 28px 12px 28px;
+  grid-template-columns:minmax(0,1fr) 260px 16px minmax(0,1fr);
+  align-content:start;
+  align-items:start;
+  justify-items:stretch;
+  gap:8px 0;
+  text-align:center;
+  min-width:0;
+  position:relative;
+}
+#gameApp .fighter.player-fighter .avatar{grid-column:2;grid-row:1;justify-self:center;align-self:start;width:260px;height:360px;margin:0}
+#gameApp .fighter.enemy .avatar{grid-column:3;grid-row:1;justify-self:center;align-self:start;width:260px;height:360px;margin:0}
+#gameApp .fighter.player-fighter .bar{grid-column:3;grid-row:1;width:12px;height:360px;justify-self:start;align-self:start;margin:0;border-radius:999px;overflow:hidden}
+#gameApp .fighter.enemy .bar{grid-column:2;grid-row:1;width:12px;height:360px;justify-self:end;align-self:start;margin:0;border-radius:999px;overflow:hidden}
+#gameApp .fighter .bar .fill{width:100%;height:100%;transition:height .25s ease,width .25s ease}
+#gameApp .fighter h3{grid-column:1/-1;grid-row:2;align-self:center;width:100%;height:42px;min-height:42px;margin:0;display:flex;align-items:center;justify-content:center}
+#gameApp .fighter > .muted:not(:has(#playerAtk)):not(:has(#enemyAtk)){grid-column:1/-1;grid-row:3;height:48px;min-height:48px;margin:0;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.35;overflow:hidden}
+#gameApp .fighter .hp-label{grid-column:1/-1;grid-row:4;width:100%;height:28px;min-height:28px;margin:0;display:flex;align-items:center;justify-content:space-between}
+#gameApp .fighter .muted:has(#playerAtk),#gameApp .fighter .muted:has(#enemyAtk){grid-column:1/-1;grid-row:6;height:28px;min-height:28px;margin:0!important;display:flex;align-items:center;justify-content:center}
+#gameApp .fighter .bar:not(.energy-bar){grid-row:1}
+@media(max-width:900px){
+ #gameApp .fighter{grid-template-columns:minmax(0,1fr) 180px 14px minmax(0,1fr);grid-template-rows:260px 40px 46px 28px 10px 28px;gap:7px 0}
+ #gameApp .fighter.player-fighter .avatar{width:180px;height:260px}
+ #gameApp .fighter.enemy .avatar{width:180px;height:260px}
+ #gameApp .fighter.player-fighter .bar{height:260px;width:10px}
+ #gameApp .fighter.enemy .bar{height:260px;width:10px}
+}
+@media(max-width:560px){
+ #gameApp .fighter{grid-template-columns:minmax(0,1fr) 120px 10px minmax(0,1fr);grid-template-rows:175px 36px 48px 28px 8px 28px}
+ #gameApp .fighter.player-fighter .avatar{width:120px;height:175px}
+ #gameApp .fighter.enemy .avatar{width:120px;height:175px}
+ #gameApp .fighter.player-fighter .bar{height:175px;width:8px}
+ #gameApp .fighter.enemy .bar{height:175px;width:8px}
+ #gameApp .fighter h3{font-size:1rem}
+}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
