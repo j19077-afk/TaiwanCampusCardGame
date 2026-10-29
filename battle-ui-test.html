@@ -754,6 +754,72 @@
  #gameApp .combat-bottom-controls .compact-combat-controls .btn{min-width:0!important;min-height:58px!important}
 }
 
+
+/* FINAL OVERRIDE: one identical battle hierarchy on desktop, tablet and phone */
+#gameApp #battlePanel{
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ gap:14px!important;width:100%!important;min-width:0!important;
+}
+#gameApp #battlePanel>.party-sidebar{
+ order:1!important;display:block!important;position:relative!important;
+ grid-column:auto!important;grid-row:auto!important;width:100%!important;
+ min-width:0!important;margin:0!important;padding:12px!important;
+ box-sizing:border-box!important;
+}
+#gameApp #battlePanel>.party-sidebar .battle-party{
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:10px!important;width:100%!important;
+}
+#gameApp #battlePanel .battle-party .battle-ally{
+ display:flex!important;flex-direction:column!important;justify-content:center!important;
+ align-items:stretch!important;gap:4px!important;min-width:0!important;
+ min-height:76px!important;padding:10px!important;box-sizing:border-box!important;
+ text-align:left!important;
+}
+#gameApp #battlePanel .battle-party .battle-ally img{display:none!important}
+#gameApp #battlePanel .battle-party .battle-ally>span{width:100%!important;min-width:0!important}
+#gameApp #battlePanel>.battle-arena{
+ order:2!important;display:grid!important;
+ grid-template-columns:minmax(0,1fr) 32px minmax(0,1fr)!important;
+ grid-template-rows:auto!important;gap:12px!important;
+ align-items:stretch!important;width:100%!important;min-width:0!important;
+ margin:0!important;position:relative!important;
+}
+#gameApp #battlePanel>.battle-arena>.player-fighter{grid-column:1!important;grid-row:1!important;min-width:0!important}
+#gameApp #battlePanel>.battle-arena>.versus{grid-column:2!important;grid-row:1!important;position:static!important;inset:auto!important;transform:none!important;align-self:center!important;justify-self:center!important;z-index:2!important}
+#gameApp #battlePanel>.battle-arena>.fighter.enemy{grid-column:3!important;grid-row:1!important;min-width:0!important}
+#gameApp #battlePanel>.party-switch-hint{order:3!important;margin:0!important}
+#gameApp #battlePanel>#notice{order:4!important;margin:0!important}
+#gameApp #battlePanel>.combat-bottom-controls{
+ order:5!important;display:block!important;width:100%!important;min-width:0!important;
+ margin:0!important;padding-top:14px!important;border-top:1px solid #344b68!important;
+ box-sizing:border-box!important;
+}
+#gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls{
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:10px!important;width:100%!important;margin-top:14px!important;
+}
+#gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls .btn{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ min-width:0!important;min-height:50px!important;width:100%!important;
+ padding:8px 6px!important;white-space:normal!important;box-sizing:border-box!important;
+}
+@media(max-width:850px){
+ #gameApp #battlePanel{gap:11px!important}
+ #gameApp #battlePanel>.party-sidebar{padding:9px!important}
+ #gameApp #battlePanel>.party-sidebar .battle-party{gap:6px!important}
+ #gameApp #battlePanel .battle-party .battle-ally{min-height:72px!important;padding:7px 6px!important}
+ #gameApp #battlePanel>.battle-arena{grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr)!important;gap:6px!important}
+ #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls{gap:6px!important}
+ #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls .btn{min-height:48px!important;font-size:.76rem!important}
+}
+@media(max-width:380px){
+ #gameApp #battlePanel>.party-sidebar .battle-party{grid-template-columns:1fr!important}
+ #gameApp #battlePanel>.battle-arena{grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr)!important;gap:4px!important}
+ #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls{grid-template-columns:1fr 1fr!important}
+ #gameApp #battlePanel>.combat-bottom-controls .compact-combat-controls #attackBtn{grid-column:1/-1!important}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
