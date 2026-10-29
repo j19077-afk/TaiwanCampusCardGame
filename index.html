@@ -521,6 +521,90 @@
 #gameApp .nav-btn{border:1px solid #4a5d79;border-radius:10px;padding:8px 12px;background:transparent;color:var(--text);font:inherit;font-size:12px;cursor:pointer}
 @media(max-width:850px){#gameApp #battlePanel{gap:11px}#gameApp .battle-arena .fighter{padding:10px}#gameApp .battle-arena .player-portrait,#gameApp .battle-arena .fighter .avatar{width:clamp(88px,23vw,120px);height:clamp(132px,34.5vw,180px)}#gameApp .battle-action-layout{grid-template-columns:minmax(0,1fr);gap:10px}#gameApp .battle-action-right .notice{min-height:90px}#gameApp .compact-combat-controls{grid-template-columns:repeat(2,minmax(0,1fr))}#gameApp .compact-combat-controls #skillBtn{grid-column:1/-1}}
 @media(max-width:420px){#gameApp .battle-arena{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:5px}#gameApp .battle-arena .fighter{padding:8px}#gameApp .battle-arena .hp-label{margin-top:12px}}
+/* Battle card symmetry: consistent image, text, and stat alignment */
+#gameApp .arena{align-items:stretch}
+#gameApp .fighter{
+  display:grid;
+  grid-template-rows:390px 42px 48px 28px 12px 28px;
+  align-content:start;
+  justify-items:stretch;
+  text-align:center;
+  gap:0;
+  min-width:0;
+}
+#gameApp .fighter .avatar{
+  width:260px;
+  height:390px;
+  max-width:100%;
+  box-sizing:border-box;
+  justify-self:center;
+  align-self:start;
+  margin:0 0 18px;
+  border-radius:18px;
+  overflow:hidden;
+  display:grid;
+  place-items:center;
+}
+#gameApp .fighter .avatar img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+#gameApp .fighter h3{
+  width:100%;
+  min-width:0;
+  height:42px;
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow-wrap:anywhere;
+}
+#gameApp .fighter .muted[id$="Desc"]{
+  width:100%;
+  min-width:0;
+  min-height:48px;
+  height:48px;
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+#gameApp .fighter .hp-label{
+  align-self:end;
+  width:100%;
+  min-height:28px;
+  margin:0 0 8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  text-align:left;
+}
+#gameApp .fighter .bar{
+  width:100%;
+  height:12px;
+  align-self:start;
+}
+#gameApp .fighter .muted:has(#playerAtk),
+#gameApp .fighter .muted:has(#enemyAtk){
+  width:100%;
+  min-height:28px;
+  margin:10px 0 0!important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+@media(max-width:650px){
+  #gameApp .fighter{grid-template-rows:260px 40px 56px 28px 10px 28px;padding:11px 8px}
+  #gameApp .fighter .avatar{width:100%;max-width:180px;height:260px;margin-bottom:12px}
+  #gameApp .fighter h3{height:40px;font-size:1rem}
+  #gameApp .fighter .muted[id$="Desc"]{height:56px;min-height:56px;font-size:.8rem}
+  #gameApp .fighter .bar{height:10px}
+}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <nav class="nav-toolbar" aria-label="遊戲導覽"><button class="nav-btn" id="lobbyHomeBtn" type="button">⌂ 返回遊戲大廳</button><span class="nav-hint">遊戲進度會自動儲存</span></nav>
