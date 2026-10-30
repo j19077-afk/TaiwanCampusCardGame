@@ -230,6 +230,23 @@
 .featured-info .btn{padding:8px 12px;font-size:.85rem;margin-top:4px}
 @media(max-width:800px){.featured-grid{grid-template-columns:1fr}.featured-card{min-height:175px}.featured-card img{width:32%;max-width:135px}.featured-info{padding-right:18px}}
 @media(max-width:380px){.featured-card img{min-width:80px;width:30%}.featured-info h3{font-size:1rem}.featured-info p{font-size:.78rem}}
+
+/* Homepage featured-character detail modal */
+.featured-card{cursor:pointer;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.featured-card:hover,.featured-card:focus-visible{transform:translateY(-2px);border-color:var(--mint);box-shadow:0 14px 34px #0004;outline:none}
+.featured-card:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+.featured-detail-backdrop{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:18px;background:#050b16d9;backdrop-filter:blur(6px)}
+.featured-detail-backdrop[hidden]{display:none}
+.featured-detail-dialog{position:relative;width:min(960px,100%);max-height:min(88dvh,850px);overflow:auto;box-sizing:border-box;padding:clamp(18px,3vw,30px);border:1px solid #7867a5;border-radius:22px;background:linear-gradient(145deg,#202a45,#151f32);color:var(--text);box-shadow:0 24px 90px #0009}
+.featured-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px}
+.featured-detail-head h2{margin:4px 0 0;font-size:clamp(1.35rem,3vw,2rem)}
+.featured-detail-close{flex:none;width:42px;height:42px;border:1px solid #526580;border-radius:11px;background:#142237;color:var(--text);font-size:1.25rem;cursor:pointer}
+.featured-detail-layout{display:grid;grid-template-columns:minmax(190px,.78fr) minmax(0,1.22fr);gap:clamp(18px,3vw,30px);align-items:start}
+.featured-detail-art{display:grid;place-items:center;min-width:0;padding:12px;border:1px solid #344b68;border-radius:16px;background:#101b2c}
+.featured-detail-art img{display:block;width:auto;height:auto;max-width:100%;max-height:60dvh;object-fit:contain}
+.featured-detail-info{min-width:0}.featured-detail-info .character-role{color:var(--mint);font-weight:800;margin:0 0 10px}.featured-detail-info p{line-height:1.8}.featured-detail-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0 22px}.featured-detail-stats>div{padding:14px;border-radius:13px;background:#101b2c;border:1px solid #263951;min-width:0}.featured-detail-stats small{display:block;color:#9fb3d0;margin-bottom:6px}.featured-detail-stats strong{font-size:1.12rem;color:#ffe29a;overflow-wrap:anywhere}.featured-detail-info h3{font-size:1.1rem;margin:18px 0 8px}
+@media(max-width:640px){.featured-detail-backdrop{padding:10px}.featured-detail-dialog{padding:16px;border-radius:16px;max-height:92dvh}.featured-detail-layout{grid-template-columns:minmax(0,1fr);gap:16px}.featured-detail-art img{max-height:42dvh}.featured-detail-stats>div{padding:11px}.featured-detail-stats strong{font-size:1rem}}
+
 /* Daily login reward popup */
 .daily-reward-popup{text-align:center;padding:8px 0 4px}
 .daily-reward-glow{display:grid;place-items:center;width:82px;height:82px;margin:0 auto 12px;border:1px solid #f3d58a88;border-radius:50%;background:radial-gradient(circle,#f5d58b33,#b98a3510 70%);font-size:2.7rem;box-shadow:0 0 34px #e8c86c20}
@@ -614,9 +631,9 @@
 <section class="featured-section" aria-labelledby="featuredTitle">
 <div class="section-heading"><div><p class="eyebrow">CAMPUS SPOTLIGHT</p><h2 id="featuredTitle">🌟 焦點角色</h2></div><span class="muted">認識角色，組建你的隊伍</span></div>
 <div class="featured-grid">
-<article class="featured-card featured-ssr"><img src="images/characters/shen-ruoxue.png" alt="沈若雪" loading="lazy" onerror="this.style.display='none'"><div class="featured-info"><span class="featured-tag">SSR · 醫學系・三年級</span><h3>沈若雪</h3><p>感染災變爆發後，她冷靜分析感染者的行動規律，逐步掌握變異體的弱點。</p></div></article>
+<article class="featured-card featured-ssr" role="button" tabindex="0" data-featured-character="ruoxue" aria-label="查看沈若雪的屬性與技能"><img src="images/characters/shen-ruoxue.png" alt="沈若雪" loading="lazy" onerror="this.style.display='none'"><div class="featured-info"><span class="featured-tag">SSR · 醫學系・三年級</span><h3>沈若雪</h3><p>感染災變爆發後，她冷靜分析感染者的行動規律，逐步掌握變異體的弱點。</p></div></article>
 
-<article class="featured-card featured-ssr"><img src="images/characters/gu-zihan.png" alt="顧紫涵" loading="lazy" onerror="this.style.display='none'"><div class="featured-info"><span class="featured-tag">SSR · 資訊工程系・四年級</span><h3>顧紫涵</h3><p>擅長分析研究設施資料，利用科技與環境尋找感染者的弱點，協助小隊避開危險。</p></div></article>
+<article class="featured-card featured-ssr" role="button" tabindex="0" data-featured-character="zihan" aria-label="查看顧紫涵的屬性與技能"><img src="images/characters/gu-zihan.png" alt="顧紫涵" loading="lazy" onerror="this.style.display='none'"><div class="featured-info"><span class="featured-tag">SSR · 資訊工程系・四年級</span><h3>顧紫涵</h3><p>擅長分析研究設施資料，利用科技與環境尋找感染者的弱點，協助小隊避開危險。</p></div></article>
 </div>
 </section>
 <section class="lobby-menu">
@@ -629,6 +646,8 @@
  </div>
  <p class="collection-note">召喚結果與收藏進度會儲存在目前的瀏覽器中。本版本尚未支援雲端存檔或跨裝置同步。</p>
 </section>
+
+<div class="featured-detail-backdrop" id="featuredDetailModal" hidden><section class="featured-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="featuredDetailTitle"><div class="featured-detail-head"><div><p class="eyebrow">CHARACTER PROFILE</p><h2 id="featuredDetailTitle">角色詳細資料</h2></div><button type="button" class="featured-detail-close" id="featuredDetailClose" aria-label="關閉視窗">✕</button></div><div id="featuredDetailBody"></div></section></div>
 <div class="modal-backdrop" id="featureModal" hidden><section class="game-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalBody"><div class="modal-head"><div><p class="eyebrow">CAMPUS SYSTEM</p><h2 id="modalTitle">遊戲功能</h2></div><button class="modal-close" id="modalClose" type="button" aria-label="關閉視窗">✕</button></div><div class="modal-body" id="modalBody"></div></section></div>
 
 <section class="lobby-section"><div class="section-heading"><div><p class="eyebrow">YOUR NEXT JOURNEY</p><h2>選擇你的行動</h2></div><span class="muted">操作簡單・立即開始</span></div>
@@ -649,6 +668,19 @@
 <script>
 (()=>{const $=id=>document.getElementById(id);const lobby=$('lobby'),gameApp=$('gameApp');
 // 戰鬥返回使用捕獲階段的全域點擊攔截，避免其他事件或畫面狀態令按鈕失效。
+
+// Homepage spotlight: show existing roster data in a focused modal; do not alter other screens.
+(function bindFeaturedCharacterModal(){
+ const backdrop=document.getElementById('featuredDetailModal'),body=document.getElementById('featuredDetailBody'),title=document.getElementById('featuredDetailTitle'),close=document.getElementById('featuredDetailClose');if(!backdrop||!body||!title||!close)return;
+ const profiles={ruoxue:{department:'醫學系',year:'三年級',description:'感染災變爆發後，她冷靜分析感染者的行動規律，逐步掌握變異體的弱點。'},zihan:{department:'資訊工程系',year:'四年級',description:'擅長分析研究設施資料，利用科技與環境尋找感染者的弱點，協助小隊避開危險。'}};
+ const skillNames={ruoxue:'冷氣開到 16 度！',zihan:'已讀不回大法！'};
+ const skillDesc={ruoxue:'沈若雪一本正經地把冷氣調到 16 度！感染者彷彿感受到月底電費帳單的恐懼，她趁亂發動強力攻勢。',zihan:'顧紫涵對感染者發送訊息後立刻已讀不回。敵人陷入無盡等待與混亂，她趁對方失去攻擊節奏時發動猛烈攻勢。'};
+ function open(id){const ch=roster.find(x=>x.id===id);if(!ch)return;const p=profiles[id];if(!p)return;const st=getCardStats(ch),lv=getLevel(ch);title.textContent=ch.name+' · '+ch.rarity;body.innerHTML='<div class="featured-detail-layout"><div class="featured-detail-art"><img src="'+ch.image+'" alt="'+ch.name+'完整卡牌" onerror="this.alt=\'角色卡牌圖片無法載入\'"></div><div class="featured-detail-info"><p class="character-role">'+p.department+'・'+p.year+'</p><p>'+p.description+'</p><div class="featured-detail-stats"><div><small>角色等級</small><strong>Lv.'+lv+' / '+levelCap(ch)+'</strong></div><div><small>攻擊力</small><strong>⚔️ '+st.atk+'</strong></div><div><small>生命值</small><strong>💚 '+st.hp+'</strong></div><div><small>技能威力</small><strong>✨ '+st.skill+'</strong></div></div><h3>專屬技能｜'+skillNames[id]+'</h3><p>'+skillDesc[id]+'</p></div></div>';backdrop.hidden=false;document.body.style.overflow='hidden';close.focus({preventScroll:true});}
+ function dismiss(){backdrop.hidden=true;document.body.style.overflow='';}
+ document.querySelectorAll('[data-featured-character]').forEach(card=>{card.addEventListener('click',()=>open(card.dataset.featuredCharacter));card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open(card.dataset.featuredCharacter)}})});
+ close.addEventListener('click',dismiss);backdrop.addEventListener('click',e=>{if(e.target===backdrop)dismiss()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!backdrop.hidden)dismiss()});
+})();
+
 function forceLobby(){if(gameApp.style.display!=='none')save();gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)}
 document.addEventListener('click',function(ev){const btn=ev.target.closest('#gameBackBtn,#lobbyHomeBtn');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();forceLobby()},true);
 
