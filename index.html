@@ -865,6 +865,25 @@
   margin-right:auto!important;
 }
 
+
+/* v11: final explicit portrait-width match for both HP bars */
+#gameApp .battle-arena .player-fighter > .bar.hp-bar-with-text,
+#gameApp .battle-arena .fighter.enemy > .bar.hp-bar-with-text {
+  width: clamp(130px, 14vw, 180px) !important;
+  min-width: 0 !important;
+  max-width: min(100%, 180px) !important;
+  flex: 0 0 24px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+@media (max-width: 640px) {
+  #gameApp .battle-arena .player-fighter > .bar.hp-bar-with-text,
+  #gameApp .battle-arena .fighter.enemy > .bar.hp-bar-with-text {
+    width: clamp(90px, 28vw, 130px) !important;
+    max-width: min(100%, 130px) !important;
+  }
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
