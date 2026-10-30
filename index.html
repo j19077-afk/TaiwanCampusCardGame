@@ -637,8 +637,27 @@
 /* Preview: health bar below card image; HP text centered inside it */
 #gameApp .battle-arena>.fighter{
   grid-template-columns:minmax(0,1fr)!important;
-  grid-template-rows:auto auto auto auto!important;
+  grid-template-rows:auto 24px auto auto!important;
   row-gap:8px!important;
+  align-content:start!important;
+}
+#gameApp .battle-arena>.fighter>.avatar{grid-column:1!important;grid-row:1!important}
+#gameApp .battle-arena>.fighter>.bar.hp-bar-with-text{
+  grid-column:1!important;grid-row:2!important;
+  box-sizing:border-box!important;
+  width:clamp(180px,26vw,400px)!important;
+  max-width:100%!important;
+  height:24px!important;min-height:24px!important;max-height:24px!important;
+  justify-self:center!important;align-self:center!important;
+}
+#gameApp .battle-arena>.fighter>h3{
+  grid-column:1!important;grid-row:3!important;
+  position:relative!important;z-index:1!important;
+  margin:0!important;
+}
+#gameApp .battle-arena>.fighter>.fighter-attack{
+  grid-column:1!important;grid-row:4!important;
+  position:relative!important;z-index:1!important;
 }
 #gameApp .battle-arena>.player-fighter>.avatar,
 #gameApp .battle-arena>.fighter.enemy>.avatar{
