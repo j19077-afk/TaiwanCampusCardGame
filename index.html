@@ -1166,19 +1166,28 @@ $('attackBtn').onclick=attack;$('defendBtn').onclick=defend;$('skillBtn').onclic
 (function(){
   function syncPortraitBars(){
     const pairs=[
-      [document.querySelector('.player-fighter #playerAvatar'),document.querySelector('.player-fighter #playerHpBar')?.closest('.hp-bar-with-text')],
-      [document.querySelector('.fighter.enemy #enemyAvatar'),document.querySelector('.fighter.enemy #enemyHpBar')?.closest('.hp-bar-with-text')]
+      [document.querySelector('.player-fighter #playerAvatar'),document.querySelector('.player-fighter #playerHpBar')?.closest('.hp-bar-with-text'),document.querySelector('.player-fighter .player-energy-hud')],
+      [document.querySelector('.fighter.enemy #enemyAvatar'),document.querySelector('.fighter.enemy #enemyHpBar')?.closest('.hp-bar-with-text'),document.querySelector('.fighter.enemy .enemy-energy-hud')]
     ];
-    pairs.forEach(([portrait,bar])=>{
-      if(!portrait||!bar)return;
+    pairs.forEach(([portrait,bar,energyHud])=>{
+      if(!portrait)return;
       const width=Math.round(portrait.getBoundingClientRect().width);
       if(width>0){
-        bar.style.setProperty('width',width+'px','important');
-        bar.style.setProperty('min-width',width+'px','important');
-        bar.style.setProperty('max-width',width+'px','important');
-        bar.style.setProperty('flex-basis','24px','important');
-        bar.style.setProperty('margin-left','auto','important');
-        bar.style.setProperty('margin-right','auto','important');
+        if(bar){
+          bar.style.setProperty('width',width+'px','important');
+          bar.style.setProperty('min-width',width+'px','important');
+          bar.style.setProperty('max-width',width+'px','important');
+          bar.style.setProperty('flex-basis','24px','important');
+          bar.style.setProperty('margin-left','auto','important');
+          bar.style.setProperty('margin-right','auto','important');
+        }
+        if(energyHud){
+          energyHud.style.setProperty('width',width+'px','important');
+          energyHud.style.setProperty('min-width',width+'px','important');
+          energyHud.style.setProperty('max-width',width+'px','important');
+          energyHud.style.setProperty('margin-left','auto','important');
+          energyHud.style.setProperty('margin-right','auto','important');
+        }
       }
     });
   }
