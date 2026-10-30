@@ -415,20 +415,25 @@
 }
 #gameApp .battle-action-layout{
   order:3;width:100%;min-width:0;display:grid;
-  grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:16px;align-items:stretch;
+  grid-template-columns:minmax(0,45fr) minmax(0,55fr);
+  grid-template-areas:"notice notice" "controls party";
+  gap:12px 16px;align-items:start;
 }
 #gameApp .battle-action-left,#gameApp .battle-action-right{min-width:0}
-#gameApp .battle-action-left .combat-bottom-controls{margin:0;height:100%;padding:0;background:transparent;border:0}
+#gameApp .battle-action-left{grid-area:controls}
+#gameApp .battle-action-right{display:contents}
+#gameApp .battle-action-right .notice{
+  grid-area:notice;width:100%;min-width:0;min-height:0;margin:0;padding:12px 16px;
+  white-space:pre-wrap;overflow-wrap:anywhere;
+}
+#gameApp .battle-action-right .party-sidebar{grid-area:party;align-self:start;min-width:0}
+#gameApp .battle-action-left .combat-bottom-controls{margin:0;height:auto;padding:0;background:transparent;border:0}
 #gameApp .battle-action-left .energy-bar{margin-bottom:10px}
 #gameApp .compact-combat-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 #gameApp .compact-combat-controls>.btn{width:100%;min-width:0;min-height:54px;display:flex;align-items:center;justify-content:center;gap:5px;padding:12px 8px}
 #gameApp .compact-combat-controls #skillBtn{grid-column:auto}
 #gameApp .compact-combat-controls #skillBtn{font-size:clamp(11px,1.05vw,15px);white-space:nowrap;letter-spacing:0;}
 #gameApp .compact-combat-controls #skillBtn small{display:block;font-size:.78em;line-height:1.2;white-space:nowrap;}
-#gameApp .battle-action-right .notice{
-  height:100%;min-height:245px;margin:0;padding:14px 16px;
-  white-space:pre-wrap;overflow-wrap:anywhere;
-}
 #gameApp .lower{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:16px}
 #gameApp .adventure-record-panel{display:none!important}
 #gameApp .battle-history-panel{display:block!important}
