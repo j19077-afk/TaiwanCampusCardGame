@@ -1212,19 +1212,15 @@ enemy=function(){const e=currentTestTarget();return e?{...e,reward:0}:testWaves[
 function testSelectTarget(id){if(testLocked||testFinished)return;const idx=testEnemies.findIndex(e=>e.id===id&&e.alive&&!e.dying);if(idx<0)return;testTargetIndex=idx;state.enemyHp=testEnemies[idx].hp;testRender();tell('已選擇「'+testEnemies[idx].name+'」作為攻擊目標。')}
 $('multiEnemyCards').addEventListener('click',ev=>{const card=ev.target.closest('[data-test-enemy]');if(card)testSelectTarget(card.getAttribute('data-test-enemy'))});
 function testCounterattack(){
- // TEST ONLY: allow enemy counterattacks and their animations/logs, but restore all player HP immediately.
- const savedPlayerHp=state.playerHp;
- const savedPartyHp={...(state.partyHp||{})};
+ // TEST ONLY: enemy turns still produce combat logs/animation, but never call the damage/death logic.
  const survivors=testEnemies.filter(e=>e.alive&&!e.dying);
  for(const foe of survivors){
-  state.playerHp=savedPlayerHp;
-  state.partyHp={...savedPartyHp};
-  enemyCounter(foe);
-  state.playerHp=savedPlayerHp;
-  state.partyHp={...savedPartyHp};
+  addLog(foe.name+' 發動反擊！測試模式：我方不會受到傷害。');
+  tell(foe.name+' 發動反擊！我方 HP 不變（無扣血測試模式）。');
+  animateFighter('playerHpBar','hp-flash');
  }
- state.playerHp=savedPlayerHp;
- state.partyHp={...savedPartyHp};
+ // Reassert the displayed HP from the unchanged state after the full enemy phase.
+ testRender();
 }
 function testCheckWave(){
  if(testEnemies.some(e=>e.alive&&!e.dying))return;
