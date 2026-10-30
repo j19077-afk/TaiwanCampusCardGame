@@ -686,6 +686,57 @@
 #gameApp .battle-arena>.fighter>.fighter-attack{grid-column:1!important;grid-row:4!important}
 #gameApp .battle-arena>.fighter>.hp-label{display:none!important}
 
+
+/* Final preview override: force both sides into identical, non-overlapping rows */
+#gameApp .battle-arena>.fighter,
+#gameApp .battle-arena>.fighter.enemy,
+#gameApp .battle-arena>.player-fighter{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto 24px auto auto!important;
+  grid-auto-flow:row!important;
+  align-content:start!important;
+  align-items:start!important;
+  justify-items:stretch!important;
+  row-gap:8px!important;
+}
+#gameApp .battle-arena>.fighter>.avatar,
+#gameApp .battle-arena>.fighter.enemy>.avatar,
+#gameApp .battle-arena>.player-fighter>.avatar{
+  grid-column:1 / 2!important;grid-row:1!important;
+  position:relative!important;z-index:1!important;
+  margin:0 auto!important;align-self:start!important;
+}
+#gameApp .battle-arena>.fighter>.bar.hp-bar-with-text,
+#gameApp .battle-arena>.fighter.enemy>.bar.hp-bar-with-text,
+#gameApp .battle-arena>.player-fighter>.bar.hp-bar-with-text{
+  grid-column:1 / 2!important;grid-row:2!important;
+  position:relative!important;z-index:2!important;
+  width:clamp(180px,26vw,400px)!important;max-width:100%!important;
+  height:24px!important;min-height:24px!important;max-height:24px!important;
+  margin:0 auto!important;align-self:center!important;justify-self:center!important;
+}
+#gameApp .battle-arena>.fighter>h3,
+#gameApp .battle-arena>.fighter.enemy>h3,
+#gameApp .battle-arena>.player-fighter>h3{
+  grid-column:1 / 2!important;grid-row:3!important;
+  position:relative!important;z-index:3!important;
+  display:block!important;width:100%!important;min-width:0!important;
+  margin:0!important;padding:0!important;
+  text-align:center!important;line-height:1.35!important;
+  white-space:normal!important;overflow-wrap:anywhere!important;
+}
+#gameApp .battle-arena>.fighter>.fighter-attack,
+#gameApp .battle-arena>.fighter.enemy>.fighter-attack,
+#gameApp .battle-arena>.player-fighter>.fighter-attack{
+  grid-column:1 / 2!important;grid-row:4!important;
+  position:relative!important;z-index:3!important;
+  display:flex!important;justify-content:center!important;
+  width:100%!important;margin:0!important;
+}
+#gameApp .battle-arena>.fighter>.fighter-description,
+#gameApp .battle-arena>.fighter>.hp-label{display:none!important}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
