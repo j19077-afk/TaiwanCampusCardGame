@@ -520,6 +520,19 @@
  #gameApp .battle-action-right .battle-ally .ally-active-label{font-size:.6rem}
 }
 
+
+/* B2: fuse horizontal HP bars into the bottom of each battle card portrait. */
+#gameApp .battle-arena>.fighter{display:grid!important;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 8px auto auto auto;align-content:start;justify-items:stretch;gap:0;padding:clamp(10px,1.5vw,16px);min-width:0}
+#gameApp .battle-arena>.fighter>.avatar{grid-column:1;grid-row:1;width:clamp(130px,14vw,180px);height:clamp(190px,20vw,264px);max-width:100%;margin:0 auto 8px;align-self:end;justify-self:center}
+#gameApp .battle-arena>.fighter>.bar{grid-column:1;grid-row:2;display:block;position:relative;width:100%;height:8px;min-height:8px;margin:0 0 7px;align-self:stretch;justify-self:stretch;overflow:hidden;border-radius:999px;background:#080f1c;border:1px solid #ffffff25}
+#gameApp .battle-arena>.fighter>.bar>.fill{display:block;width:100%!important;height:100%;transform-origin:left center!important;transition:transform .32s ease,background .18s ease;border-radius:999px}
+#gameApp .battle-arena>.fighter>h3{grid-column:1;grid-row:3;width:100%;margin:0 0 3px;text-align:center}
+#gameApp .battle-arena>.fighter>.hp-label{grid-column:1;grid-row:4;justify-content:center;margin:0 0 2px;font-size:clamp(.78rem,1.1vw,.95rem)}
+#gameApp .battle-arena>.fighter>.hp-label>span{display:none}
+#gameApp .battle-arena>.fighter>.hp-label>b{font-weight:800}
+#gameApp .battle-arena>.fighter>.fighter-attack{grid-column:1;grid-row:5;margin:0!important}
+#gameApp .battle-arena>.fighter>.fighter-description{display:none!important}
+@media(max-width:640px){#gameApp .battle-arena>.fighter{padding:8px;grid-template-rows:auto 7px auto auto auto}#gameApp .battle-arena>.fighter>.avatar{width:clamp(90px,28vw,130px);height:clamp(135px,42vw,190px);margin-bottom:7px}#gameApp .battle-arena>.fighter>.bar{height:7px;min-height:7px;margin-bottom:6px}#gameApp .battle-arena>.fighter>.hp-label{font-size:.76rem}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
@@ -709,7 +722,7 @@ const defaults=()=>({stage:1,coins:0,cleared:0,playerHp:100,energy:60,potions:3,
 let state;
 function floatNumber(targetId,text,heal=false){const target=$(targetId);if(!target)return;const fighter=target.closest('.fighter');if(!fighter)return;const n=document.createElement('span');n.className='hp-damage-float '+(fighter.classList.contains('enemy')?'enemy-damage':'player-damage')+(heal?' heal-number':'');n.textContent=text;fighter.append(n);setTimeout(()=>n.remove(),950)}
 function animateFighter(id,kind){const el=$(id);if(!el)return;if(kind==='hp-flash'){const bar=el.closest('.bar');const target=bar||el;target.classList.remove('hp-flash');void target.offsetWidth;target.classList.add('hp-flash');setTimeout(()=>target.classList.remove('hp-flash'),450);return}el.classList.remove('hit','attack-pulse','victory');void el.offsetWidth;el.classList.add(kind);setTimeout(()=>el.classList.remove(kind),450)}
-function updateHpBar(id,current,maximum,side){const fill=$(id);if(!fill)return;const max=Math.max(1,Number(maximum)||1),hp=Math.max(0,Math.min(max,Number(current)||0)),ratio=hp/max;fill.style.width='100%';fill.style.height='100%';fill.style.transform='scaleY('+ratio+')';fill.style.transformOrigin='bottom center';fill.style.flex='0 0 auto';fill.style.background=ratio<=0.25?'linear-gradient(180deg,#ff334f,#b80f35)':ratio<=0.5?'linear-gradient(180deg,#ff765e,#e73545)':side==='enemy'?'linear-gradient(180deg,#ffb06e,#ff647c)':'linear-gradient(180deg,#a6edba,#50d6a5)';fill.setAttribute('aria-valuenow',String(hp));fill.setAttribute('aria-valuemin','0');fill.setAttribute('aria-valuemax',String(max));fill.setAttribute('role','progressbar')}
+function updateHpBar(id,current,maximum,side){const fill=$(id);if(!fill)return;const max=Math.max(1,Number(maximum)||1),hp=Math.max(0,Math.min(max,Number(current)||0)),ratio=hp/max;fill.style.width='100%';fill.style.height='100%';fill.style.transform='scaleX('+ratio+')';fill.style.transformOrigin='left center';fill.style.flex='0 0 auto';fill.style.background=ratio<=0?'#344055':ratio<0.25?'linear-gradient(90deg,#ff334f,#b80f35)':ratio<0.6?'linear-gradient(90deg,#ffd166,#f0a52b)':side==='enemy'?'linear-gradient(90deg,#ff647c,#ffb06e)':'linear-gradient(90deg,#50d6a5,#a6edba)';fill.setAttribute('aria-valuenow',String(hp));fill.setAttribute('aria-valuemin','0');fill.setAttribute('aria-valuemax',String(max));fill.setAttribute('role','progressbar')}
 function showGame(){lobby.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';gameApp.style.display='grid';document.body.style.overflow='';try{window.history.replaceState({screen:'game'},'','#game')}catch(err){}window.scrollTo({top:0,behavior:'smooth'});render();if(!state.stageStorySeen&&state.enemyHp>0)setTimeout(showStageStory,0)}
 function showLobby(){gameApp.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';lobby.style.display='grid';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}window.scrollTo({top:0,behavior:'smooth'});refreshLobby()}
 function returnToLobby(){forceLobby()}
