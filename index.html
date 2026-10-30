@@ -812,6 +812,48 @@
  #gameApp .battle-arena>.fighter.enemy>.bar.hp-bar-with-text{width:clamp(130px,20vw,180px)!important}
 }
 
+
+/* Restore original battle-card dimensions with direct ID selectors */
+#gameApp #playerAvatar,
+#gameApp #enemyAvatar{
+  box-sizing:border-box!important;
+  width:180px!important;
+  height:264px!important;
+  min-width:0!important;
+  max-width:100%!important;
+  min-height:0!important;
+  max-height:264px!important;
+  flex:0 0 264px!important;
+  margin:0 auto 8px!important;
+  overflow:hidden!important;
+}
+#gameApp #playerAvatar img,
+#gameApp #enemyAvatar img{
+  display:block!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  object-fit:contain!important;
+}
+@media(max-width:640px){
+ #gameApp #playerAvatar,#gameApp #enemyAvatar{
+   width:clamp(90px,28vw,130px)!important;
+   height:clamp(135px,42vw,190px)!important;
+   max-height:190px!important;
+   flex-basis:clamp(135px,42vw,190px)!important;
+ }
+}
+@media(min-width:641px) and (max-width:900px){
+ #gameApp #playerAvatar,#gameApp #enemyAvatar{
+   width:clamp(130px,20vw,180px)!important;
+   height:clamp(190px,29vw,264px)!important;
+   max-height:264px!important;
+   flex-basis:clamp(190px,29vw,264px)!important;
+ }
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
