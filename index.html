@@ -1143,22 +1143,22 @@ const enemySkillSets=[
  [{type:'A',name:'高速突襲'}],
  [{type:'A',name:'獵食追擊'}],
  [{type:'B',name:'藥劑干擾'}],
- [{type:'A',name:'異變重擊'},{type:'B',name:'感染號令'}],
+ [{type:'A',name:'異變重擊'}],
  [{type:'A',name:'暗處伏擊'}],
  [{type:'B',name:'寄生侵蝕'}],
  [{type:'B',name:'失控實驗波'}],
  [{type:'A',name:'突破重擊'}],
- [{type:'A',name:'原型重擊'},{type:'C',name:'細胞再生'}],
+ [{type:'A',name:'原型重擊'}],
  [{type:'B',name:'群體訊號干擾'}],
  [{type:'A',name:'突入撲擊'}],
  [{type:'A',name:'天台飛撲'}],
  [{type:'A',name:'裝甲衝撞'}],
- [{type:'A',name:'異變重擊'},{type:'B',name:'封鎖脈衝'}],
+ [{type:'A',name:'異變重擊'}],
  [{type:'B',name:'訊號污染'}],
  [{type:'B',name:'研究區干擾波'}],
  [{type:'A',name:'進化重擊'},{type:'B',name:'適應干擾'}],
  [{type:'B',name:'核心封鎖'}],
- [{type:'A',name:'核心暴走'},{type:'B',name:'核心訊號'},{type:'C',name:'原初再生'}]
+ [{type:'A',name:'核心暴走'}]
 ];
 function enemy(){const n=Math.max(1,Number(state.stage)||1),b=enemies[(n-1)%enemies.length],cycle=Math.floor((n-1)/4),boss=n%10===0,mini=n%5===0&&!boss;return {...b,name:enemyCardNames[n-1]||(boss?({10:'暗影監督者',20:'深淵支配者'}[n]||'深淵領主'):mini?({5:'巡夜隊長',15:'封印守衛'}[n]||'精英隊長'):b.name),desc:boss?'篇章核心敵人':mini?'阻擋主線的強大敵人':b.desc,icon:boss?'👑':mini?'🐉':b.icon,hp:Math.round((b.hp+cycle*35)*(boss?2.8:mini?1.8:1)),atk:Math.round((b.atk+cycle*4)*(boss?2.0:mini?1.55:1.15)),reward:baseReward(n)}}
 function showStageStory(){
