@@ -647,7 +647,7 @@
 #gameApp .battle-arena>.player-fighter>.bar,
 #gameApp .battle-arena>.fighter.enemy>.bar{
   grid-column:1!important;grid-row:2!important;
-  width:100%!important;height:12px!important;min-height:12px!important;
+  width:clamp(180px,26vw,400px)!important;max-width:100%!important;height:24px!important;min-height:24px!important;justify-self:center!important;
   display:block!important;position:relative!important;overflow:hidden!important;
   margin:0!important;border-radius:999px!important;
 }
@@ -660,7 +660,7 @@
 #gameApp .battle-arena>.fighter>.bar>.hp-bar-text{
   position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);
   z-index:2;display:block;width:max-content;max-width:100%;padding:0 5px;
-  color:#fff;font-size:10px;line-height:1;font-weight:800;
+  color:#fff;font-size:14px;line-height:1;font-weight:800;
   text-shadow:0 1px 3px #000,0 0 3px #000;white-space:nowrap;pointer-events:none;
 }
 #gameApp .battle-arena>.fighter>h3{grid-column:1!important;grid-row:3!important;margin:0!important}
