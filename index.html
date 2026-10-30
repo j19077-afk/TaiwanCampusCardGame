@@ -618,6 +618,21 @@
  #gameApp .battle-arena>.fighter>.bar,
  #gameApp .battle-arena>.fighter.enemy>.bar{width:clamp(130px,14vw,180px)!important}
 }
+/* Preview: keep notice above energy controls on desktop and mobile */
+#gameApp .battle-action-layout{grid-template-areas:"notice notice" "controls party"}
+#gameApp .battle-action-right{display:contents}
+#gameApp .battle-action-right .notice{grid-area:notice;min-height:0;height:auto;max-height:none}
+#gameApp .battle-action-right .party-sidebar{grid-area:party}
+@media(max-width:900px){
+ #gameApp .battle-action-layout{grid-template-columns:minmax(0,1fr);grid-template-areas:"notice" "controls" "party";gap:10px}
+ #gameApp .battle-action-left{order:initial}
+ #gameApp .battle-action-right .notice{min-height:0;max-height:180px}
+ #gameApp .battle-action-right .party-sidebar{order:initial}
+}
+@media(max-width:520px){
+ #gameApp .battle-action-right .notice{max-height:150px;padding:10px 12px}
+ #gameApp .battle-action-right .party-sidebar{padding:8px}
+}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
