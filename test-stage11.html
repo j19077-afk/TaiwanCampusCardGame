@@ -102,7 +102,7 @@ function enemyCounter(){
  const attackers=alive().slice();let total=0;
  for(const e of attackers){if(playerHp<=0)break;let hit=e.atk+Math.floor(Math.random()*3);if(defending)hit=Math.ceil(hit*.7);playerHp=Math.max(0,playerHp-hit);total+=hit;log("「"+e.name+"」反擊，造成 "+hit+" 點傷害。")}
  defending=false;render();
- if(playerHp<=0){ended=true;lock(true);tell("我方生命值歸零，測試戰鬥結束。請重置後再次測試。";);return}
+ if(playerHp<=0){ended=true;lock(true);tell("我方生命值歸零，測試戰鬥結束。請重置後再次測試。");return}
  tell("敵人依序反擊，合計造成 "+total+" 點傷害。");render();
 }
 function clearWave(){
