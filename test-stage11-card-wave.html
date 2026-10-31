@@ -1252,7 +1252,7 @@ body{min-height:100vh}
 <button class="btn secondary" id="defendBtn" type="button">🛡️ 防禦</button>
 <button class="btn secondary skill-quick-btn" id="skillBtn" type="button">✦ 必殺技 <small>消耗 35 能量</small></button>
 <button class="btn secondary" id="healBtn" type="button">🧪 補給 <small>回復 50 HP</small></button>
-</div></div><p class="test-mode-note">獨立測試模式：不讀取、不寫入正式存檔；敵方反擊不扣除我方 HP。</p></div>
+</div></div><p class="test-mode-note">正常戰鬥規則：敵方反擊會實際扣除我方 HP；全隊倒下則戰鬥失敗。</p></div>
 <div class="battle-action-right"><div class="notice" id="notice" role="status" aria-live="polite">請選擇敵方卡牌，再使用戰鬥指令。</div>
 <aside class="party-sidebar"><h3>出戰隊員</h3><div id="battleParty" class="battle-party" aria-label="測試用隊伍">
 <button type="button" class="battle-ally active"><img src="images/characters/lin-yuqing-sr.png" alt=""><span class="ally-name">三上悠亞</span><small class="ally-active-label">目前操作</small></button>
@@ -1261,12 +1261,17 @@ body{min-height:100vh}
 </div></aside></div>
 </div>
 </section>
-<section class="panel battle-history-panel"><div class="battle-history-heading"><h2>🗒️ 戰鬥訊息</h2></div><div class="muted battle-history-hint">第11關多人分波測試紀錄</div><div class="battle-log-label">一般戰鬥紀錄</div><div class="log recent-three" id="log" aria-live="polite"><div class="logline">測試戰鬥準備開始。</div></div></section>
+<section class="panel battle-history-panel"><div class="battle-history-heading"><h2>🗒️ 戰鬥訊息</h2></div><div class="muted battle-history-hint">第11關正常戰鬥紀錄</div><div class="battle-log-label">一般戰鬥紀錄</div><div class="log recent-three" id="log" aria-live="polite"><div class="logline">測試戰鬥準備開始。</div></div></section>
 <div class="foot">此頁只開放第11關戰鬥測試。未載入大廳、召喚、背包、任務、正式存檔與其他關卡。</div>
 </main>
 <script>
 (()=>{
 const $=id=>document.getElementById(id);
+const roster=[
+ {id:'yuching',name:'三上悠亞',rarity:'SR',role:'均衡型冒險者',image:'images/characters/lin-yuqing-sr.png',atk:22,skill:40,hp:118},
+ {id:'yutong',name:'蘇語彤',rarity:'R',role:'友善支援',image:'images/characters/su-yutong.png.png',atk:11,skill:19,hp:84},
+ {id:'ruoxue',name:'沈若雪',rarity:'SSR',role:'冰霜系策略型',image:'images/characters/shen-ruoxue.png',atk:24,skill:70,hp:122}
+];
 const waves=[
  [{id:'infected',name:'初始感染體',rarity:'R',hp:65,atk:8,energy:0,image:'新增圖片/敵方卡牌/stage-11.png',icon:'🧟‍♀️'},
   {id:'student',name:'感染學生',rarity:'R',hp:55,atk:7,energy:0,image:'',icon:'🧟'}],
@@ -1274,74 +1279,142 @@ const waves=[
   {id:'mutant',name:'異變感染體',rarity:'R',hp:75,atk:10,energy:0,image:'',icon:'👹'},
   {id:'infected2',name:'初始感染體',rarity:'R',hp:65,atk:8,energy:0,image:'新增圖片/敵方卡牌/stage-11.png',icon:'🧟‍♀️'}]
 ];
-let wave=0,enemies=[],selected='infected',playerHp=105,playerEnergy=45,healed=false,busy=false,finished=false;
-const maxPlayerHp=105;
-function addLog(message){const row=document.createElement('div');row.className='logline';row.textContent=message;$('log').prepend(row);while($('log').children.length>8)$('log').lastElementChild.remove()}
+let wave=0,enemies=[],selected='infected',activeId='yuching',energy=0,defendNext=false,supplyUsed=false,busy=false,finished=false,defeated=false;
+const partyHp=Object.fromEntries(roster.map(c=>[c.id,c.hp]));
+function active(){return roster.find(c=>c.id===activeId)||roster[0]}
+function aliveParty(){return roster.filter(c=>partyHp[c.id]>0)}
+function aliveEnemies(){return enemies.filter(e=>e.hp>0)}
+function addLog(message){const row=document.createElement('div');row.className='logline';row.textContent=message;$('log').prepend(row);while($('log').children.length>12)$('log').lastElementChild.remove()}
+function tell(message){$('notice').textContent=message}
+function floatDamage(host,text,heal=false){const el=document.createElement('span');el.className='damage-float'+(heal?' heal-number':'');el.textContent=text;$(host).append(el);setTimeout(()=>el.remove(),900)}
 function updatePlayer(){
- $('playerHpText').textContent='HP '+playerHp+' / '+maxPlayerHp;
- $('playerHpBar').style.width=(playerHp/maxPlayerHp*100)+'%';
- $('playerEnergyText').textContent='能量 '+playerEnergy+' / 100';
- $('playerEnergyBar').style.width=playerEnergy+'%';
- $('skillBtn').disabled=busy||finished||playerEnergy<35;
- $('healBtn').disabled=busy||finished||healed||playerHp===maxPlayerHp;
- $('attackBtn').disabled=busy||finished||!enemies.some(e=>e.hp>0);
- $('defendBtn').disabled=busy||finished;
+ const ch=active(),hp=partyHp[ch.id];
+ $('playerName').textContent=ch.name;
+ $('playerAvatar').innerHTML='<img src="'+ch.image+'" alt="'+ch.name+'" onerror="this.parentElement.textContent=\'🎓\'">';
+ $('playerHpText').textContent='HP '+hp+' / '+ch.hp;
+ $('playerHpBar').style.width=(hp/ch.hp*100)+'%';
+ $('playerEnergyText').textContent='能量 '+energy+' / 100';
+ $('playerEnergyBar').style.width=energy+'%';
+ $('playerAtk').textContent=ch.atk;
+ $('skillBtn').disabled=busy||finished||defeated||energy<35;
+ $('healBtn').disabled=busy||finished||defeated||supplyUsed||hp>=ch.hp;
+ $('attackBtn').disabled=busy||finished||defeated||aliveEnemies().length===0;
+ $('defendBtn').disabled=busy||finished||defeated;
+ $('battleParty').innerHTML=roster.map(c=>'<button type="button" class="battle-ally '+(c.id===activeId?'active':'')+'" data-member="'+c.id+'" '+(partyHp[c.id]<=0?'disabled':'')+'><img src="'+c.image+'" alt=""><span class="ally-name">'+c.name+'</span>'+(c.id===activeId?'<small class="ally-active-label">目前操作</small>':'')+'<span class="ally-hp">HP '+Math.max(0,partyHp[c.id])+' / '+c.hp+'</span></button>').join('');
 }
-function render(){
- const alive=enemies.filter(e=>e.hp>0);
+function renderEnemies(){
+ const alive=aliveEnemies();
  $('waveTag').textContent=(wave===0?'第一波':'第二波')+'｜'+alive.length+' / '+enemies.length+' 名存活';
  $('enemyGrid').innerHTML='';
  enemies.forEach(e=>{
   const card=document.createElement('article');
   card.className='fighter enemy'+(e.hp<=0?' dead':'')+(selected===e.id?' selected':'');
-  card.setAttribute('role','button');card.setAttribute('tabindex',e.hp>0&&!busy&&!finished?'0':'-1');
-  card.setAttribute('aria-label',e.name+'，HP '+Math.max(0,e.hp)+'，能量 '+e.energy);
+  card.setAttribute('role','button');card.setAttribute('tabindex',e.hp>0&&!busy&&!finished&&!defeated?'0':'-1');
   const art=e.image?'<img src="'+e.image+'" alt="'+e.name+'" onerror="this.remove();this.parentElement.textContent=\''+e.icon+'\'">':e.icon;
   card.innerHTML='<div class="energy-hud enemy-energy-hud"><div class="bar energy-bar"><div class="fill energy-fill" style="width:'+e.energy+'%"></div><span class="energy-bar-text">能量 '+e.energy+' / 100</span></div></div><div class="avatar">'+art+'</div><h3>'+e.name+' <small>['+e.rarity+']</small></h3><div class="muted fighter-description">基礎攻擊</div><div class="bar hp-bar-with-text"><div class="fill" style="width:'+Math.max(0,e.hp)/e.maxHp*100+'%"></div><span class="hp-bar-text">HP '+Math.max(0,e.hp)+' / '+e.maxHp+'</span></div><div class="muted fighter-attack">攻擊力：<b>'+e.atk+'</b></div>';
-  const choose=()=>{if(busy||finished||e.hp<=0)return;selected=e.id;$('notice').textContent='已選取「'+e.name+'」，請選擇戰鬥操作。';render()};
+  const choose=()=>{if(busy||finished||defeated||e.hp<=0)return;selected=e.id;tell('已選取「'+e.name+'」，請選擇戰鬥操作。');render()};
   card.addEventListener('click',choose);card.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();choose()}});
   $('enemyGrid').append(card);
  });
- updatePlayer();
 }
+function render(){renderEnemies();updatePlayer()}
+function target(){return enemies.find(e=>e.id===selected&&e.hp>0)||aliveEnemies()[0]}
 function loadWave(){
  enemies=waves[wave].map(e=>({...e,maxHp:e.hp}));
  selected=enemies[0].id;render();
- $('notice').textContent=(wave===0?'第一波敵人出現！':'第二波敵人出現！')+' 點選敵方卡牌即可切換攻擊目標。';
+ tell((wave===0?'第一波':'第二波')+'敵人登場！選擇敵方卡牌後進行攻擊。');
  addLog((wave===0?'第一波':'第二波')+'敵人登場。');
 }
-function target(){return enemies.find(e=>e.id===selected&&e.hp>0)||enemies.find(e=>e.hp>0)}
+function checkBattleEnd(){
+ if(aliveEnemies().length===0){
+  if(wave===0){
+   busy=true;render();tell('第一波全滅，第二波即將登場。');addLog('第一波全滅，準備迎戰第二波。');
+   setTimeout(()=>{wave=1;busy=false;loadWave()},1000);
+  }else{
+   finished=true;render();tell('🎉 第二波全滅！第11關戰鬥測試勝利。');addLog('第二波全滅，測試戰鬥勝利。');
+  }
+  return true;
+ }
+ if(aliveParty().length===0){
+  defeated=true;render();tell('💫 全隊角色倒下，戰鬥失敗。可重新開始測試。');addLog('全隊 HP 歸零，戰鬥失敗。');
+  $('attackBtn').disabled=true;$('defendBtn').disabled=true;$('skillBtn').disabled=true;$('healBtn').disabled=true;
+  return true;
+ }
+ return false;
+}
 function enemyTurn(){
- busy=true;render();const living=enemies.filter(e=>e.hp>0);let index=0;
+ busy=true;render();
+ const queue=aliveEnemies().slice();let i=0;
  function next(){
-  if(index>=living.length){busy=false;render();return}
-  const enemy=living[index++];enemy.energy=Math.min(100,enemy.energy+20);
-  $('notice').textContent=enemy.name+' 發動基礎攻擊！（測試模式：我方不扣血）';
-  addLog(enemy.name+' 發動反擊；能量 +20（'+enemy.energy+' / 100），我方 HP 不變。');
-  const node=[...$('enemyGrid').children].find(el=>el.querySelector('h3')?.textContent.includes(enemy.name));
-  if(node)node.classList.add('hit');
-  render();setTimeout(next,360);
+  if(i>=queue.length){busy=false;render();return}
+  const enemy=queue[i++];
+  if(enemy.hp<=0){next();return}
+  enemy.energy=Math.min(100,enemy.energy+20);
+  const ch=active();
+  let damage=enemy.atk+Math.floor(Math.random()*5);
+  if(defendNext){damage=Math.ceil(damage*.7);defendNext=false;addLog('防禦生效，本次受到傷害減少 30%。')}
+  const before=partyHp[ch.id],actual=Math.min(before,damage);
+  partyHp[ch.id]=Math.max(0,before-damage);
+  floatDamage('playerAvatar','-'+actual);
+  addLog(enemy.name+' 發動基礎攻擊，'+ch.name+' 受到 '+actual+' 點傷害；敵方能量 +20（'+enemy.energy+' / 100）。');
+  if(partyHp[ch.id]<=0){
+   addLog(ch.name+' 倒下了！');
+   const nextMember=aliveParty()[0];
+   if(nextMember){activeId=nextMember.id;tell(ch.name+' 倒下！自動切換至 '+nextMember.name+'。')}
+  }else tell(enemy.name+' 反擊，造成 '+actual+' 點傷害。');
+  render();
+  if(checkBattleEnd())return;
+  setTimeout(next,420);
  }
  next();
 }
-function afterAction(message){
- $('notice').textContent=message;addLog(message);render();
- if(enemies.every(e=>e.hp<=0)){
-  if(wave===0){
-   busy=true;render();$('notice').textContent='第一波全滅，準備迎戰第二波。';
-   addLog('第一波全滅，第二波即將登場。');
-   setTimeout(()=>{wave=1;busy=false;loadWave()},1100);
-  }else{
-   finished=true;$('notice').textContent='第二波全滅！第11關測試戰鬥完成。';
-   addLog('第二波全滅，測試戰鬥完成。');updatePlayer();
-  }
- }else enemyTurn();
+function finishPlayerAction(message){
+ addLog(message);tell(message);render();
+ if(!checkBattleEnd())enemyTurn();
 }
-$('attackBtn').onclick=()=>{if(busy||finished)return;const e=target();if(!e)return;const damage=20;e.hp=Math.max(0,e.hp-damage);afterAction('我方攻擊「'+e.name+'」，造成 '+damage+' 點傷害。')};
-$('skillBtn').onclick=()=>{if(busy||finished||playerEnergy<35)return;const e=target();if(!e)return;playerEnergy-=35;const damage=38;e.hp=Math.max(0,e.hp-damage);afterAction('我方施放測試必殺技攻擊「'+e.name+'」，造成 '+damage+' 點傷害。')};
-$('defendBtn').onclick=()=>{if(busy||finished)return;afterAction('我方採取防禦姿態。')};
-$('healBtn').onclick=()=>{if(busy||finished||healed||playerHp>=maxPlayerHp)return;playerHp=Math.min(maxPlayerHp,playerHp+50);healed=true;afterAction('使用補給，恢復生命值。')};
-loadWave();updatePlayer();
+function attack(){
+ if(busy||finished||defeated)return;
+ const e=target(),ch=active();if(!e)return;
+ const damage=ch.atk+2*roster.length+Math.floor(Math.random()*5);
+ const actual=Math.min(e.hp,damage);e.hp=Math.max(0,e.hp-damage);
+ energy=Math.min(100,energy+10);floatDamage('enemyGrid','-'+actual);
+ finishPlayerAction(ch.name+' 發動普通攻擊，對 '+e.name+' 造成 '+actual+' 點傷害，恢復 10 點能量。');
+}
+function useSkill(){
+ if(busy||finished||defeated||energy<35)return;
+ const ch=active(),e=target();if(!e)return;
+ energy-=35;
+ if(ch.id==='yutong'){
+  let total=0;roster.forEach(member=>{const before=partyHp[member.id];partyHp[member.id]=Math.min(member.hp,before+25);total+=partyHp[member.id]-before});
+  finishPlayerAction(ch.name+' 施放「先喝水再說！」，全隊各恢復 25 HP（共恢復 '+total+' HP）。');
+ }else{
+  const damage=ch.skill+Math.floor(Math.random()*5),actual=Math.min(e.hp,damage);e.hp=Math.max(0,e.hp-damage);
+  if(ch.id==='keqing')defendNext=true;
+  finishPlayerAction(ch.name+' 施放專屬必殺技，對 '+e.name+' 造成 '+actual+' 點傷害'+(ch.id==='keqing'?'，並使下一次受到的傷害減半。':'')+'，消耗 35 能量。');
+ }
+}
+function defend(){
+ if(busy||finished||defeated)return;
+ defendNext=true;energy=Math.min(100,energy+5);
+ finishPlayerAction(active().name+' 採取防禦姿態：下一次敵方攻擊傷害減少 30%，恢復 5 點能量。');
+}
+function heal(){
+ if(busy||finished||defeated||supplyUsed)return;
+ const ch=active(),before=partyHp[ch.id],after=Math.min(ch.hp,before+50),actual=after-before;
+ if(actual<=0)return;
+ partyHp[ch.id]=after;supplyUsed=true;floatDamage('playerAvatar','+'+actual,true);
+ finishPlayerAction('使用本關補給，'+ch.name+' 恢復 '+actual+' HP（每場限用一次）。');
+}
+$('attackBtn').onclick=attack;
+$('skillBtn').onclick=useSkill;
+$('defendBtn').onclick=defend;
+$('healBtn').onclick=heal;
+$('battleParty').addEventListener('click',ev=>{
+ const button=ev.target.closest('[data-member]');if(!button||button.disabled||busy||finished||defeated)return;
+ const id=button.dataset.member;if(id===activeId)return;
+ activeId=id;addLog('切換操作角色：'+active().name+'。');tell('已切換至 '+active().name+'。');render();
+});
+loadWave();render();
 })();
 </script>
 </body></html>
