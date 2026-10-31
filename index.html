@@ -1230,12 +1230,15 @@
 // Homepage spotlight: show existing roster data in a focused modal; do not alter other screens.
 (function bindFeaturedCharacterModal(){
  const backdrop=document.getElementById('featuredDetailModal'),body=document.getElementById('featuredDetailBody'),title=document.getElementById('featuredDetailTitle'),close=document.getElementById('featuredDetailClose');if(!backdrop||!body||!title||!close)return;
+ // The summon page hides #lobby; keep this dialog outside that hidden ancestor.
+ if(backdrop.parentElement!==document.body)document.body.appendChild(backdrop);
  const profiles={ruoxue:{department:'醫學系',year:'三年級',description:'感染災變爆發後，她冷靜分析感染者的行動規律，逐步掌握變異體的弱點。'},zihan:{department:'資訊工程系',year:'四年級',description:'擅長分析研究設施資料，利用科技與環境尋找感染者的弱點，協助小隊避開危險。'}};
  const skillNames={ruoxue:'冷氣開到 16 度！',zihan:'已讀不回大法！'};
  const skillDesc={ruoxue:'沈若雪一本正經地把冷氣調到 16 度！感染者彷彿感受到月底電費帳單的恐懼，她趁亂發動強力攻勢。',zihan:'顧紫涵對感染者發送訊息後立刻已讀不回。敵人陷入無盡等待與混亂，她趁對方失去攻擊節奏時發動猛烈攻勢。'};
  function open(id){const ch=roster.find(x=>x.id===id);if(!ch)return;const p=profiles[id];if(!p)return;const st=getCardStats(ch),lv=getLevel(ch);title.textContent=ch.name+' · '+ch.rarity;body.innerHTML='<div class="featured-detail-layout"><div class="featured-detail-art"><img src="'+ch.image+'" alt="'+ch.name+'完整卡牌" onerror="this.alt=\'角色卡牌圖片無法載入\'"></div><div class="featured-detail-info"><p class="character-role">'+p.department+'・'+p.year+'</p><p>'+p.description+'</p><div class="featured-detail-stats"><div><small>角色等級</small><strong>Lv.'+lv+' / '+levelCap(ch)+'</strong></div><div><small>攻擊力</small><strong>⚔️ '+st.atk+'</strong></div><div><small>生命值</small><strong>💚 '+st.hp+'</strong></div><div><small>技能威力</small><strong>✨ '+st.skill+'</strong></div></div><h3>專屬技能｜'+skillNames[id]+'</h3><p>'+skillDesc[id]+'</p></div></div>';backdrop.hidden=false;document.body.style.overflow='hidden';close.focus({preventScroll:true});}
  function dismiss(){backdrop.hidden=true;document.body.style.overflow='';}
- document.addEventListener('click',e=>{const card=e.target.closest('[data-featured-character]');if(card)open(card.dataset.featuredCharacter)});document.addEventListener('keydown',e=>{const card=e.target.closest('[data-featured-character]');if(card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();open(card.dataset.featuredCharacter)}});
+ document.addEventListener('click',e=>{const target=e.target instanceof Element?e.target:null;const card=target&&target.closest('#summonPage [data-featured-character]');if(card&&$('summonPage')?.style.display!=='none')open(card.dataset.featuredCharacter)});
+ document.addEventListener('keydown',e=>{const target=e.target instanceof Element?e.target:null;const card=target&&target.closest('#summonPage [data-featured-character]');if(card&&$('summonPage')?.style.display!=='none'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();open(card.dataset.featuredCharacter)}});
  close.addEventListener('click',dismiss);backdrop.addEventListener('click',e=>{if(e.target===backdrop)dismiss()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!backdrop.hidden)dismiss()});
 })();
 
