@@ -826,10 +826,8 @@
 #gameApp .enemy-skill-notice .skill-notice-name{font-size:16px;font-weight:800;margin-top:4px}
 #gameApp .enemy-skill-notice .skill-notice-desc{font-size:12px;opacity:.8;margin-top:3px;line-height:1.5}
 #gameApp .battle-log-label{font-size:12px;font-weight:700;opacity:.72;margin:4px 0 6px}
-#gameApp #enemyAvatar.enemy-skill-warning{outline:3px solid #d97706;outline-offset:3px;box-shadow:0 0 0 5px rgba(217,119,6,.14),0 0 18px rgba(217,119,6,.32);animation:enemySkillShake .12s ease-in-out 4}
-#gameApp #enemyAvatar.enemy-skill-cast{outline:3px solid #16a34a;outline-offset:3px;box-shadow:0 0 0 5px rgba(22,163,74,.14),0 0 20px rgba(22,163,74,.35);animation:enemySkillShake .10s ease-in-out 5}
-@keyframes enemySkillShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
-@media(prefers-reduced-motion:reduce){#gameApp #enemyAvatar.enemy-skill-warning,#gameApp #enemyAvatar.enemy-skill-cast{animation:none!important}}
+#gameApp #enemyAvatar.enemy-skill-warning{outline:3px solid #d97706;outline-offset:3px;box-shadow:0 0 0 5px rgba(217,119,6,.14),0 0 18px rgba(217,119,6,.32)}
+#gameApp #enemyAvatar.enemy-skill-cast{outline:3px solid #16a34a;outline-offset:3px;box-shadow:0 0 0 5px rgba(22,163,74,.14),0 0 20px rgba(22,163,74,.35)}
 /* Restore original battle-card dimensions with direct ID selectors */
 #gameApp #playerAvatar,
 #gameApp #enemyAvatar{
