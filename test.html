@@ -1153,6 +1153,10 @@
 @media(max-width:650px){#featureModal .featured-grid{grid-template-columns:1fr}}
 
 .combat-action-selected{outline:3px solid #ffe08a!important;outline-offset:2px;box-shadow:0 0 0 4px #ffe08a33,0 0 20px #ffe08a55!important;filter:brightness(1.12)}
+/* 攻擊按鈕改為中性深藍灰，互動時提高亮度 */
+#attackBtn{background:#2b3b55!important;color:var(--text)!important;border:1px solid #4a5d79!important;transition:filter .16s,transform .12s,box-shadow .16s}
+#attackBtn:hover:not(:disabled){filter:brightness(1.22)!important}
+#attackBtn:active:not(:disabled){filter:brightness(1.32)!important;transform:scale(.98)}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
