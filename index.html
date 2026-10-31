@@ -936,25 +936,6 @@
 }
 
 
-/* V1 follow-up: remove portrait frame and use the original side-specific soft glow colors. */
-#gameApp .battle-arena>.player-fighter>.avatar{
-  background:transparent!important;border:0!important;box-shadow:none!important;
-  filter:drop-shadow(0 0 7px rgba(75,225,190,.48)) drop-shadow(0 0 16px rgba(75,225,190,.22));
-}
-#gameApp .battle-arena>.player-fighter>.avatar img{
-  background:transparent!important;border:0!important;box-shadow:none!important;
-  filter:drop-shadow(0 0 6px rgba(75,225,190,.5)) drop-shadow(0 0 14px rgba(75,225,190,.22));
-}
-#gameApp .battle-arena>.fighter.enemy>.avatar{
-  background:transparent!important;border:0!important;box-shadow:none!important;
-  filter:drop-shadow(0 0 7px rgba(221,105,164,.48)) drop-shadow(0 0 16px rgba(221,105,164,.22));
-}
-#gameApp .battle-arena>.fighter.enemy>.avatar img{
-  background:transparent!important;border:0!important;box-shadow:none!important;
-  filter:drop-shadow(0 0 6px rgba(221,105,164,.5)) drop-shadow(0 0 14px rgba(221,105,164,.22));
-}
-
-
 /* V1 correction: remove only the large outer fighter panels; keep the card frames intact. */
 #gameApp .battle-arena>.fighter,
 #gameApp .battle-arena>.fighter.enemy{
@@ -1025,6 +1006,15 @@
  #gameApp .battle-party .battle-ally img{width:32px;height:40px}
  #gameApp .compact-combat-controls{gap:6px}
  #gameApp .compact-combat-controls .btn{min-height:41px;padding:8px 7px}
+}
+
+
+/* V1 update: remove both player and enemy portrait glow effects. */
+#gameApp .battle-arena>.player-fighter>.avatar,
+#gameApp .battle-arena>.player-fighter>.avatar img,
+#gameApp .battle-arena>.fighter.enemy>.avatar,
+#gameApp .battle-arena>.fighter.enemy>.avatar img{
+  filter:none!important;
 }
 
 </style></head><body>
