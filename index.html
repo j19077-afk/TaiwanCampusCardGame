@@ -954,6 +954,16 @@
   filter:drop-shadow(0 0 6px rgba(221,105,164,.5)) drop-shadow(0 0 14px rgba(221,105,164,.22));
 }
 
+
+/* V1 correction: remove only the large outer fighter panels; keep the card frames intact. */
+#gameApp .battle-arena>.fighter,
+#gameApp .battle-arena>.fighter.enemy{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
