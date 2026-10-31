@@ -1062,6 +1062,85 @@
 #gameApp .battle-action-right .notice{margin-top:0!important}
 @media(max-width:640px){#gameApp .battle-arena>.fighter>.avatar,#gameApp .battle-arena>.fighter.enemy>.avatar{width:clamp(90px,28vw,130px)!important;height:clamp(135px,42vw,190px)!important}}
 
+
+/* Battle spacing V4 — comfortable spacing, preserve current portrait size (preview only). */
+/* 1) Energy bar to portrait: deliberate breathing room. */
+#gameApp .battle-arena>.fighter>.energy-hud{
+  margin:0 auto 16px!important;
+}
+#gameApp .battle-arena>.fighter>.energy-hud .energy-bar{
+  margin:0!important;
+}
+/* 2) Portrait to HP bar. */
+#gameApp .battle-arena>.fighter>.avatar,
+#gameApp .battle-arena>.fighter.enemy>.avatar{
+  margin:0 auto 12px!important;
+}
+/* 3) HP, character name and attack information. */
+#gameApp .battle-arena>.fighter>.hp-bar-with-text{
+  margin:8px auto 8px!important;
+}
+#gameApp .battle-arena>.fighter>h3{
+  margin:6px 0 7px!important;
+}
+#gameApp .battle-arena>.fighter>.fighter-attack{
+  margin:5px 0 0!important;
+}
+/* 4) Arena to notice area. */
+#gameApp #battlePanel{
+  gap:14px!important;
+}
+#gameApp #battlePanel>.battle-arena{
+  margin-bottom:0!important;
+}
+/* 5) Notice to action controls. */
+#gameApp .battle-action-layout{
+  row-gap:13px!important;
+  column-gap:12px!important;
+}
+#gameApp .battle-action-right .notice{
+  margin:0!important;
+  padding:11px 14px!important;
+}
+/* 6) Comfortable control and party-card spacing. */
+#gameApp .compact-combat-controls{
+  gap:10px!important;
+}
+#gameApp .compact-combat-controls>.btn{
+  min-height:48px!important;
+}
+#gameApp .battle-action-right .party-sidebar{
+  padding:10px!important;
+}
+#gameApp .battle-action-right .party-sidebar h3{
+  margin-bottom:8px!important;
+}
+#gameApp .battle-action-right .battle-party{
+  gap:8px!important;
+}
+#gameApp .battle-action-right .battle-ally{
+  height:72px!important;
+  padding:7px 5px!important;
+  gap:5px!important;
+}
+@media(max-width:900px){
+ #gameApp #battlePanel{gap:12px!important}
+ #gameApp .battle-action-layout{row-gap:12px!important}
+ #gameApp .battle-action-right .notice{padding:10px 12px!important}
+ #gameApp .battle-action-right .party-sidebar{padding:9px!important}
+ #gameApp .battle-action-right .battle-ally{height:70px!important}
+}
+@media(max-width:640px){
+ #gameApp .battle-arena>.fighter>.energy-hud{margin-bottom:12px!important}
+ #gameApp .battle-arena>.fighter>.avatar,
+ #gameApp .battle-arena>.fighter.enemy>.avatar{margin-bottom:9px!important}
+ #gameApp .battle-arena>.fighter>.hp-bar-with-text{margin:7px auto!important}
+ #gameApp .battle-arena>.fighter>h3{margin:5px 0 6px!important}
+ #gameApp .battle-action-layout{row-gap:10px!important}
+ #gameApp .compact-combat-controls{gap:8px!important}
+ #gameApp .battle-action-right .battle-party{gap:7px!important}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
