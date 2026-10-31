@@ -899,6 +899,248 @@
   }
 }
 
+
+/* Battle UI compact V1 preview: spacing-only refinements, preserve existing behavior. */
+#gameApp .topline{gap:10px}
+#gameApp .topline>div:first-child{min-width:0}
+#gameApp .topline .eyebrow{margin-bottom:3px}
+#gameApp .topline h2{margin-top:2px;margin-bottom:0}
+#gameApp #battlePanel{gap:12px;padding:clamp(12px,2.1vw,22px)}
+#gameApp .battle-arena>.fighter{min-height:0!important;padding:clamp(10px,1.4vw,14px)!important}
+#gameApp .battle-arena>.fighter>.avatar{transform:scale(.95);transform-origin:top center;margin-bottom:4px}
+#gameApp .battle-arena>.fighter>.energy-hud{margin-bottom:3px}
+#gameApp .battle-arena>.fighter>.energy-hud .energy-bar{height:26px}
+#gameApp .battle-arena>.fighter>.bar.hp-bar-with-text{height:21px!important;min-height:21px!important;max-height:21px!important}
+#gameApp .battle-arena>.fighter>h3{margin-bottom:2px}
+#gameApp .battle-arena>.fighter>.fighter-description,
+#gameApp .battle-arena>.fighter>.fighter-attack{margin-top:1px;margin-bottom:1px}
+#gameApp .battle-action-layout{gap:9px}
+#gameApp .battle-action-right .notice{box-sizing:border-box;padding:9px 11px;min-height:0;max-height:153px}
+#gameApp .battle-action-right .party-sidebar{padding:9px}
+#gameApp .battle-action-right .party-sidebar h3{margin-bottom:6px}
+#gameApp .battle-party{gap:6px}
+#gameApp .battle-party>*{min-height:0}
+#gameApp .compact-combat-controls{gap:8px}
+#gameApp .compact-combat-controls .btn{min-height:44px;padding:10px 12px}
+#gameApp .battle-history-panel{padding:clamp(12px,2vw,20px)}
+#gameApp .battle-history-panel .battle-history-heading{margin-bottom:7px}
+#gameApp .battle-history-panel .battle-history-hint{margin:4px 0 7px}
+@media(max-width:760px){
+ #gameApp #battlePanel{padding:9px;gap:8px}
+ #gameApp .battle-arena>.fighter{padding:6px 4px!important}
+ #gameApp .battle-arena>.fighter>.energy-hud .energy-bar{height:23px}
+ #gameApp .battle-action-right .notice{max-height:132px;padding:8px 9px}
+ #gameApp .battle-action-right .party-sidebar{padding:7px}
+ #gameApp .compact-combat-controls{gap:6px}
+ #gameApp .compact-combat-controls .btn{min-height:41px;padding:8px 7px}
+}
+
+
+/* V1 correction: remove only the large outer fighter panels; keep the card frames intact. */
+#gameApp .battle-arena>.fighter,
+#gameApp .battle-arena>.fighter.enemy{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+}
+
+
+/* V1 outer-frame removal hotfix: target the actual two direct fighter panels. */
+#gameApp #battlePanel>.battle-arena>.fighter,
+#gameApp #battlePanel>.battle-arena>.player-fighter,
+#gameApp #battlePanel>.battle-arena>.fighter.enemy{
+  background:none!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+}
+#gameApp #battlePanel>.battle-arena>.fighter::before,
+#gameApp #battlePanel>.battle-arena>.fighter::after,
+#gameApp #battlePanel>.battle-arena>.player-fighter::before,
+#gameApp #battlePanel>.battle-arena>.player-fighter::after{
+  content:none!important;
+  display:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  background:none!important;
+}
+
+
+/* Consolidated battle UI compact V1 — final agreed settings. */
+#gameApp .topline .muted{display:none!important}
+#gameApp .topline{gap:10px}
+#gameApp #battlePanel{gap:12px;padding:clamp(12px,2.1vw,22px)}
+#gameApp #battlePanel>.battle-arena>.fighter,
+#gameApp #battlePanel>.battle-arena>.player-fighter,
+#gameApp #battlePanel>.battle-arena>.fighter.enemy{
+  background:transparent!important;background-color:transparent!important;background-image:none!important;
+  border:0!important;outline:0!important;box-shadow:none!important;border-radius:0!important;
+}
+#gameApp #battlePanel>.battle-arena>.fighter::before,
+#gameApp #battlePanel>.battle-arena>.fighter::after,
+#gameApp #battlePanel>.battle-arena>.player-fighter::before,
+#gameApp #battlePanel>.battle-arena>.player-fighter::after{content:none!important;display:none!important}
+#gameApp .battle-arena>.fighter>.avatar{transform:scale(.95);transform-origin:top center}
+#gameApp .battle-arena>.fighter>.energy-hud{margin-bottom:3px}
+#gameApp .battle-arena>.fighter>.energy-hud .energy-bar{height:26px}
+#gameApp .battle-arena>.fighter>.bar.hp-bar-with-text{height:21px!important;min-height:21px!important;max-height:21px!important}
+#gameApp .battle-action-right .notice{box-sizing:border-box;min-height:42px;padding:11px 13px;max-height:153px}
+#gameApp .battle-action-right .party-sidebar{padding:9px}
+#gameApp .battle-action-right .party-sidebar h3{margin-bottom:6px}
+#gameApp .battle-party{gap:6px;margin:10px 0}
+#gameApp .battle-party .battle-ally{height:70px;min-height:0;box-sizing:border-box;padding:7px;gap:7px}
+#gameApp .battle-party .battle-ally img{width:40px;height:50px}
+#gameApp .compact-combat-controls{gap:8px}
+#gameApp .compact-combat-controls .btn{min-height:44px;padding:10px 12px}
+@media(max-width:760px){
+ #gameApp #battlePanel{padding:9px;gap:8px}
+ #gameApp .battle-arena>.fighter{padding:6px 4px!important}
+ #gameApp .battle-arena>.fighter>.energy-hud .energy-bar{height:23px}
+ #gameApp .battle-action-right .notice{min-height:38px;max-height:132px;padding:8px 9px}
+ #gameApp .battle-action-right .party-sidebar{padding:7px}
+ #gameApp .battle-party .battle-ally{height:68px;padding:5px 3px;gap:3px}
+ #gameApp .battle-party .battle-ally img{width:32px;height:40px}
+ #gameApp .compact-combat-controls{gap:6px}
+ #gameApp .compact-combat-controls .btn{min-height:41px;padding:8px 7px}
+}
+
+
+/* V1 update: remove both player and enemy portrait glow effects. */
+#gameApp .battle-arena>.player-fighter>.avatar,
+#gameApp .battle-arena>.player-fighter>.avatar img,
+#gameApp .battle-arena>.fighter.enemy>.avatar,
+#gameApp .battle-arena>.fighter.enemy>.avatar img{
+  filter:none!important;
+}
+
+
+/* Battle spacing V2 — balanced compact layout (preview only). */
+@media (min-width: 901px){
+ #gameApp #battlePanel>.battle-arena{width:min(100%,1100px)!important;margin:0 auto!important;grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr)!important;gap:clamp(8px,1.1vw,14px)!important}
+}
+#gameApp #battlePanel{gap:10px!important}
+#gameApp .battle-arena>.fighter>.energy-hud{margin-bottom:2px!important}
+#gameApp .battle-arena>.fighter>.avatar{margin-bottom:3px!important}
+#gameApp .battle-arena>.fighter>h3{margin-top:2px!important;margin-bottom:1px!important}
+#gameApp .battle-arena>.fighter>.hp-bar-with-text{margin-top:2px!important;margin-bottom:2px!important}
+#gameApp .battle-arena>.fighter>.fighter-description,#gameApp .battle-arena>.fighter>.fighter-attack{margin-top:0!important;margin-bottom:0!important}
+#gameApp .battle-action-layout{gap:8px 12px!important}
+#gameApp .battle-action-right .notice{padding:9px 12px!important}
+#gameApp .battle-action-right .party-sidebar{padding:8px!important}
+#gameApp .battle-action-right .party-sidebar h3{margin-bottom:5px!important}
+#gameApp .battle-action-right .battle-party{gap:5px!important}
+#gameApp .battle-action-right .battle-ally{height:68px!important;padding:6px 4px!important;gap:4px!important}
+#gameApp .compact-combat-controls{gap:7px!important}
+#gameApp .compact-combat-controls>.btn{min-height:48px!important;padding:10px 9px!important}
+@media(max-width:900px){
+ #gameApp #battlePanel{gap:8px!important}
+ #gameApp .battle-action-layout{gap:8px!important}
+ #gameApp .battle-action-right .party-sidebar{padding:7px!important}
+ #gameApp .battle-action-right .battle-ally{height:66px!important}
+}
+@media(max-width:560px){
+ #gameApp .battle-action-right .battle-ally{height:64px!important;padding:4px 2px!important}
+ #gameApp .compact-combat-controls{gap:6px!important}
+ #gameApp .compact-combat-controls>.btn{min-height:44px!important;padding:8px 6px!important}
+}
+
+
+/* Battle spacing V3 — tighter vertical rhythm and matched portraits (preview only). */
+#gameApp #battlePanel{gap:6px!important}
+#gameApp #battlePanel>.battle-arena{align-items:start!important;margin-bottom:0!important}
+#gameApp .battle-arena>.fighter{min-height:0!important;height:auto!important;align-self:start!important;padding-top:8px!important;padding-bottom:8px!important}
+#gameApp .battle-arena>.fighter>.energy-hud{margin-top:0!important;margin-bottom:0!important}
+#gameApp .battle-arena>.fighter>.energy-hud .energy-bar{margin-bottom:0!important}
+#gameApp .battle-arena>.fighter>.avatar,#gameApp .battle-arena>.fighter.enemy>.avatar{box-sizing:border-box!important;width:clamp(130px,14vw,180px)!important;height:clamp(190px,20vw,264px)!important;min-width:0!important;max-width:100%!important;margin:0 auto 3px!important;object-fit:contain!important}
+#gameApp .battle-arena>.fighter>.avatar img,#gameApp .battle-arena>.fighter.enemy>.avatar img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important}
+#gameApp .battle-arena>.fighter>.hp-bar-with-text{margin-top:0!important;margin-bottom:2px!important}
+#gameApp .battle-action-layout{margin-top:0!important;gap:6px 10px!important}
+#gameApp .battle-action-right .notice{margin-top:0!important}
+@media(max-width:640px){#gameApp .battle-arena>.fighter>.avatar,#gameApp .battle-arena>.fighter.enemy>.avatar{width:clamp(90px,28vw,130px)!important;height:clamp(135px,42vw,190px)!important}}
+
+
+/* Battle spacing V4 — comfortable spacing, preserve current portrait size (preview only). */
+/* 1) Energy bar to portrait: deliberate breathing room. */
+#gameApp .battle-arena>.fighter>.energy-hud{
+  margin:0 auto 16px!important;
+}
+#gameApp .battle-arena>.fighter>.energy-hud .energy-bar{
+  margin:0!important;
+}
+/* 2) Portrait to HP bar. */
+#gameApp .battle-arena>.fighter>.avatar,
+#gameApp .battle-arena>.fighter.enemy>.avatar{
+  margin:0 auto 12px!important;
+}
+/* 3) HP, character name and attack information. */
+#gameApp .battle-arena>.fighter>.hp-bar-with-text{
+  margin:8px auto 8px!important;
+}
+#gameApp .battle-arena>.fighter>h3{
+  margin:6px 0 7px!important;
+}
+#gameApp .battle-arena>.fighter>.fighter-attack{
+  margin:5px 0 0!important;
+}
+/* 4) Arena to notice area. */
+#gameApp #battlePanel{
+  gap:14px!important;
+}
+#gameApp #battlePanel>.battle-arena{
+  margin-bottom:0!important;
+}
+/* 5) Notice to action controls. */
+#gameApp .battle-action-layout{
+  row-gap:13px!important;
+  column-gap:12px!important;
+}
+#gameApp .battle-action-right .notice{
+  margin:0!important;
+  padding:11px 14px!important;
+}
+/* 6) Comfortable control and party-card spacing. */
+#gameApp .compact-combat-controls{
+  gap:10px!important;
+}
+#gameApp .compact-combat-controls>.btn{
+  min-height:48px!important;
+}
+#gameApp .battle-action-right .party-sidebar{
+  padding:10px!important;
+}
+#gameApp .battle-action-right .party-sidebar h3{
+  margin-bottom:8px!important;
+}
+#gameApp .battle-action-right .battle-party{
+  gap:8px!important;
+}
+#gameApp .battle-action-right .battle-ally{
+  height:72px!important;
+  padding:7px 5px!important;
+  gap:5px!important;
+}
+@media(max-width:900px){
+ #gameApp #battlePanel{gap:12px!important}
+ #gameApp .battle-action-layout{row-gap:12px!important}
+ #gameApp .battle-action-right .notice{padding:10px 12px!important}
+ #gameApp .battle-action-right .party-sidebar{padding:9px!important}
+ #gameApp .battle-action-right .battle-ally{height:70px!important}
+}
+@media(max-width:640px){
+ #gameApp .battle-arena>.fighter>.energy-hud{margin-bottom:12px!important}
+ #gameApp .battle-arena>.fighter>.avatar,
+ #gameApp .battle-arena>.fighter.enemy>.avatar{margin-bottom:9px!important}
+ #gameApp .battle-arena>.fighter>.hp-bar-with-text{margin:7px auto!important}
+ #gameApp .battle-arena>.fighter>h3{margin:5px 0 6px!important}
+ #gameApp .battle-action-layout{row-gap:10px!important}
+ #gameApp .compact-combat-controls{gap:8px!important}
+ #gameApp .battle-action-right .battle-party{gap:7px!important}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
@@ -945,7 +1187,7 @@
 </div></section>
 <div class="lobby-footer">校園女神錄 <span>· 真人角色收藏 × 校園卡牌冒險</span></div>
 </main>
-<main id="gameApp" class="wrap" style="display:none"><nav class="nav-toolbar" aria-label="戰鬥導覽"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="nav-btn" id="gameBackBtn" type="button">← 返回遊戲大廳</button></div></nav><section class="topline"><div><p class="eyebrow">STAGE <span id="stageTop">1</span></p><h2 id="stageTitle">第 1 關：訓練場的挑戰</h2><div class="muted">點擊攻擊，打敗敵人即可前往下一關。</div></div><div class="pill">🪙 金幣 <span id="coinsTop">0</span></div></section>
+<main id="gameApp" class="wrap" style="display:none"><nav class="nav-toolbar" aria-label="戰鬥導覽"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="nav-btn" id="gameBackBtn" type="button">← 返回遊戲大廳</button></div></nav><section class="topline"><div><p class="eyebrow">STAGE <span id="stageTop">1</span></p><h2 id="stageTitle">第 1 關：訓練場的挑戰</h2></div><div class="pill">🪙 金幣 <span id="coinsTop">0</span></div></section>
 <section class="panel" id="battlePanel"><div class="arena battle-arena">
 <div class="fighter player-fighter"><div class="energy-hud player-energy-hud"><div class="bar energy-bar"><div class="fill energy-fill" id="playerEnergyBar"></div><span class="energy-bar-text" id="playerEnergyText">✦ 能量 60 / 100</span></div></div><div class="avatar player-portrait" id="playerAvatar"><img src="images/characters/lin-yuqing-sr.png" alt="三上悠亞" onerror="this.remove();this.parentElement.textContent='🎓'"></div><h3>三上悠亞</h3><div class="muted fighter-description">學園新生・玩家</div><div class="bar hp-bar-with-text"><div class="fill" id="playerHpBar"></div><span class="hp-bar-text" id="playerHpText">100 / 100</span></div><div class="muted fighter-attack">攻擊力：<b id="playerAtk">18</b></div></div><div class="versus">VS</div>
 <div class="fighter enemy"><div class="energy-hud enemy-energy-hud"><div class="bar energy-bar"><div class="fill energy-fill" id="enemyEnergyBar"></div><span class="energy-bar-text" id="enemyEnergyText">能量 60 / 100 ✦</span></div></div><div class="avatar" id="enemyAvatar">👾</div><h3 id="enemyName">校園史萊姆</h3><div class="muted fighter-description" id="enemyDesc">第一個練習對手</div><div class="bar hp-bar-with-text"><div class="fill" id="enemyHpBar"></div><span class="hp-bar-text" id="enemyHpText">55 / 55</span></div><div class="muted fighter-attack">攻擊力：<b id="enemyAtk">7</b></div></div></div>
