@@ -964,6 +964,30 @@
   border-radius:0!important;
 }
 
+
+/* V1 outer-frame removal hotfix: target the actual two direct fighter panels. */
+#gameApp #battlePanel>.battle-arena>.fighter,
+#gameApp #battlePanel>.battle-arena>.player-fighter,
+#gameApp #battlePanel>.battle-arena>.fighter.enemy{
+  background:none!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+}
+#gameApp #battlePanel>.battle-arena>.fighter::before,
+#gameApp #battlePanel>.battle-arena>.fighter::after,
+#gameApp #battlePanel>.battle-arena>.player-fighter::before,
+#gameApp #battlePanel>.battle-arena>.player-fighter::after{
+  content:none!important;
+  display:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  background:none!important;
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
