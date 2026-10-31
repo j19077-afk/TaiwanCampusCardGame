@@ -1211,6 +1211,7 @@
   <button class="menu-card" type="button" data-menu="summon"><span class="menu-icon">✨</span><strong>卡牌召喚</strong><small>使用金幣進行原型抽卡</small><span class="menu-arrow">前往召喚 →</span></button>
   <button class="menu-card" type="button" data-menu="inventory"><span class="menu-icon">🎒</span><strong>角色背包</strong><small>查看已收藏的角色</small><span class="menu-arrow">開啟背包 →</span></button>
   <button class="menu-card" type="button" data-menu="formation"><span class="menu-icon">🛡️</span><strong>角色編成</strong><small>選擇最多三名已收藏角色，組成隊伍</small><span class="menu-arrow">編輯隊伍 →</span></button>
+  <button class="menu-card" type="button" data-menu="sweep"><span class="menu-icon">⚡</span><strong>一鍵掃蕩</strong><small>任意選擇已通關關卡，快速取得重玩獎勵</small><span class="menu-arrow">每日 3 次 →</span></button>
  </div>
  <p class="collection-note">召喚結果與收藏進度會儲存在目前的瀏覽器中。本版本尚未支援雲端存檔或跨裝置同步。</p>
 </section>
@@ -1296,7 +1297,7 @@ function showModal(title,html){const wasOpen=!modal.hidden;const previousScrollT
 function closeModal(){modal.hidden=true;modal.classList.remove('archive-fullscreen');document.body.style.overflow='';}
 $('modalClose').addEventListener('click',closeModal);
 modal.addEventListener('click',e=>{const claim=e.target.closest('[data-claim]');if(claim){e.preventDefault();claimQuest(claim.dataset.claim);return}const invFilter=e.target.closest('[data-inventory-filter]');if(invFilter){inventoryFilter=invFilter.dataset.inventoryFilter;openInventory();return}const up=e.target.closest('[data-level-up]');if(up){e.preventDefault();const id=up.dataset.levelUp,scrollContainer=modalBody,previousScrollTop=scrollContainer.scrollTop,previousWindowY=window.scrollY,c=readCollection(),ch=roster.find(x=>x.id===id);if(!ch)return;const lv=getLevel(ch),cost=lv*20+(ch.rarity==='SSR'?80:ch.rarity==='SR'?40:0),g=readGameSave();if(lv>=levelCap(ch)||Number(g.coins)<cost)return;g.coins=Math.max(0,Number(g.coins)||0)-cost;try{const persisted={...readGameSave(),coins:g.coins};localStorage.setItem('campusCardMiniSave',JSON.stringify(persisted));if(typeof state!=='undefined'&&state){state.coins=g.coins;save()}}catch(err){console.error('金幣存檔失敗',err)}c.levels=c.levels||{};c.levels[id]=lv+1;writeCollection(c);if(typeof state!=='undefined'&&state&&state.activeMember===id&&state.partyHp)state.partyHp[id]=Math.min(getCardStats(ch).hp,(state.partyHp[id]??getCardStats(ch).hp)+growthByRarity[ch.rarity].hp);openInventory();refreshLobby();requestAnimationFrame(()=>{scrollContainer.scrollTop=previousScrollTop;window.scrollTo({top:previousWindowY,behavior:'instant'});requestAnimationFrame(()=>{scrollContainer.scrollTop=previousScrollTop;window.scrollTo({top:previousWindowY,behavior:'instant'})})});return;}if(e.target===modal)closeModal()});
-modal.addEventListener('change',e=>{if(e.target.matches('#inventorySort')){inventorySort=e.target.value;openInventory()}});
+modal.addEventListener('change',e=>{if(e.target.matches('#inventorySort')){inventorySort=e.target.value;openInventory()}if(e.target.matches('#sweepStage'))updateSweepPreview()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)closeModal()});
 function openArchive(){
  const col=readCollection();
@@ -1374,9 +1375,9 @@ document.addEventListener('click',function(ev){
  const daily=target.closest('#dailyBtn');
  if(daily){ev.preventDefault();ev.stopImmediatePropagation();claimDailyGift();return;}
  const menu=target.closest('[data-menu]');
- if(menu){ev.preventDefault();ev.stopImmediatePropagation();try{switch(menu.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'quests':openQuests();break;}}catch(err){console.error('大廳功能開啟失敗',err);showModal('功能載入失敗','<p>此功能載入時發生錯誤，請截圖回報。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p>')}return;}
+ if(menu){ev.preventDefault();ev.stopImmediatePropagation();try{switch(menu.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'sweep':openSweep();break;case'quests':openQuests();break;}}catch(err){console.error('大廳功能開啟失敗',err);showModal('功能載入失敗','<p>此功能載入時發生錯誤，請截圖回報。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p>')}return;}
  const action=target.closest('[data-modal-action]');
- if(action){ev.preventDefault();ev.stopImmediatePropagation();switch(action.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'formation-done':closeModal();break;case'do-summon':doSummon();break;case'do-ten-summon':doTenSummon();break;case'do-newbie-ten-summon':doNewbieTenSummon();break;case'daily-reward-close':closeModal();break;}return;}
+ if(action){ev.preventDefault();ev.stopImmediatePropagation();switch(action.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'formation-done':closeModal();break;case'do-summon':doSummon();break;case'do-ten-summon':doTenSummon();break;case'do-newbie-ten-summon':doNewbieTenSummon();break;case'daily-reward-close':closeModal();break;case'sweep-confirm':confirmSweep();break;case'sweep-close':closeModal();break;}return;}
  const add=target.closest('[data-add-member]');if(add&&!add.disabled){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(add.dataset.addMember);return;}
  const remove=target.closest('[data-remove-member]');if(remove){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(remove.dataset.removeMember,true);return;}
 },true);
@@ -1434,6 +1435,45 @@ function baseReward(n){if(n>=1&&n<=4)return 10;if(n<=8)return 15;if(n<=12)return
 function firstBossBonus(n){return n%10===0?20:n%5===0?10:0}
 function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
+
+function sweepDailyState(){
+ const day=taiwanDayKey();
+ if(state.sweepDay!==day){state.sweepDay=day;state.sweepUsed=0;save()}
+ state.sweepUsed=Math.max(0,Math.min(3,Number(state.sweepUsed)||0));
+ return {day,used:state.sweepUsed,remaining:Math.max(0,3-state.sweepUsed)};
+}
+function clearedSweepStages(){
+ const set=new Set((Array.isArray(state.clearedStages)?state.clearedStages:[]).map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20));
+ const progress=Math.max(0,Math.min(20,Number(state.cleared)||0));
+ for(let n=1;n<=progress;n++)set.add(n);
+ return [...set].sort((a,b)=>a-b);
+}
+function sweepReward(n){return replayReward(n)+replayBossBonus(n)}
+function openSweep(){
+ const daily=sweepDailyState(),stages=clearedSweepStages();
+ const options=stages.map(n=>'<option value="'+n+'">第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'（'+stageKind(n)+'）</option>').join('');
+ const html='<div class="panel" style="padding:14px;margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><strong>今日掃蕩額度</strong><strong style="color:var(--gold);font-size:1.15rem">'+daily.remaining+' / 3 次</strong></div><div class="bar" style="margin-top:10px"><div class="fill" style="width:'+(daily.remaining/3*100)+'%"></div></div><p class="muted" style="margin:9px 0 0">每日 00:00（台灣時間）重置；普通關卡與已通關 BOSS 關皆可選擇。</p></div>'+
+ (stages.length?'<label for="sweepStage" style="display:block;font-weight:800;margin-bottom:7px">選擇已通關關卡</label><select id="sweepStage" style="width:100%;padding:12px;border-radius:10px;border:1px solid #526985;background:#111d2e;color:#eef4ff;font:inherit">'+options+'</select><div id="sweepPreview" class="notice" style="margin-top:12px" aria-live="polite"></div><div class="modal-actions"><button type="button" class="btn secondary" data-modal-action="sweep-close">取消</button><button type="button" class="btn primary" id="sweepConfirmBtn" data-modal-action="sweep-confirm" '+(daily.remaining<=0?'disabled':'')+'>⚡ 確認掃蕩</button></div>':'<div class="notice">目前尚無已通關關卡。成功通關任一關後即可使用掃蕩。</div><div class="modal-actions"><button type="button" class="btn secondary" data-modal-action="sweep-close">關閉</button></div>');
+ showModal('⚡ 已通關關卡一鍵掃蕩',html);
+ updateSweepPreview();
+}
+function updateSweepPreview(){
+ const select=$('sweepStage'),preview=$('sweepPreview'),button=$('sweepConfirmBtn');
+ if(!select||!preview||!button)return;
+ const n=Number(select.value),allowed=clearedSweepStages().includes(n),daily=sweepDailyState(),reward=sweepReward(n);
+ preview.innerHTML=allowed?'<strong>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</strong><p style="margin:7px 0 0">關卡類型：'+stageKind(n)+'<br>預計獲得：<span class="reward">'+reward+' 枚金幣</span><br>掃蕩後剩餘：'+Math.max(0,daily.remaining-1)+' 次</p><p class="muted" style="margin:7px 0 0">採用既有重玩獎勵計算；掃蕩不會改變目前戰鬥關卡或角色生命值。</p>':'目前選擇的關卡尚未通關。';
+ button.disabled=!allowed||daily.remaining<=0;
+ if(daily.remaining<=0)preview.innerHTML+='<p style="color:#ffb9c3;margin:8px 0 0">今日掃蕩次數已用完，將於台灣時間 00:00 重置。</p>';
+}
+function confirmSweep(){
+ const select=$('sweepStage');if(!select)return;
+ const n=Number(select.value),daily=sweepDailyState();
+ if(daily.remaining<=0||!clearedSweepStages().includes(n)){updateSweepPreview();return}
+ const reward=sweepReward(n);
+ state.coins=Math.max(0,Number(state.coins)||0)+reward;
+ state.sweepUsed=daily.used+1;state.sweepDay=daily.day;save();render();refreshLobby();
+ showModal('⚡ 掃蕩完成','<div class="summon-result"><strong>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</strong><p>成功完成掃蕩！</p><p class="reward">獲得 '+reward+' 枚金幣</p><p>今日剩餘掃蕩次數：'+(3-state.sweepUsed)+' / 3</p></div><div class="modal-actions"><button type="button" class="btn primary" data-modal-action="sweep-close">完成</button></div>');
+}
 function taiwanDayKey(date=new Date()){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).format(date)}
 const enemyCardNames=["校園感染學生","迅捷感染者","食堂感染者","護理感染者","巨型感染體","圖書館潛伏者","寄生感染體","實驗型感染者","變異實驗體","E-01 原型體","初始感染體","宿舍感染學生","飛撲型感染體","裝甲感染體","重裝鎮壓體","城市感染者","研究中心感染者","E-02 進化個體","核心守衛","E-00 原初母體"];
 const enemySkillSets=[
