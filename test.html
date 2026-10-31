@@ -1156,7 +1156,9 @@
 /* 攻擊按鈕改為中性深藍灰，互動時提高亮度 */
 #attackBtn{background:#2b3b55!important;color:var(--text)!important;border:1px solid #4a5d79!important;transition:filter .16s,transform .12s,box-shadow .16s}
 #attackBtn:hover:not(:disabled){filter:brightness(1.22)!important}
-#attackBtn:active:not(:disabled){filter:brightness(1.32)!important;transform:scale(.98)}
+/* 第一次點選：選取狀態持續提亮；第二次點選執行：短暫輕壓 */
+#attackBtn.combat-action-selected:not(:disabled){filter:brightness(1.28)!important;box-shadow:0 0 0 2px #78d7d055,0 0 18px #78d7d044!important}
+#attackBtn:active:not(:disabled){filter:brightness(1.36)!important;transform:scale(.985);box-shadow:inset 0 2px 5px #07111f66!important}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
