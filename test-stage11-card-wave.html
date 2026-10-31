@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#172033">
+<title>校園女神錄｜第11關多人分波戰鬥測試</title>
+<style>
+:root{color-scheme:dark;--bg:#101827;--panel:#19263b;--line:#34445e;--mint:#78d7d0;--gold:#ffd780;--text:#eef4ff;--muted:#a6b4cb}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#2b4566,#101827 65%);color:var(--text);font:15px/1.5 system-ui,"Noto Sans TC",sans-serif;min-height:100vh}
+header{padding:16px 4%;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #34445e;background:#101827cc}
+h1{font-size:clamp(20px,4vw,28px);margin:0}h2,h3,p{margin-top:0}.eyebrow{font-size:11px;letter-spacing:.15em;color:#9fb6d5;margin:0 0 4px;font-weight:800}.pill,.tag{display:inline-flex;align-items:center;border:1px solid #526987;border-radius:999px;padding:5px 10px;color:#d9e8ff;font-size:12px}
+main{width:min(1120px,94%);margin:22px auto 40px}.stage-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.stage-head h2{margin:0;font-size:clamp(19px,3vw,25px)}
+.panel{background:linear-gradient(145deg,#1a2940,#172237);border:1px solid var(--line);border-radius:17px;padding:16px;box-shadow:0 12px 30px #0003}
+.battlefield{display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1.45fr);gap:14px;align-items:stretch}
+.side-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.side-title h3{margin:0;font-size:16px}
+.player-side,.enemy-side{min-width:0}.player-card{border:1px solid #4d9f9b;background:linear-gradient(160deg,#213b4c,#172b3c);border-radius:14px;padding:10px;max-width:280px;margin:auto}
+.card-art{height:210px;border-radius:10px;overflow:hidden;background:linear-gradient(145deg,#324968,#18253a);display:flex;align-items:center;justify-content:center;position:relative}
+.card-art img{width:100%;height:100%;object-fit:contain;object-position:center}
+.card-art .placeholder{font-size:66px;filter:drop-shadow(0 6px 10px #0008)}
+.card-meta{padding:9px 2px 2px}.card-name{font-weight:850;font-size:17px}.card-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.hp-row{display:flex;justify-content:space-between;font-size:12px;color:#dbe7f8;margin:9px 0 5px}.hp-track{height:9px;background:#344055;border-radius:20px;overflow:hidden}.hp-fill{height:100%;background:linear-gradient(90deg,#50d6a5,#a6edba);width:100%;transition:width .25s}.enemy-card .hp-fill{background:linear-gradient(90deg,#ff647c,#ffb06e)}
+.energy-track{height:7px;background:#344055;border-radius:20px;overflow:hidden;margin-top:9px}.energy-fill{height:100%;background:linear-gradient(90deg,#6b9cff,#a9c7ff);width:45%;transition:width .25s}
+.versus{display:flex;align-items:center;justify-content:center;font-weight:900;color:#ffd780;font-size:19px;letter-spacing:.08em}
+.enemy-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.enemy-card{min-width:0;border:1px solid #46546c;border-radius:13px;padding:8px;background:#121d30;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s}
+.enemy-card.selected{border:2px solid #78d7d0;box-shadow:0 0 0 2px #78d7d033;transform:translateY(-2px)}
+.enemy-card.dead{opacity:.35;filter:grayscale(1);pointer-events:none}
+.enemy-card .card-art{height:150px}.enemy-card .card-name{font-size:14px;line-height:1.3}.enemy-card .card-sub{font-size:11px}
+.rarity{position:absolute;left:7px;top:7px;border-radius:6px;background:#2675b9;color:white;padding:2px 7px;font-weight:900;font-size:12px;box-shadow:0 2px 6px #0007}
+.team-strip{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.team-mini{width:76px;border:1px solid #46546c;border-radius:9px;background:#111d30;padding:5px;text-align:center;font-size:11px;color:#dbe7f8}
+.team-mini img{width:100%;height:68px;object-fit:cover;object-position:top;border-radius:6px}.team-mini.active{border-color:var(--mint)}
+.combat-panel{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid #526987;border-radius:10px;padding:10px 14px;background:#243650;color:#eef4ff;font:700 14px system-ui;cursor:pointer}.btn.primary{background:#78d7d0;color:#102033;border-color:#78d7d0}.btn:disabled{opacity:.4;cursor:not-allowed}
+.notice{min-height:76px;padding:12px;border:1px solid #465a77;border-radius:12px;background:#111d30;color:#dce8f8;font-size:13px}
+.log{margin-top:10px;max-height:120px;overflow:auto;font-size:12px;color:#bac9de}.log p{margin:0 0 5px}
+.wave-banner{display:none;margin:0 0 12px;text-align:center;padding:10px;border:1px solid #d5b56c;background:#493b25;color:#ffe2a0;border-radius:12px;font-weight:900}
+.test-note{margin-top:12px;color:#9fb1c9;font-size:12px;text-align:center}
+@media(max-width:760px){.battlefield{grid-template-columns:1fr;gap:10px}.versus{height:22px}.player-card{max-width:220px}.enemy-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.enemy-card .card-art{height:130px}.combat-panel{grid-template-columns:1fr}.stage-head{align-items:flex-start;flex-direction:column}}
+</style></head>
+<body>
+<header><div><p class="eyebrow">CAMPUS IDOL CHRONICLES · TEST BUILD</p><h1>校園女神錄</h1></div><span class="pill">第11關多人分波戰鬥測試</span></header>
+<main>
+<div class="stage-head"><div><p class="eyebrow">STAGE 11</p><h2>第11關：被包圍的中庭</h2></div><span class="tag" id="waveTag">第一波｜2 名敵人</span></div>
+<div class="wave-banner" id="waveBanner">第二波敵人來襲！</div>
+<section class="panel">
+<div class="battlefield">
+<div class="player-side">
+<div class="side-title"><h3>我方角色</h3><span class="tag">玩家</span></div>
+<div class="player-card">
+<div class="card-art"><span class="rarity">SR</span><img id="playerImage" src="images/characters/lin-yuqing-sr.png" alt="三上悠亞" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<span class=&quot;placeholder&quot;>🎓</span>')"></div>
+<div class="card-meta"><div class="card-name" id="playerName">三上悠亞</div><div class="card-sub">學園新生・操作角色</div>
+<div class="hp-row"><span>生命值</span><strong id="playerHpText">105 / 105</strong></div><div class="hp-track"><div class="hp-fill" id="playerHpBar"></div></div>
+<div class="hp-row"><span>能量</span><strong id="energyText">45 / 100</strong></div><div class="energy-track"><div class="energy-fill" id="energyBar"></div></div>
+</div></div>
+<div class="team-strip">
+<div class="team-mini active"><img src="images/characters/lin-yuqing-sr.png" alt="三上悠亞" onerror="this.style.visibility='hidden'">三上悠亞</div>
+<div class="team-mini"><img src="images/characters/su-yutong.png.png" alt="蘇語彤" onerror="this.style.visibility='hidden'">蘇語彤</div>
+<div class="team-mini"><img src="images/characters/shen-ruoxue.png" alt="沈若雪" onerror="this.style.visibility='hidden'">沈若雪</div>
+</div>
+</div>
+<div class="versus">VS</div>
+<div class="enemy-side">
+<div class="side-title"><h3>敵方卡牌</h3><span class="tag" id="enemyCount">剩餘 2 / 2</span></div>
+<div class="enemy-grid" id="enemyGrid"></div>
+</div>
+</div>
+</section>
+<section class="panel combat-panel">
+<div><h3>戰鬥操作</h3><div class="controls">
+<button class="btn primary" id="attackBtn">⚔️ 普通攻擊</button>
+<button class="btn" id="skillBtn">✦ 必殺技（35 能量）</button>
+<button class="btn" id="defendBtn">🛡️ 防禦</button>
+<button class="btn" id="healBtn">🧪 補給</button>
+</div><p class="test-note">獨立測試模式：不讀取、不寫入正式存檔；敵方反擊僅播放動作與訊息，不扣除我方 HP。</p></div>
+<div><h3>戰鬥訊息</h3><div class="notice" id="notice">請點選右側敵人卡牌選擇攻擊目標。</div><div class="log" id="log" aria-live="polite"></div></div>
+</section>
+<p class="test-note">此頁只開放第11關戰鬥測試。大廳、召喚、背包、任務、存檔與其他關卡均未載入。</p>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const waves=[
+ [{id:'infected',name:'初始感染體',rarity:'R',hp:65,atk:8,image:'新增圖片/敵方卡牌/stage-11.png',icon:'🧟‍♀️'},
+  {id:'student',name:'感染學生',rarity:'R',hp:55,atk:7,image:'',icon:'🧟'}],
+ [{id:'fast',name:'高速感染體',rarity:'R',hp:60,atk:9,image:'',icon:'🏃'},
+  {id:'mutant',name:'異變感染體',rarity:'R',hp:75,atk:10,image:'',icon:'👹'},
+  {id:'infected2',name:'初始感染體',rarity:'R',hp:65,atk:8,image:'新增圖片/敵方卡牌/stage-11.png',icon:'🧟‍♀️'}]
+];
+let wave=0,enemies=[],selected=null,playerHp=105,energy=45,healed=false,busy=false,finished=false;
+const maxPlayerHp=105;
+function log(t){const p=document.createElement('p');p.textContent=t;$('log').prepend(p);while($('log').children.length>8)$('log').lastElementChild.remove()}
+function updatePlayer(){ $('playerHpText').textContent=playerHp+' / '+maxPlayerHp;$('playerHpBar').style.width=(playerHp/maxPlayerHp*100)+'%';$('energyText').textContent=energy+' / 100';$('energyBar').style.width=energy+'%';$('skillBtn').disabled=busy||finished||energy<35;$('healBtn').disabled=busy||finished||healed||playerHp===maxPlayerHp;$('attackBtn').disabled=busy||finished||!enemies.some(e=>e.hp>0);$('defendBtn').disabled=busy||finished}
+function render(){const alive=enemies.filter(e=>e.hp>0);$('enemyCount').textContent='剩餘 '+alive.length+' / '+enemies.length;$('waveTag').textContent=(wave===0?'第一波':'第二波')+'｜'+enemies.length+' 名敵人';$('enemyGrid').innerHTML='';
+enemies.forEach(e=>{const card=document.createElement('button');card.type='button';card.className='enemy-card'+(e.hp<=0?' dead':'')+(selected===e.id?' selected':'');card.disabled=e.hp<=0||busy||finished;card.innerHTML='<div class="card-art"><span class="rarity">'+e.rarity+'</span>'+(e.image?'<img src="'+e.image+'" alt="'+e.name+'" onerror="this.style.display=\'none\';this.parentElement.insertAdjacentHTML(\'beforeend\',\'<span class=\\\'placeholder\\\'>'+e.icon+'</span>\')">':'<span class="placeholder">'+e.icon+'</span>')+'</div><div class="card-meta"><div class="card-name">'+e.name+'</div><div class="card-sub">基礎攻擊</div><div class="hp-row"><span>HP</span><strong>'+Math.max(0,e.hp)+' / '+e.maxHp+'</strong></div><div class="hp-track"><div class="hp-fill" style="width:'+Math.max(0,e.hp)/e.maxHp*100+'%"></div></div></div>';
+card.addEventListener('click',()=>{if(busy||e.hp<=0)return;selected=e.id;$('notice').textContent='已選取「'+e.name+'」，請選擇戰鬥操作。';render()});$('enemyGrid').append(card)});
+updatePlayer()}
+function loadWave(){enemies=waves[wave].map(e=>({...e,maxHp:e.hp}));selected=enemies[0].id;render();$('notice').textContent=(wave===0?'第一波敵人出現！':'第二波敵人出現！')+' 點選敵人卡牌即可切換攻擊目標。';log((wave===0?'第一波':'第二波')+'敵人登場。')}
+function getTarget(){return enemies.find(e=>e.id===selected&&e.hp>0)||enemies.find(e=>e.hp>0)}
+function enemyTurn(){busy=true;render();let alive=enemies.filter(e=>e.hp>0);let i=0;function next(){if(i>=alive.length){busy=false;render();return}const e=alive[i++];$('notice').textContent=e.name+' 發動基礎攻擊！（測試模式：我方不扣血）';log(e.name+' 發動反擊；測試模式保留我方 HP。');const el=[...$('enemyGrid').children].find(x=>x.querySelector('.card-name')?.textContent===e.name);if(el){el.animate([{transform:'translateX(0)'},{transform:'translateX(-7px)'},{transform:'translateX(0)'}],{duration:300})}setTimeout(next,380)}next()}
+function afterPlayerAction(msg){$('notice').textContent=msg;log(msg);render();if(enemies.every(e=>e.hp<=0)){if(wave===0){busy=true;render();$('waveBanner').style.display='block';$('waveBanner').textContent='第一波已清除！第二波敵人即將出現…';$('notice').textContent='第一波全滅，準備迎戰第二波。';log('第一波全滅，第二波即將登場。');setTimeout(()=>{$('waveBanner').style.display='none';wave=1;busy=false;loadWave()},1300)}else{finished=true;$('notice').textContent='第二波全滅！第11關測試戰鬥完成。';log('第二波全滅，測試戰鬥完成。');updatePlayer();$('attackBtn').disabled=true;$('skillBtn').disabled=true;$('defendBtn').disabled=true;$('healBtn').disabled=true}}else enemyTurn()}
+$('attackBtn').onclick=()=>{if(busy||finished)return;const t=getTarget();if(!t)return;const dmg=20;t.hp=Math.max(0,t.hp-dmg);afterPlayerAction('我方攻擊「'+t.name+'」，造成 '+dmg+' 點傷害。')};
+$('skillBtn').onclick=()=>{if(busy||finished||energy<35)return;const t=getTarget();if(!t)return;energy-=35;const dmg=38;t.hp=Math.max(0,t.hp-dmg);afterPlayerAction('施放必殺技攻擊「'+t.name+'」，造成 '+dmg+' 點傷害。')};
+$('defendBtn').onclick=()=>{if(busy||finished)return;afterPlayerAction('我方採取防禦姿態。')};
+$('healBtn').onclick=()=>{if(busy||finished||healed||playerHp>=maxPlayerHp)return;playerHp=Math.min(maxPlayerHp,playerHp+50);healed=true;afterPlayerAction('使用補給，恢復 50 HP（最多回復至滿血）。')};
+loadWave();updatePlayer();
+})();
+</script>
+</body></html>
