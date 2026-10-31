@@ -1199,7 +1199,7 @@
 <div class="lower"><section class="panel adventure-record-panel"><h2>📘 冒險紀錄</h2><div class="muted" style="margin-bottom:12px">每次勝利都會獲得金幣，敵人也會逐漸變強。</div><div class="topline"><span>已通過關卡</span><strong id="cleared">0</strong></div><div class="topline" style="margin-top:9px"><span>本關勝利獎勵</span><strong class="reward" id="reward">+10 金幣</strong></div><div class="topline" style="margin-top:9px"><span>補給次數</span><strong id="potions">3</strong></div></section>
 <section class="panel battle-history-panel"><div class="battle-history-heading"><h2>🗒️ 戰鬥訊息</h2><button type="button" class="nav-btn" id="toggleFullLog" aria-expanded="false">查看全部紀錄 ↓</button></div><div id="enemySkillNotice" class="enemy-skill-notice" hidden aria-live="polite"></div><p class="muted battle-history-hint">最新 3 筆紀錄 · 點擊可查看完整戰鬥歷史</p><div class="battle-log-label">一般戰鬥紀錄</div><div class="log recent-three" id="log"><div class="logline">你踏入學園訓練場，準備開始冒險。</div></div><button class="btn danger" id="resetBtn" style="width:100%;margin-top:14px">重新開始遊戲</button></section></div><div class="foot">進度儲存在這個瀏覽器。清除瀏覽器資料或更換裝置可能會使存檔消失。</div></main>
 <script>
-(()=>{const $=id=>document.getElementById(id);const lobby=$('lobby'),gameApp=$('gameApp');
+(()=>{let skillMenuOpen=false;const $=id=>document.getElementById(id);const lobby=$('lobby'),gameApp=$('gameApp');
 // 戰鬥返回使用捕獲階段的全域點擊攔截，避免其他事件或畫面狀態令按鈕失效。
 
 // Homepage spotlight: show existing roster data in a focused modal; do not alter other screens.
