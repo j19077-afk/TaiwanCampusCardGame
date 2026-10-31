@@ -1518,7 +1518,6 @@ function stage20EnemyCounter(e){
    else if(!team.some(id=>(state.partyHp[id]??0)>0)){state.playerHp=0;tell('💫 全隊倒下！請重新挑戰第20關。')}
   }
  }
- if(skill&&skill.debuff){state.stage20DebuffTurns=2;addLog('感染干擾！我方全體攻擊力降低20%，持續接下來2個玩家行動，不累加。')}
  state.defendNext=false;state.guardNext=false;return total
 }
 
