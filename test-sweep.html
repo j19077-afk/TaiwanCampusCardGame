@@ -1375,9 +1375,9 @@ document.addEventListener('click',function(ev){
  const daily=target.closest('#dailyBtn');
  if(daily){ev.preventDefault();ev.stopImmediatePropagation();claimDailyGift();return;}
  const menu=target.closest('[data-menu]');
- if(menu){ev.preventDefault();ev.stopImmediatePropagation();try{switch(menu.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'quests':openQuests();break;}}catch(err){console.error('大廳功能開啟失敗',err);showModal('功能載入失敗','<p>此功能載入時發生錯誤，請截圖回報。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p>')}return;}
+ if(menu){ev.preventDefault();ev.stopImmediatePropagation();try{switch(menu.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'sweep':openSweep();break;case'quests':openQuests();break;}}catch(err){console.error('大廳功能開啟失敗',err);showModal('功能載入失敗','<p>此功能載入時發生錯誤，請截圖回報。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p>')}return;}
  const action=target.closest('[data-modal-action]');
- if(action){ev.preventDefault();ev.stopImmediatePropagation();switch(action.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'formation-done':closeModal();break;case'do-summon':doSummon();break;case'do-ten-summon':doTenSummon();break;case'do-newbie-ten-summon':doNewbieTenSummon();break;case'daily-reward-close':closeModal();break;}return;}
+ if(action){ev.preventDefault();ev.stopImmediatePropagation();switch(action.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'formation-done':closeModal();break;case'do-summon':doSummon();break;case'do-ten-summon':doTenSummon();break;case'do-newbie-ten-summon':doNewbieTenSummon();break;case'daily-reward-close':closeModal();break;case'sweep-confirm':confirmSweep();break;case'sweep-close':closeModal();break;}return;}
  const add=target.closest('[data-add-member]');if(add&&!add.disabled){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(add.dataset.addMember);return;}
  const remove=target.closest('[data-remove-member]');if(remove){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(remove.dataset.removeMember,true);return;}
 },true);
@@ -1435,14 +1435,7 @@ function baseReward(n){if(n>=1&&n<=4)return 10;if(n<=8)return 15;if(n<=12)return
 function firstBossBonus(n){return n%10===0?20:n%5===0?10:0}
 function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
-// 獨立測試頁：掃蕩功能事件，不改動正式版原有事件流程。
-document.addEventListener('click',function(ev){
- const target=ev.target instanceof Element?ev.target:null;if(!target)return;
- const menu=target.closest('[data-menu="sweep"]');
- if(menu){ev.preventDefault();ev.stopImmediatePropagation();openSweep();return;}
- const action=target.closest('[data-modal-action="sweep-confirm"],[data-modal-action="sweep-close"]');
- if(action){ev.preventDefault();ev.stopImmediatePropagation();if(action.dataset.modalAction==='sweep-confirm')confirmSweep();else closeModal();return;}
-},true);
+// 掃蕩選單與 Modal 動作已整合至原有事件委派，避免事件攔截順序衝突。
 document.addEventListener('change',function(ev){if(ev.target&&ev.target.id==='sweepStage')updateSweepPreview()},true);
 function sweepDailyState(){
  const day=taiwanDayKey();
