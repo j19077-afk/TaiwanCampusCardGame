@@ -1174,6 +1174,22 @@
   line-height:1.4!important;text-align:center!important;
 }
 
+
+/* Match enemy HP bar thickness exactly to the player HP bar. */
+#gameApp .battle-arena>.player-fighter>.bar.hp-bar-with-text,
+#gameApp .battle-arena>.fighter.enemy>.bar.hp-bar-with-text{
+  box-sizing:border-box!important;
+  height:24px!important;
+  min-height:24px!important;
+  max-height:24px!important;
+}
+#gameApp .battle-arena>.player-fighter>.bar.hp-bar-with-text>.fill,
+#gameApp .battle-arena>.fighter.enemy>.bar.hp-bar-with-text>.fill{
+  height:100%!important;
+  min-height:100%!important;
+  max-height:100%!important;
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
