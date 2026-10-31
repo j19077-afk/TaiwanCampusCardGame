@@ -1017,6 +1017,37 @@
   filter:none!important;
 }
 
+
+/* Battle spacing V2 — balanced compact layout (preview only). */
+@media (min-width: 901px){
+ #gameApp #battlePanel>.battle-arena{width:min(100%,1100px)!important;margin:0 auto!important;grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr)!important;gap:clamp(8px,1.1vw,14px)!important}
+}
+#gameApp #battlePanel{gap:10px!important}
+#gameApp .battle-arena>.fighter>.energy-hud{margin-bottom:2px!important}
+#gameApp .battle-arena>.fighter>.avatar{margin-bottom:3px!important}
+#gameApp .battle-arena>.fighter>h3{margin-top:2px!important;margin-bottom:1px!important}
+#gameApp .battle-arena>.fighter>.hp-bar-with-text{margin-top:2px!important;margin-bottom:2px!important}
+#gameApp .battle-arena>.fighter>.fighter-description,#gameApp .battle-arena>.fighter>.fighter-attack{margin-top:0!important;margin-bottom:0!important}
+#gameApp .battle-action-layout{gap:8px 12px!important}
+#gameApp .battle-action-right .notice{padding:9px 12px!important}
+#gameApp .battle-action-right .party-sidebar{padding:8px!important}
+#gameApp .battle-action-right .party-sidebar h3{margin-bottom:5px!important}
+#gameApp .battle-action-right .battle-party{gap:5px!important}
+#gameApp .battle-action-right .battle-ally{height:68px!important;padding:6px 4px!important;gap:4px!important}
+#gameApp .compact-combat-controls{gap:7px!important}
+#gameApp .compact-combat-controls>.btn{min-height:48px!important;padding:10px 9px!important}
+@media(max-width:900px){
+ #gameApp #battlePanel{gap:8px!important}
+ #gameApp .battle-action-layout{gap:8px!important}
+ #gameApp .battle-action-right .party-sidebar{padding:7px!important}
+ #gameApp .battle-action-right .battle-ally{height:66px!important}
+}
+@media(max-width:560px){
+ #gameApp .battle-action-right .battle-ally{height:64px!important;padding:4px 2px!important}
+ #gameApp .compact-combat-controls{gap:6px!important}
+ #gameApp .compact-combat-controls>.btn{min-height:44px!important;padding:8px 6px!important}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
