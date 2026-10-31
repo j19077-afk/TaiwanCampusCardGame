@@ -1154,11 +1154,13 @@
 
 .combat-action-selected{outline:3px solid #ffe08a!important;outline-offset:2px;box-shadow:0 0 0 4px #ffe08a33,0 0 20px #ffe08a55!important;filter:brightness(1.12)}
 /* 攻擊按鈕改為中性深藍灰，互動時提高亮度 */
-#attackBtn{background:#2b3b55!important;color:var(--text)!important;border:1px solid #4a5d79!important;transition:filter .16s,transform .12s,box-shadow .16s}
-#attackBtn:hover:not(:disabled){filter:brightness(1.22)!important}
-/* 第一次點選：選取狀態持續提亮；第二次點選執行：短暫輕壓 */
-#attackBtn.combat-action-selected:not(:disabled){background:#356b4b!important;border-color:#8be0a5!important;color:#fff!important;filter:brightness(1.12)!important;box-shadow:0 0 0 2px #8be0a566,0 0 20px #63d98b77!important}
-#attackBtn:active:not(:disabled){filter:brightness(1.36)!important;transform:scale(.985);box-shadow:inset 0 2px 5px #07111f66!important}
+/* 四個戰鬥操作鍵統一底色、懸停、選取與按壓回饋 */
+#attackBtn,#defendBtn,#skillBtn,#healBtn{background:#2b3b55!important;color:var(--text)!important;border:1px solid #4a5d79!important;transition:background .16s,border-color .16s,filter .16s,transform .12s,box-shadow .16s}
+#attackBtn:hover:not(:disabled),#defendBtn:hover:not(:disabled),#skillBtn:hover:not(:disabled),#healBtn:hover:not(:disabled){filter:brightness(1.22)!important}
+/* 第一次點選：統一使用明亮綠色底與綠色光暈 */
+#attackBtn.combat-action-selected:not(:disabled),#defendBtn.combat-action-selected:not(:disabled),#skillBtn.combat-action-selected:not(:disabled),#healBtn.combat-action-selected:not(:disabled){background:#356b4b!important;border:1px solid #8be0a5!important;color:#fff!important;outline:0!important;filter:brightness(1.12)!important;box-shadow:0 0 0 2px #8be0a566,0 0 20px #63d98b77!important}
+/* 第二次點選執行：短暫輕壓回饋 */
+#attackBtn:active:not(:disabled),#defendBtn:active:not(:disabled),#skillBtn:active:not(:disabled),#healBtn:active:not(:disabled){filter:brightness(1.36)!important;transform:scale(.985);box-shadow:inset 0 2px 5px #07111f66!important}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
