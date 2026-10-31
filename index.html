@@ -1269,6 +1269,8 @@ const roster=[
  {id:'zihan',name:'顧紫涵',rarity:'SSR',icon:'🌙',role:'幻術系',image:'images/characters/gu-zihan.png'}
 ];
 const modal=$('featureModal'),modalTitle=$('modalTitle'),modalBody=$('modalBody');
+// The shared game modal must live outside #lobby because the standalone summon/archive pages hide that ancestor.
+if(modal&&modal.parentElement!==document.body)document.body.appendChild(modal);
 function readCollection(){try{const v=JSON.parse(localStorage.getItem('campusCardCollection')||'null');if(v&&Array.isArray(v.owned)){const owned=[...new Set(v.owned.filter(id=>roster.some(c=>c.id===id)))];let formation=Array.isArray(v.formation)?[...new Set(v.formation.filter(id=>owned.includes(id)))].slice(0,3):[];if(!formation.length&&owned.includes('yuching'))formation=['yuching'];return {owned,formation,levels:v.levels&&typeof v.levels==='object'?v.levels:{},quests:v.quests&&typeof v.quests==='object'?v.quests:{},newbieTenClaimed:v.newbieTenClaimed===true}}}catch(e){}return {owned:starterCharacters.slice(),formation:starterCharacters.slice(),levels:{},quests:{},newbieTenClaimed:false}}
 const growthByRarity={R:{atk:1.2,skill:1.5,hp:5},SR:{atk:1.8,skill:2.2,hp:7},SSR:{atk:2.5,skill:3.2,hp:9}};
 const cardStats={yuching:{atk:20,skill:36,hp:105,heal:0},yutong:{atk:13,skill:22,hp:95,heal:35},ruoxue:{atk:18,skill:52,hp:90,heal:0},xingyao:{atk:25,skill:34,hp:88,heal:0},keqing:{atk:15,skill:26,hp:125,heal:0},zihan:{atk:17,skill:58,hp:85,heal:0}};
