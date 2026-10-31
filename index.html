@@ -1178,6 +1178,12 @@
   min-height:100%!important;
   max-height:100%!important;
 }
+
+
+/* Cover portrait enlarged by 30%; preserve full card ratio on desktop and mobile. */
+.hero-emblem{min-width:0}
+.hero-portrait-frame{box-sizing:border-box}
+@media(max-width:700px){.hero-emblem{width:100%;min-width:0}.hero-portrait-frame{width:min(100%,403px);height:auto;aspect-ratio:310/360}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
