@@ -899,6 +899,42 @@
   }
 }
 
+
+/* Battle UI compact V1 preview: spacing-only refinements, preserve existing behavior. */
+#gameApp .topline{gap:10px}
+#gameApp .topline>div:first-child{min-width:0}
+#gameApp .topline .eyebrow{margin-bottom:3px}
+#gameApp .topline h2{margin-top:2px;margin-bottom:0}
+#gameApp #battlePanel{gap:12px;padding:clamp(12px,2.1vw,22px)}
+#gameApp .battle-arena>.fighter{min-height:0!important;padding:clamp(10px,1.4vw,14px)!important}
+#gameApp .battle-arena>.fighter>.avatar{transform:scale(.95);transform-origin:top center;margin-bottom:4px}
+#gameApp .battle-arena>.fighter>.energy-hud{margin-bottom:3px}
+#gameApp .battle-arena>.fighter>.energy-hud .energy-bar{height:26px}
+#gameApp .battle-arena>.fighter>.bar.hp-bar-with-text{height:21px!important;min-height:21px!important;max-height:21px!important}
+#gameApp .battle-arena>.fighter>h3{margin-bottom:2px}
+#gameApp .battle-arena>.fighter>.fighter-description,
+#gameApp .battle-arena>.fighter>.fighter-attack{margin-top:1px;margin-bottom:1px}
+#gameApp .battle-action-layout{gap:9px}
+#gameApp .battle-action-right .notice{box-sizing:border-box;padding:9px 11px;min-height:0;max-height:153px}
+#gameApp .battle-action-right .party-sidebar{padding:9px}
+#gameApp .battle-action-right .party-sidebar h3{margin-bottom:6px}
+#gameApp .battle-party{gap:6px}
+#gameApp .battle-party>*{min-height:0}
+#gameApp .compact-combat-controls{gap:8px}
+#gameApp .compact-combat-controls .btn{min-height:44px;padding:10px 12px}
+#gameApp .battle-history-panel{padding:clamp(12px,2vw,20px)}
+#gameApp .battle-history-panel .battle-history-heading{margin-bottom:7px}
+#gameApp .battle-history-panel .battle-history-hint{margin:4px 0 7px}
+@media(max-width:760px){
+ #gameApp #battlePanel{padding:9px;gap:8px}
+ #gameApp .battle-arena>.fighter{padding:6px 4px!important}
+ #gameApp .battle-arena>.fighter>.energy-hud .energy-bar{height:23px}
+ #gameApp .battle-action-right .notice{max-height:132px;padding:8px 9px}
+ #gameApp .battle-action-right .party-sidebar{padding:7px}
+ #gameApp .compact-combat-controls{gap:6px}
+ #gameApp .compact-combat-controls .btn{min-height:41px;padding:8px 7px}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
@@ -945,7 +981,7 @@
 </div></section>
 <div class="lobby-footer">校園女神錄 <span>· 真人角色收藏 × 校園卡牌冒險</span></div>
 </main>
-<main id="gameApp" class="wrap" style="display:none"><nav class="nav-toolbar" aria-label="戰鬥導覽"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="nav-btn" id="gameBackBtn" type="button">← 返回遊戲大廳</button></div></nav><section class="topline"><div><p class="eyebrow">STAGE <span id="stageTop">1</span></p><h2 id="stageTitle">第 1 關：訓練場的挑戰</h2><div class="muted">點擊攻擊，打敗敵人即可前往下一關。</div></div><div class="pill">🪙 金幣 <span id="coinsTop">0</span></div></section>
+<main id="gameApp" class="wrap" style="display:none"><nav class="nav-toolbar" aria-label="戰鬥導覽"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="nav-btn" id="gameBackBtn" type="button">← 返回遊戲大廳</button></div></nav><section class="topline"><div><p class="eyebrow">STAGE <span id="stageTop">1</span></p><h2 id="stageTitle">第 1 關：訓練場的挑戰</h2></div><div class="pill">🪙 金幣 <span id="coinsTop">0</span></div></section>
 <section class="panel" id="battlePanel"><div class="arena battle-arena">
 <div class="fighter player-fighter"><div class="energy-hud player-energy-hud"><div class="bar energy-bar"><div class="fill energy-fill" id="playerEnergyBar"></div><span class="energy-bar-text" id="playerEnergyText">✦ 能量 60 / 100</span></div></div><div class="avatar player-portrait" id="playerAvatar"><img src="images/characters/lin-yuqing-sr.png" alt="三上悠亞" onerror="this.remove();this.parentElement.textContent='🎓'"></div><h3>三上悠亞</h3><div class="muted fighter-description">學園新生・玩家</div><div class="bar hp-bar-with-text"><div class="fill" id="playerHpBar"></div><span class="hp-bar-text" id="playerHpText">100 / 100</span></div><div class="muted fighter-attack">攻擊力：<b id="playerAtk">18</b></div></div><div class="versus">VS</div>
 <div class="fighter enemy"><div class="energy-hud enemy-energy-hud"><div class="bar energy-bar"><div class="fill energy-fill" id="enemyEnergyBar"></div><span class="energy-bar-text" id="enemyEnergyText">能量 60 / 100 ✦</span></div></div><div class="avatar" id="enemyAvatar">👾</div><h3 id="enemyName">校園史萊姆</h3><div class="muted fighter-description" id="enemyDesc">第一個練習對手</div><div class="bar hp-bar-with-text"><div class="fill" id="enemyHpBar"></div><span class="hp-bar-text" id="enemyHpText">55 / 55</span></div><div class="muted fighter-attack">攻擊力：<b id="enemyAtk">7</b></div></div></div>
