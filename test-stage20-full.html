@@ -1475,21 +1475,22 @@ function stage20EnemyCounter(e){
  const living=team.map(id=>roster.find(ch=>ch.id===id)).filter(ch=>ch&&(state.partyHp[ch.id]??maxHp(ch))>0);
  if(!living.length){state.playerHp=0;return 0}
  const p=stage20Config();
- state.stage20BossTurns=(Number(state.stage20BossTurns)||0)+1;
- const actionInCycle=((state.stage20BossTurns-1)%5)+1;
- const energyAfter=actionInCycle*20;
- const isSpecial=actionInCycle===5;
+ const energyBefore=Math.max(0,Math.min(100,Number(state.enemyEnergy)||0));
+ const energyAfter=Math.min(100,energyBefore+20);
+ const isSpecial=energyAfter>=100;
  let skill;
  if(isSpecial){
   skill=p.special;
   state.enemyEnergy=0;
+  state.stage20BossTurns=0;
   addLog('💥 E-00 能量達到100/100，施放特殊必殺技「'+skill.name+'」！');
   setEnemySkillNotice('cast',skill.name,e.name);
  }else{
   skill=p.normal[(Number(state.stage20Rotation)||0)%2];
   state.stage20Rotation=(Number(state.stage20Rotation)||0)+1;
   state.enemyEnergy=energyAfter;
-  if(actionInCycle===4){
+  state.stage20BossTurns=(Number(state.stage20BossTurns)||0)+1;
+  if(energyAfter===80){
    setEnemySkillNotice('warning',p.special.name,e.name);
    addLog('⚠️ E-00 能量達到80/100！下一次行動將施放特殊必殺技「'+p.special.name+'」，請做好防禦！');
   }else{
