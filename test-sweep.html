@@ -1193,7 +1193,7 @@
 <main id="lobby" class="lobby-shell">
 <section class="lobby-hero">
 <div class="hero-copy"><p class="eyebrow">CAMPUS IDOL CHRONICLES · OFFICIAL</p><h2>收藏校園女神，<br><span>開啟冒險旅程</span></h2><p class="hero-text">收集角色卡牌、組建隊伍，展開校園冒險。</p>
-<div class="hero-actions"><button class="btn primary" id="startBtn">⚔️ 開始冒險</button><button class="btn secondary" id="dailyBtn">🎁 領取每日補給</button></div>
+<div class="hero-actions"><button class="btn primary" id="startBtn">⚔️ 開始冒險</button><button class="btn secondary" id="dailyBtn">🎁 領取每日補給</button></div><button class="btn secondary" id="stageCenterBtn" type="button">⚔️ 關卡挑戰中心｜自行挑戰・一鍵掃蕩</button>
 <div class="daily-note" id="dailyNote">每日登入獎勵：每日台灣時間 00:00 更新，可領取金幣。</div></div>
 <div class="hero-emblem"><div class="hero-portrait-frame" aria-label="校園女神真人角色主視覺"><div class="portrait-orbit orbit-one"></div><div class="portrait-orbit orbit-two"></div><div class="portrait-crest">✦</div><div class="portrait-rarity">CAMPUS IDOL · SSR</div></div><div class="emblem-caption">CAMPUS IDOL<br>CHRONICLES</div></div>
 </section>
@@ -1210,8 +1210,7 @@
   <button class="menu-card" type="button" data-menu="archive"><span class="menu-icon">📚</span><strong>角色圖鑑</strong><small>查看角色資料與稀有度</small><span class="menu-arrow">開啟圖鑑 →</span></button>
   <button class="menu-card" type="button" data-menu="summon"><span class="menu-icon">✨</span><strong>卡牌召喚</strong><small>使用金幣進行原型抽卡</small><span class="menu-arrow">前往召喚 →</span></button>
   <button class="menu-card" type="button" data-menu="inventory"><span class="menu-icon">🎒</span><strong>角色背包</strong><small>查看已收藏的角色</small><span class="menu-arrow">開啟背包 →</span></button>
-  <button class="menu-card" type="button" data-menu="sweep"><span class="menu-icon">⚡</span><strong>一鍵掃蕩</strong><small>任意選擇已通關關卡，快速取得重玩獎勵</small><span class="menu-arrow">每日 3 次 →</span></button>
-  <button class="menu-card" type="button" data-menu="formation"><span class="menu-icon">🛡️</span><strong>角色編成</strong><small>選擇最多三名已收藏角色，組成隊伍</small><span class="menu-arrow">編輯隊伍 →</span></button>
+    <button class="menu-card" type="button" data-menu="formation"><span class="menu-icon">🛡️</span><strong>角色編成</strong><small>選擇最多三名已收藏角色，組成隊伍</small><span class="menu-arrow">編輯隊伍 →</span></button>
  </div>
  <p class="collection-note">召喚結果與收藏進度會儲存在目前的瀏覽器中。本版本尚未支援雲端存檔或跨裝置同步。</p>
 </section>
@@ -1377,7 +1376,7 @@ document.addEventListener('click',function(ev){
  const menu=target.closest('[data-menu]');
  if(menu){ev.preventDefault();ev.stopImmediatePropagation();try{switch(menu.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'sweep':openSweep();break;case'quests':openQuests();break;}}catch(err){console.error('大廳功能開啟失敗',err);showModal('功能載入失敗','<p>此功能載入時發生錯誤，請截圖回報。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p>')}return;}
  const action=target.closest('[data-modal-action]');
- if(action){ev.preventDefault();ev.stopImmediatePropagation();switch(action.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'formation-done':closeModal();break;case'do-summon':doSummon();break;case'do-ten-summon':doTenSummon();break;case'do-newbie-ten-summon':doNewbieTenSummon();break;case'daily-reward-close':closeModal();break;case'sweep-confirm':confirmSweep();break;case'sweep-close':closeModal();break;}return;}
+ if(action){ev.preventDefault();ev.stopImmediatePropagation();switch(action.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'formation-done':closeModal();break;case'do-summon':doSummon();break;case'do-ten-summon':doTenSummon();break;case'do-newbie-ten-summon':doNewbieTenSummon();break;case'daily-reward-close':closeModal();break;case'challenge-start':startSelectedChallenge();break;case'sweep-confirm':confirmSweep();break;case'sweep-close':closeModal();break;}return;}
  const add=target.closest('[data-add-member]');if(add&&!add.disabled){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(add.dataset.addMember);return;}
  const remove=target.closest('[data-remove-member]');if(remove){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(remove.dataset.removeMember,true);return;}
 },true);
@@ -1437,6 +1436,32 @@ function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
 // 掃蕩選單與 Modal 動作已整合至原有事件委派，避免事件攔截順序衝突。
 document.addEventListener('change',function(ev){if(ev.target&&ev.target.id==='sweepStage')updateSweepPreview()},true);
+function unlockedChallengeStages(){
+ const maxUnlocked=Math.max(1,Math.min(20,Number(state.stage)||1,Math.max(1,(Number(state.cleared)||0)+1)));
+ return Array.from({length:maxUnlocked},(_,i)=>i+1);
+}
+function openStageCenter(){
+ const unlocked=unlockedChallengeStages(),cleared=clearedSweepStages();
+ const opts=a=>a.map(n=>'<option value="'+n+'">第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</option>').join('');
+ const html='<div class="panel" style="padding:14px;margin-bottom:12px"><strong>自行挑戰</strong><p class="muted">只能選擇目前已解鎖的關卡；挑戰會進入正常戰鬥。</p><label for="challengeStage">選擇挑戰關卡</label><select id="challengeStage" style="width:100%;padding:12px;border-radius:10px;background:#111d2e;color:#eef4ff">'+opts(unlocked)+'</select><div class="modal-actions"><button class="btn primary" type="button" data-modal-action="challenge-start">開始挑戰</button></div></div>'+
+ '<div class="panel" style="padding:14px"><strong>一鍵掃蕩</strong><p class="muted">僅限已通關關卡；每日最多 3 次，不進入戰鬥。</p>'+
+ (cleared.length?'<label for="sweepStage">選擇掃蕩關卡</label><select id="sweepStage" style="width:100%;padding:12px;border-radius:10px;background:#111d2e;color:#eef4ff">'+opts(cleared)+'</select><div id="sweepPreview" class="notice" style="margin-top:12px"></div><p>今日剩餘：'+sweepDailyState().remaining+' / 3 次</p><div class="modal-actions"><button class="btn primary" type="button" data-modal-action="sweep-confirm">確認掃蕩</button></div>':'<p class="muted">目前尚無已通關關卡，完成關卡後即可使用掃蕩。</p>')+'</div>';
+ showModal('⚔️ 關卡挑戰中心',html);
+ if(cleared.length)updateSweepPreview();
+}
+function startSelectedChallenge(){
+ const sel=$('challengeStage');if(!sel)return;
+ const n=Number(sel.value);if(!unlockedChallengeStages().includes(n))return;
+ state.stage=n;state.stage20Phase=0;state.stage20Rotation=0;state.stage20BossTurns=0;state.stage20SpecialPending=false;
+ state.energy=0;state.enemyEnergy=0;state.pendingEnemySkill=null;state.enemySkillNotice=null;state.bossCharge=false;state.defendNext=false;state.guardNext=false;state.supplyUsedStage=false;state.potions=1;
+ const col=readCollection(),team=(col.formation||[]).map(id=>roster.find(ch=>ch.id===id)).filter(Boolean);
+ if(!team.length)team.push(roster.find(ch=>ch.id==='yuching'));
+ state.partyHp=state.partyHp||{};team.forEach(ch=>{if(!Number.isFinite(state.partyHp[ch.id]))state.partyHp[ch.id]=maxHp(ch)});
+ state.activeMember=team.find(ch=>state.partyHp[ch.id]>0)?.id||team[0].id;state.playerHp=state.partyHp[state.activeMember];
+ state.enemyHp=enemy().hp;state.stageStorySeen=false;selectedCombatAction=null;skillMenuOpen=false;
+ save();closeModal();showGame();setTimeout(()=>{if(state.enemyHp>0)showStageStory()},0);
+}
+document.getElementById('stageCenterBtn')?.addEventListener('click',openStageCenter);
 function sweepDailyState(){
  const day=taiwanDayKey();
  if(state.sweepDay!==day){state.sweepDay=day;state.sweepUsed=0;save()}
