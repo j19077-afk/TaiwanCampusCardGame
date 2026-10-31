@@ -935,6 +935,25 @@
  #gameApp .compact-combat-controls .btn{min-height:41px;padding:8px 7px}
 }
 
+
+/* V1 follow-up: remove portrait frame and use the original side-specific soft glow colors. */
+#gameApp .battle-arena>.player-fighter>.avatar{
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  filter:drop-shadow(0 0 7px rgba(75,225,190,.48)) drop-shadow(0 0 16px rgba(75,225,190,.22));
+}
+#gameApp .battle-arena>.player-fighter>.avatar img{
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  filter:drop-shadow(0 0 6px rgba(75,225,190,.5)) drop-shadow(0 0 14px rgba(75,225,190,.22));
+}
+#gameApp .battle-arena>.fighter.enemy>.avatar{
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  filter:drop-shadow(0 0 7px rgba(221,105,164,.48)) drop-shadow(0 0 16px rgba(221,105,164,.22));
+}
+#gameApp .battle-arena>.fighter.enemy>.avatar img{
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  filter:drop-shadow(0 0 6px rgba(221,105,164,.5)) drop-shadow(0 0 14px rgba(221,105,164,.22));
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
