@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>校園女神錄｜第20關測試版</title>
+<style>
+:root{color-scheme:dark;--bg:#090e1c;--panel:#151e32;--line:#394765;--text:#edf2ff;--muted:#aab7d0;--red:#c94d59;--gold:#e2b45c;--teal:#64d8c5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 0,#25304e,var(--bg) 65%);color:var(--text);font:15px/1.6 system-ui,sans-serif;padding:20px}
+main{max-width:1050px;margin:auto}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.tag{border:1px solid #a84a58;color:#ffb5bd;padding:4px 10px;border-radius:99px;font-size:12px}
+h1{font-size:clamp(23px,4vw,34px);margin:8px 0}.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}.panel{background:#151e32eF;border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0}.boss{text-align:center;border-color:#91404e;background:linear-gradient(145deg,#281724,#151e32)}.boss-art{width:160px;height:190px;margin:8px auto 12px;border:2px solid #b74a5c;border-radius:14px;display:grid;place-items:center;background:radial-gradient(circle,#6d2338,#211522 65%);font-size:58px}.bar{height:16px;background:#080d18;border-radius:99px;overflow:hidden;border:1px solid #46516a}.fill{height:100%;width:100%;background:linear-gradient(90deg,#a52f47,#f07875);transition:width .25s}.energy{background:linear-gradient(90deg,#a77a30,#f3d17a)}.stats{display:flex;justify-content:space-between;gap:10px;margin:8px 0}.party{display:grid;gap:10px}.member{padding:12px;border:1px solid #3d4a65;border-radius:12px;background:#10182a}.member.active{border-color:var(--teal);box-shadow:0 0 0 1px #64d8c544}.member button{margin-top:8px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}button{border:1px solid #53617d;background:#263550;color:white;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}button.primary{background:#276f70;border-color:#64d8c5}button:disabled{opacity:.4;cursor:not-allowed}.story{border-left:3px solid var(--gold);padding:10px 14px;background:#272338;border-radius:8px;margin:12px 0}.log{height:260px;overflow:auto;display:flex;flex-direction:column-reverse;gap:6px}.log p{margin:0;padding:7px 9px;background:#0e1728;border-radius:8px;color:#dce5f7;font-size:13px}.phase{font-weight:800;color:#ffb3bd}.foot{margin:18px 0;color:var(--muted);font-size:12px}@media(max-width:760px){.grid{grid-template-columns:1fr}body{padding:12px}.panel{padding:14px}}
+</style>
+</head>
+<body><main>
+<div class="top"><span class="tag">獨立測試頁｜不連動正式版存檔</span><span class="muted">TEST BUILD · E-00</span></div>
+<h1>第20關：E-00 原初母體</h1>
+<p class="muted">三階段連續 BOSS 戰鬥測試。此頁使用獨立模擬資料，不修改正式版角色、存檔或戰鬥紀錄。</p>
+<div class="story" id="story"><b>原初甦醒</b><br>原初母體 E-00 從核心艙中甦醒，感染訊號瞬間覆蓋整座研究中心。小隊必須突破三個進化階段，摧毀母體並關閉訊號中樞，才能終結這場校園感染災變。</div>
+<div class="grid">
+<section class="panel boss">
+<div class="phase" id="phaseName">第一階段｜原初甦醒</div>
+<div class="boss-art" id="bossArt">🧬</div>
+<h2>E-00 原初母體</h2>
+<div class="stats"><b>母體生命值</b><strong id="bossHpText">2500 / 2500</strong></div><div class="bar"><div class="fill" id="bossHpBar"></div></div>
+<div class="stats"><span>敵方能量</span><strong id="bossEnergyText">0 / 100</strong></div><div class="bar"><div class="fill energy" id="bossEnergyBar"></div></div>
+<div class="stats"><span>普通技能輪替</span><strong id="rotationText">核心脈衝</strong></div>
+<div class="stats"><span>本階段 BOSS 行動</span><strong id="turnText">0</strong></div>
+</section>
+<section class="panel">
+<h2>我方出戰隊伍</h2><p class="muted">測試用滿等屬性；切換操作角色不會重置生命值。</p>
+<div id="party" class="party"></div>
+<div class="stats"><span>我方能量</span><b id="playerEnergy">0 / 100</b></div><div class="bar"><div class="fill energy" id="playerEnergyBar"></div></div>
+<div class="actions"><button class="primary" id="attackBtn">⚔️ 普通攻擊</button><button id="skillBtn">✦ 角色技能</button><button id="defendBtn">🛡️ 防禦</button><button id="healBtn">🧪 補給</button><button id="resetBtn">重新測試</button></div>
+<p class="muted" id="debuffText">感染干擾：無</p>
+</section>
+</div>
+<section class="panel" style="margin-top:16px"><h2>戰鬥訊息</h2><div class="log" id="log"></div></section>
+<p class="foot">測試注意：普通技能每次敵方行動輪流使用；敵方能量每次行動增加20，達100時當次立即施放特殊技能。防禦減傷30%。第三階段「觸肢全面突襲」使我方攻擊力降低20%，持續2個玩家行動。</p>
+</main>
+<script>
+(()=>{
+const phases=[
+ {name:'第一階段｜原初甦醒',hp:2500,art:'🧬',story:'核心艙停止運作，E-00 緩緩睜開雙眼。控制台警告：原初樣本甦醒，核心限制解除。',normal:[{name:'核心脈衝',target:'single',damage:30},{name:'感染震盪',target:'all',damage:15}],special:{name:'原初核心爆發',target:'single',damage:50}},
+ {name:'第二階段｜異變增殖',hp:3500,art:'🦠',story:'母體遭受重創後，骨質增生覆蓋軀幹，黑灰色骨甲與觸肢迅速增殖。研究中心終端顯示：進化超出預測，限制程序失效。',normal:[{name:'觸肢突刺',target:'single',damage:40},{name:'骨甲重擊',target:'single',damage:55}],special:{name:'觸肢狂襲',target:'all',damage:30}},
+ {name:'第三階段｜完全暴走',hp:5000,art:'👹',story:'警報聲戛然而止。E-00 的觸肢完全展開，胸腹核心暴露並發出紅光。感染訊號源頭就在眼前——摧毀母體核心，終結感染。',normal:[{name:'母體暴走',target:'all',damage:30},{name:'觸肢全面突襲',target:'all',damage:25,debuff:true}],special:{name:'原初終焉',target:'all',damage:45}}
+];
+const team=[
+ {id:'zihan',name:'顧紫涵',rarity:'SSR',hp:556,maxHp:556,atk:145,skill:235},
+ {id:'ruoxue',name:'沈若雪',rarity:'SSR',hp:562,maxHp:562,atk:147,skill:227},
+ {id:'xingyao',name:'許星瑤',rarity:'SR',hp:372,maxHp:372,atk:98,skill:124}
+];
+let phase=0,bossHp=phases[0].hp,bossEnergy=0,playerEnergy=0,bossTurn=0,rotation=0,active=0,defendNext=false,supplyUsed=false,debuffTurns=0,debuffFresh=false,ended=false;
+const $=id=>document.getElementById(id);
+function log(t){const p=document.createElement('p');p.textContent=t;$('log').prepend(p)}
+function alive(){return team.filter(x=>x.hp>0)}
+function draw(){const p=phases[phase];$('phaseName').textContent=p.name;$('bossArt').textContent=p.art;$('bossHpText').textContent=Math.max(0,bossHp)+' / '+p.hp;$('bossHpBar').style.width=(Math.max(0,bossHp)/p.hp*100)+'%';$('bossEnergyText').textContent=bossEnergy+' / 100';$('bossEnergyBar').style.width=bossEnergy+'%';$('turnText').textContent=String(bossTurn);$('rotationText').textContent=bossEnergy>=80?p.special.name:p.normal[rotation%2].name;$('playerEnergy').textContent=playerEnergy+' / 100';$('playerEnergyBar').style.width=playerEnergy+'%';$('debuffText').textContent=debuffTurns?'感染干擾：我方攻擊力降低20%，剩餘 '+debuffTurns+' 個玩家行動':'感染干擾：無';$('party').innerHTML=team.map((x,i)=>'<div class="member '+(i===active?'active':'')+'"><b>'+x.name+'（'+x.rarity+'）</b><div class="stats"><span>HP</span><strong>'+x.hp+' / '+x.maxHp+'</strong></div><div class="bar"><div class="fill" style="width:'+Math.max(0,x.hp)/x.maxHp*100+'%;background:linear-gradient(90deg,#247f69,#68d5ad)"></div></div><div class="stats"><span>攻擊 '+x.atk+'｜技能 '+x.skill+'</span><span>'+(x.hp>0?'存活':'倒下')+'</span></div><button data-member="'+i+'" '+(x.hp<=0?'disabled':'')+'>切換角色</button></div>').join('');document.querySelectorAll('[data-member]').forEach(b=>b.onclick=()=>{active=Number(b.dataset.member);draw()});$('attackBtn').disabled=ended||!alive().length||bossHp<=0;$('skillBtn').disabled=ended||!alive().length||playerEnergy<35||bossHp<=0;$('defendBtn').disabled=ended||!alive().length||bossHp<=0;$('healBtn').disabled=ended||supplyUsed||team[active].hp<=0||team[active].hp===team[active].maxHp||bossHp<=0}
+function endPlayerAction(wasDebuffed){if(wasDebuffed&&debuffTurns>0){if(debuffFresh)debuffFresh=false;else debuffTurns--}if(!alive().length){ended=true;log('全隊倒下，測試戰鬥失敗。')}draw()}
+function damagePlayer(member,amount){let d=amount;if(defendNext)d=Math.ceil(d*.7);member.hp=Math.max(0,member.hp-d);log(member.name+' 受到 '+d+' 點傷害'+(defendNext?'（防禦減傷30%）':'')+'。')}
+function bossAction(){if(ended||bossHp<=0)return;bossTurn++;bossEnergy=Math.min(100,bossEnergy+20);const p=phases[phase];let skill;if(bossEnergy>=100){skill=p.special;bossEnergy=0;log('⚡ E-00 能量達100，立即施放特殊技能「'+skill.name+'」！')}else{skill=p.normal[rotation%2];rotation++;log('E-00 使用普通技能「'+skill.name+'」。')}
+let targets=skill.target==='all'?alive():[team.filter(x=>x.hp>0)[Math.floor(Math.random()*alive().length)]].filter(Boolean);targets.forEach(m=>damagePlayer(m,skill.damage));if(skill.debuff){debuffTurns=2;debuffFresh=true;log('感染干擾！我方全體攻擊力降低20%，持續2個玩家行動。')}defendNext=false}
+function playerAttack(){if(ended||bossHp<=0)return;const m=team[active];if(m.hp<=0)return;const was=debuffTurns>0;let d=m.atk+12+6+Math.floor(Math.random()*5);if(was)d=Math.floor(d*.8);bossHp=Math.max(0,bossHp-d);playerEnergy=Math.min(100,playerEnergy+10);log(m.name+' 普通攻擊造成 '+d+' 點傷害，獲得10能量。');afterPlayer(d,was)}
+function playerSkill(){if(ended||playerEnergy<35||bossHp<=0)return;const m=team[active];if(m.hp<=0)return;const was=debuffTurns>0;playerEnergy-=35;let d=m.skill+18+Math.floor(Math.random()*5);if(was)d=Math.floor(d*.8);bossHp=Math.max(0,bossHp-d);log(m.name+' 施放角色技能，造成 '+d+' 點傷害，消耗35能量。');afterPlayer(d,was)}
+function afterPlayer(d,was){if(bossHp<=0){draw();if(phase<2){const old=phase;phase++;bossHp=phases[phase].hp;bossEnergy=0;bossTurn=0;rotation=0;defendNext=false;debuffTurns=0;debuffFresh=false;$('story').innerHTML='<b>'+phases[phase].name+'</b><br>'+phases[phase].story;log('階段 '+(old+1)+' 結束！E-00 進入'+phases[phase].name+'，全隊生命值保留。');}else{ended=true;$('story').innerHTML='<b>最終勝利</b><br>母體核心遭到摧毀，感染訊號中樞停止運作。第一章最終戰完成。';log('🎉 勝利！E-00 原初母體已被摧毀。')}draw();return}bossAction();endPlayerAction(was)}
+$('attackBtn').onclick=playerAttack;$('skillBtn').onclick=playerSkill;$('defendBtn').onclick=()=>{if(ended)return;const was=debuffTurns>0;defendNext=true;playerEnergy=Math.min(100,playerEnergy+5);log(team[active].name+' 採取防禦姿態，下一次敵方傷害減少30%，獲得5能量。');bossAction();endPlayerAction(was)};$('healBtn').onclick=()=>{const m=team[active];if(ended||supplyUsed||m.hp<=0)return;const before=m.hp;m.hp=Math.min(m.maxHp,m.hp+50);supplyUsed=true;log('使用本關補給，'+m.name+' 恢復 '+(m.hp-before)+' HP。');draw()};$('resetBtn').onclick=()=>location.reload();
+draw();log('測試開始：E-00 原初母體進入第一階段。');
+})();
+</script></body></html>
