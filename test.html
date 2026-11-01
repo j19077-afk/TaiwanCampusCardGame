@@ -1473,6 +1473,7 @@ function openStageCenter(){
 }
 function updateChallengeRewardPreview(){
  const preview=$('challengeRewardPreview');if(!preview)return;
+ preview.style.color='';
  const n=Math.max(1,Number(state.challengeLastStage)||1),daily=challengeRewardState(n,'play');
  preview.innerHTML='<strong>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</strong><br>今日自行挑戰通關獎勵剩餘：<strong>'+daily.remaining+' / 3 次</strong>'+(daily.remaining===0?'<p style="color:#ffd780;margin:7px 0 0">今日挑戰獎勵已領完，仍可繼續挑戰。</p>':'');
 }
@@ -1481,7 +1482,7 @@ function selectChallengeStage(n){if(!unlockedChallengeStages().includes(Number(n
 function restoreChallengeMainState(){const current=state,snap=current.challengeMainSnapshot;if(snap&&typeof snap==='object'){const keep={coins:current.coins,challengeLastStage:current.challengeLastStage,challengeClearedStages:current.challengeClearedStages,challengePlayRewardCounts:current.challengePlayRewardCounts,challengeSweepRewardCounts:current.challengeSweepRewardCounts};state={...snap,...keep}}else{state.challengeMode=false}delete state.challengeMainSnapshot;state.challengeMode=false;state.challengeReturnStage=null;state.challengeReplayCompleted=false}
 function returnToChallengePage(){state.challengeResultActive=false;save();openStageCenter();updateChallengeRewardPreview()}
 function finishChallengeDefeat(){if(!state.challengeMode)return;restoreChallengeMainState();state.challengeResultActive=true;save();selectedCombatAction=null;skillMenuOpen=false;tell('挑戰失敗！本次不扣除每日自行挑戰獎勵次數。');addLog('挑戰失敗：未取得通關獎勵，今日自行挑戰額度不變。');$('defendBtn').disabled=true;$('healBtn').disabled=true;$('skillBtn').disabled=true;render()}
-function cloneChallengeValue(value){return value===undefined?undefined:JSON.parse(JSON.stringify(value))}
+function cloneChallengeValue(value,seen=new WeakMap()){if(value===null||typeof value!=='object')return value;if(seen.has(value))return seen.get(value);const copy=Array.isArray(value)?[]:{};seen.set(value,copy);Object.keys(value).forEach(key=>{copy[key]=cloneChallengeValue(value[key],seen)});return copy}
 function startSelectedChallenge(){
  const n=Number(state.challengeLastStage);
  if(!Number.isInteger(n)||!unlockedChallengeStages().includes(n)){tell('請先通過主線關卡，才能在關卡挑戰中心解鎖該關。');return;}
