@@ -1441,7 +1441,7 @@ function mainlineClearedStages(){
  const recorded=Array.isArray(state.clearedStages)?state.clearedStages:[];
  const set=new Set(recorded.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20));
  const progress=Math.max(0,Math.min(20,Number(state.cleared)||0));
- if(set.size===0){for(let n=1;n<=progress;n++)set.add(n)}
+ for(let n=1;n<=progress;n++)set.add(n);
  return [...set].sort((a,b)=>a-b);
 }
 function unlockedChallengeStages(){
