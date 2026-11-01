@@ -1194,6 +1194,15 @@
 /* Mobile lobby layout correction: keep the hero portrait below the actions and within the first viewport. */
 @media(max-width:640px){.lobby-hero{grid-template-columns:minmax(0,1fr);gap:12px;padding:20px 14px;min-height:0}.hero-copy{width:100%;min-width:0}.hero-copy h2{font-size:clamp(1.55rem,6.4vw,2rem);line-height:1.2}.hero-text{margin-bottom:12px}.hero-actions{gap:8px}.hero-actions .btn{min-width:0;flex:1;padding:11px 9px;font-size:.9rem}.hero-emblem{width:100%;min-height:0;margin:0;display:grid;justify-items:center;gap:6px}.hero-portrait-frame{width:min(44vw,168px);height:min(48vw,184px);min-height:150px;border-radius:20px 20px 34px 20px}.hero-emblem .emblem-caption{margin-top:2px;font-size:.58rem;line-height:1.35}.portrait-orbit{width:110px;height:110px}.orbit-two{width:140px;height:140px}.portrait-crest{top:12px;left:14px;font-size:1.25rem}.portrait-rarity{bottom:7px;padding:3px 8px;font-size:.55rem}}
 @media(max-width:380px){.lobby-hero{padding:18px 12px;gap:10px}.hero-actions .btn{font-size:.82rem;padding:10px 7px}.hero-portrait-frame{width:150px;height:164px;min-height:0}}
+
+/* Cleared-stage indicator: gold border, gentle breathing glow and persistent check mark. */
+.challenge-stage-card{position:relative;}
+.challenge-stage-card.is-cleared{border:1.5px solid #e8c66f;background:#17263b;color:#fff3cf;box-shadow:inset 0 0 0 1px #e8c66f55,0 0 10px #e8c66f55;animation:challenge-cleared-breathe 3.2s ease-in-out infinite;}
+.challenge-stage-card.is-cleared strong{color:#ffe5a0;text-shadow:0 0 9px #f2cb6d88;}
+.challenge-stage-card.is-cleared small,.challenge-stage-card.is-cleared>span:not(.challenge-clear-check){color:#f0d99f;}
+.challenge-stage-card .challenge-clear-check{position:absolute;top:5px;right:6px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#e8c66f;color:#17263b;font-size:12px;font-weight:1000;line-height:1;box-shadow:0 0 8px #f2cb6d99;}
+@keyframes challenge-cleared-breathe{0%,100%{box-shadow:inset 0 0 0 1px #e8c66f44,0 0 6px #e8c66f44}50%{box-shadow:inset 0 0 0 1px #ffe6a088,0 0 15px #f2cb6d99}}
+@media(prefers-reduced-motion:reduce){.challenge-stage-card.is-cleared{animation:none;box-shadow:inset 0 0 0 1px #e8c66f66,0 0 9px #e8c66f66}}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
@@ -1454,7 +1463,7 @@ function openChallengeCenter(mode='challenge'){
   const done=cleared.includes(n),unlocked=challengeUnlocked(n),locked=!done&&!unlocked;
   const status=done?'已通關':locked?'尚未解鎖':'可挑戰';
   const kind=n%10===0?'大頭目':n%5===0?'小頭目':'普通關卡';
-  return '<button type="button" class="challenge-stage-card '+(done?'is-cleared':locked?'is-locked':'is-open')+'" data-challenge-stage="'+n+'" '+(locked?'disabled':'')+'><strong>'+String(n).padStart(2,'0')+'</strong><small>'+kind+'</small><span>'+status+'</span></button>';
+  return '<button type="button" class="challenge-stage-card '+(done?'is-cleared':locked?'is-locked':'is-open')+'" data-challenge-stage="'+n+'" '+(locked?'disabled':'')+'>'+(done?'<span class="challenge-clear-check" aria-label="已通關">✓</span>':'')+'<strong>'+String(n).padStart(2,'0')+'</strong><small>'+kind+'</small><span>'+status+'</span></button>';
  }).join('');
  const modeTabs='<div class="challenge-mode-tabs"><button type="button" class="'+(mode==='challenge'?'active':'')+'" data-challenge-mode="challenge">⚔️ 自行挑戰</button><button type="button" class="'+(mode==='sweep'?'active':'')+'" data-challenge-mode="sweep">⚡ 一鍵掃蕩</button></div>';
  const info=mode==='challenge'?'<p class="muted">選擇已解鎖關卡。已通關關卡可重玩；每次進入戰鬥皆會恢復全隊滿血並重置敵方狀態。</p>':'<div class="challenge-sweep-count">今日剩餘掃蕩次數：<strong>'+remaining+' / 3</strong></div><p class="muted">只能選擇已通關關卡，直接結算重玩獎勵，不進入戰鬥。</p>';
