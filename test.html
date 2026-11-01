@@ -1379,7 +1379,19 @@ document.addEventListener('click',function(ev){
  const menu=target.closest('[data-menu]');
  if(menu){ev.preventDefault();ev.stopImmediatePropagation();try{switch(menu.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'quests':openQuests();break;case'stage-center':openStageCenter();break;}}catch(err){console.error('大廳功能開啟失敗',err);showModal('功能載入失敗','<p>此功能載入時發生錯誤，請截圖回報。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p>')}return;}
  const action=target.closest('[data-modal-action]');
- if(action){ev.preventDefault();ev.stopImmediatePropagation();switch(action.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'formation-done':closeModal();break;case'do-summon':doSummon();break;case'do-ten-summon':doTenSummon();break;case'do-newbie-ten-summon':doNewbieTenSummon();break;case'daily-reward-close':closeModal();break;case'challenge-start':startSelectedChallenge();break;case'sweep-confirm':confirmSweep();break;case'sweep-close':closeModal();break;}return;}
+ if(action){ev.preventDefault();ev.stopImmediatePropagation();switch(action.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'formation-done':closeModal();break;case'do-summon':doSummon();break;case'do-ten-summon':doTenSummon();break;case'do-newbie-ten-summon':doNewbieTenSummon();break;case'daily-reward-close':closeModal();break;case'challenge-start':{
+   const stagePage=$('stageCenterPage'),preview=$('challengeRewardPreview');
+   const selected=stagePage&&stagePage.querySelector('[data-challenge-stage].selected');
+   if(selected)state.challengeLastStage=Number(selected.dataset.challengeStage);
+   try{startSelectedChallenge()}
+   catch(err){
+    console.error('自行挑戰啟動失敗',err);
+    const message='挑戰啟動失敗：'+String(err&&err.message||err);
+    if(preview){preview.textContent=message;preview.style.color='#ffd780'}
+    else alert(message);
+   }
+   break;
+  }case'sweep-confirm':confirmSweep();break;case'sweep-close':closeModal();break;}return;}
  const add=target.closest('[data-add-member]');if(add&&!add.disabled){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(add.dataset.addMember);return;}
  const remove=target.closest('[data-remove-member]');if(remove){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(remove.dataset.removeMember,true);return;}
 },true);
@@ -1457,8 +1469,6 @@ function openStageCenter(){
  let page=$('stageCenterPage');if(!page){page=document.createElement('main');page.id='stageCenterPage';page.className='stage-center-page';$('lobby').parentNode.insertBefore(page,$('lobby').nextSibling)}
  page.innerHTML=html;page.style.display='grid';lobby.style.display='none';gameApp.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';modal.hidden=true;document.body.style.overflow='';try{window.history.replaceState({screen:'stage-center'},'','#stage-center')}catch(e){}window.scrollTo(0,0);
  $('stageCenterBackBtn').onclick=showLobby;
- const challengeStartBtn=page.querySelector('[data-modal-action="challenge-start"]');
- if(challengeStartBtn)challengeStartBtn.onclick=function(ev){ev.preventDefault();ev.stopPropagation();try{startSelectedChallenge()}catch(err){console.error('自行挑戰啟動失敗',err);tell('挑戰啟動失敗：'+String(err&&err.message||err))}};
  updateChallengeRewardPreview();if(cleared.length)updateSweepPreview();
 }
 function updateChallengeRewardPreview(){
