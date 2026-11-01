@@ -2031,7 +2031,7 @@ function enemyCounter(e){
     addLog(target.name+' 倒下了！');
     const next=livingTeam.find(ch=>ch.id!==target.id&&(state.partyHp[ch.id]??0)>0);
     if(next&&target.id===state.activeMember){state.activeMember=next.id;state.playerHp=state.partyHp[next.id];tell(target.name+' 倒下了！已切換至 '+next.name+'。')}
-    else if(!team.some(id=>(state.partyHp[id]??0)>0)){state.playerHp=0;tell('💫 全隊倒下！請按下「重新開始遊戲」再次挑戰。')}
+    else if(!team.some(id=>(state.partyHp[id]??0)>0)){state.playerHp=0;tell('💫 全隊死亡！請按下「失敗/撤退」返回。')}
    }
   }
   state.defendNext=false;state.guardNext=false;return total;
@@ -2058,7 +2058,7 @@ function enemyCounter(e){
    addLog(target.name+' 倒下了！');
    const next=livingTeam.find(ch=>ch.id!==target.id&&(state.partyHp[ch.id]??0)>0);
    if(next&&target.id===state.activeMember){state.activeMember=next.id;state.playerHp=state.partyHp[next.id];tell(target.name+' 倒下了！已切換至 '+next.name+'。')}
-   else if(!team.some(id=>(state.partyHp[id]??0)>0)){state.playerHp=0;tell('💫 全隊倒下！請按下「重新開始遊戲」再次挑戰。')}
+   else if(!team.some(id=>(state.partyHp[id]??0)>0)){state.playerHp=0;tell('💫 全隊死亡！請按下「失敗/撤退」返回。')}
   }
  }
  if(announcedSkill)addLog('⚠️ '+e.name+' 能量達到 100/100！即將施放「'+announcedSkill.name+'」，請做好防禦！');
