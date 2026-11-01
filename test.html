@@ -1457,18 +1457,19 @@ function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
 
 
-let challengeMode=false,challengeReturnStage=1,challengeSelectedStage=1,challengeViewMode='challenge',challengeMainlineSnapshot=null,currentScreen='lobby',challengeReplayRewardCounts={};
+let challengeMode=false,challengeReturnStage=1,challengeSelectedStage=null,challengeViewMode='challenge',challengeMainlineSnapshot=null,currentScreen='lobby',challengeReplayRewardCounts={};
 try{challengeReplayRewardCounts=JSON.parse(localStorage.getItem('campusChallengeReplayRewards')||'{}')||{}}catch(e){challengeReplayRewardCounts={}}
 function challengeClearedStages(){return clearedSweepStages()}
 function challengeReplayRewardDailyState(n){const day=taiwanDayKey(),key=day+'-'+String(n),used=Math.max(0,Math.min(3,Number(challengeReplayRewardCounts[key])||0));return {used,remaining:Math.max(0,3-used),limit:3}}
 function challengeUnlocked(n){const cleared=Math.max(0,Math.min(20,Number(state.cleared)||0));return Number.isInteger(Number(n))&&Number(n)>=1&&Number(n)<=cleared}
 function openChallengeCenter(mode='challenge'){
  if(currentScreen!=='lobby'){showModal('目前無法進入關卡挑戰中心','<p>請先結束目前的主線戰鬥並返回遊戲大廳，再進入關卡挑戰中心。</p><div class="modal-actions"><button type="button" class="btn primary" data-modal-action="close">知道了</button></div>');return}
+ challengeSelectedStage=null;
  challengeViewMode=mode;
  const cleared=challengeClearedStages(),remaining=sweepDailyState().remaining;
  const chapterOptions='<option value="1" selected>第一章：校園異變（01–20 關）</option><option value="2" disabled>第二章（尚未開放）</option><option value="3" disabled>第三章（尚未開放）</option>';
  const cards=Array.from({length:20},(_,i)=>i+1).map(n=>{
-  const done=cleared.includes(n),unlocked=challengeUnlocked(n),locked=!unlocked,selected=mode==='challenge'&&challengeSelectedStage===n&&unlocked;
+  const done=cleared.includes(n),unlocked=challengeUnlocked(n),locked=!unlocked,selected=challengeSelectedStage===n&&unlocked;
   const status=unlocked?'已通關':'尚未解鎖';
   const kind=n%10===0?'大頭目':n%5===0?'小頭目':'普通關卡';
   const rewardState=unlocked?challengeReplayRewardDailyState(n):null;return '<button type="button" class="challenge-stage-card '+(selected?'is-selected':locked?'is-locked':'is-open')+'" data-challenge-stage="'+n+'" '+(locked?'disabled':'')+'>'+(done?'<span class="challenge-clear-check" aria-label="已通關">✓</span>':'')+'<strong>'+String(n).padStart(2,'0')+'</strong><small>'+kind+'</small><span>'+status+'</span><span class="challenge-reward-label">今日剩餘領取</span><span class="challenge-reward-remaining">'+(unlocked?rewardState.remaining+' / '+rewardState.limit:'— / 3')+'</span></button>';
@@ -1478,7 +1479,7 @@ function openChallengeCenter(mode='challenge'){
  const html='<div class="challenge-center"><label class="challenge-chapter-label" for="challengeChapter">選擇章節</label><select id="challengeChapter" class="challenge-chapter-select">'+chapterOptions+'</select>'+modeTabs+info+'<div class="challenge-stage-grid">'+cards+'</div><p class="challenge-footnote">第一章共 20 關；章節解鎖條件採獨立設定，供未來擴充使用。</p></div>';
  showModal('⚔️ 關卡挑戰中心',html);
  modalBody.querySelectorAll('[data-challenge-mode]').forEach(btn=>btn.addEventListener('click',()=>openChallengeCenter(btn.dataset.challengeMode)));
- modalBody.querySelectorAll('[data-challenge-stage]').forEach(btn=>btn.addEventListener('click',()=>openChallengeStage(Number(btn.dataset.challengeStage),mode)));
+ modalBody.querySelectorAll('[data-challenge-stage]').forEach(btn=>btn.addEventListener('click',()=>{const n=Number(btn.dataset.challengeStage);if(challengeSelectedStage===n){openChallengeStage(n,mode);return}challengeSelectedStage=n;modalBody.querySelectorAll('[data-challenge-stage]').forEach(card=>card.classList.toggle('is-selected',Number(card.dataset.challengeStage)===n))}));
  const chapter=$('challengeChapter');if(chapter)chapter.addEventListener('change',()=>{if(chapter.value!=='1')showModal('章節尚未開放','<p>此章節尚未開放，未來可依個別章節設定解鎖條件。</p><div class="modal-actions"><button type="button" class="btn primary" data-modal-action="challenge-back">返回</button></div>')});
 }
 function openChallengeStage(n,mode){
