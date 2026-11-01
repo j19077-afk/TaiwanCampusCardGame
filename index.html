@@ -1306,6 +1306,19 @@ function resetBattleForRetreat(){
  try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}
  challengeMainState=null;delete state.challengeMainSnapshot;save();
 }
+function clearChallengeModeForMainline(){
+ if(state&&state.challengeMode){
+  if(challengeMainState||state.challengeMainSnapshot){restoreChallengeMainState()}
+  else{state.stage=Math.max(1,Number(state.challengeReturnStage)||1);state.challengeMode=false;state.challengeResultActive=false;state.challengeReturnStage=null;state.challengeReplayCompleted=false;delete state.challengeMainSnapshot;challengeMainState=null;try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}save()}
+ }
+ if(!state)return;
+ state.challengeMode=false;state.challengeResultActive=false;state.challengeReturnStage=null;state.challengeReplayCompleted=false;
+ delete state.challengeMainSnapshot;challengeMainState=null;
+ try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}
+ const attack=$('attackBtn');
+ if(attack){attack.textContent='⚔️ 攻擊';attack.disabled=Number(state.playerHp)<=0||Number(state.enemyHp)<=0;attack.onclick=()=>handleCombatAction('attack')}
+ save();
+}
 function forceLobby(){
  const wasChallenge=!!(state&&state.challengeMode);
  if(wasChallenge){
@@ -1316,7 +1329,7 @@ function forceLobby(){
  }
  if(gameApp.style.display!=='none'||wasChallenge)resetBattleForRetreat();
  const notice=$('notice');if(notice)notice.textContent='';
- gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';const challenge=$('stageCenterPage');if(challenge)challenge.style.display='none';
+ clearChallengeModeForMainline();gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';const challenge=$('stageCenterPage');if(challenge)challenge.style.display='none';
  try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)
 }
 document.addEventListener('click',function(ev){const btn=ev.target.closest('#gameBackBtn,#lobbyHomeBtn');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();forceLobby()},true);
@@ -1437,7 +1450,7 @@ document.addEventListener('click',function(ev){
  const target=ev.target instanceof Element?ev.target:null;if(!target)return;
  const stageChoice=target.closest('[data-challenge-stage]');if(stageChoice){ev.preventDefault();ev.stopImmediatePropagation();selectChallengeStage(stageChoice.dataset.challengeStage);return;}
  const start=target.closest('#startBtn');
- if(start){ev.preventDefault();ev.stopImmediatePropagation();showGame();return;}
+ if(start){ev.preventDefault();ev.stopImmediatePropagation();clearChallengeModeForMainline();showGame();return;}
  const daily=target.closest('#dailyBtn');
  if(daily){ev.preventDefault();ev.stopImmediatePropagation();claimDailyGift();return;}
  const menu=target.closest('[data-menu]');
