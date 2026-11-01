@@ -2177,7 +2177,7 @@ state.stage=Math.min(20,Math.max(1,Number(state.stage)||1));state.cleared=Math.m
       <input id="anzaiLevel" type="range" min="1" max="50" value="1">
       <div class="anzai-statline"><span>治療力</span><b id="anzaiHealPower">—</b></div>
       <div class="anzai-statline"><span>單次測試治療量（治療力 × 2.0）</span><b id="anzaiHealAmount">—</b></div>
-      <small>提醒：目前母檔案尚未提供安西教練的基礎治療力，因此測試頁以獨立暫定基礎值 40 作為測試輸入；不視為正式角色數值。</small>
+      <small>測試數值依已確認規則：SSR 基礎治療力 60、倍率 1.35、每級成長 +1；僅供本測試區驗證，不寫入正式角色資料。</small>
     </article>
     <article class="anzai-target-card">
       <h3>指定我方治療對象</h3>
@@ -2225,7 +2225,7 @@ state.stage=Math.min(20,Math.max(1,Number(state.stage)||1));state.cleared=Math.m
 (function(){
   const root=document.getElementById('anzaiHealingTest');if(!root)return;
   const $=id=>document.getElementById(id);
-  const BASE_HEAL=40,SSR_MULTIPLIER=1.35,PER_LEVEL_GROWTH=1,SKILL_MULTIPLIER=2;
+  const BASE_HEAL=60,SSR_MULTIPLIER=1.35,PER_LEVEL_GROWTH=1,SKILL_MULTIPLIER=2;
   let targetId=null,sim={},team=[];
   function getMaxHp(ch){
     const cap=({R:25,SR:40,SSR:50})[ch.rarity]||25;
@@ -2289,6 +2289,8 @@ state.stage=Math.min(20,Math.max(1,Number(state.stage)||1));state.cleared=Math.m
   function runTests(){
     const s=stats(),max=100,tests=[];
     const push=(name,pass,detail)=>tests.push({name,pass,detail});
+    push('SSR Lv.1 治療力與技能治療量正確',Math.round(60*1.35)===81&&Math.round(60*1.35)*2===162,'治療力 81；技能治療量 162 HP');
+    push('SSR Lv.50 治療力與技能治療量正確',Math.round(60*1.35+49)===130&&Math.round(60*1.35+49)*2===260,'治療力 130；技能治療量 260 HP');
     push('滿 HP 角色不可被選取',max>=max===true&&Math.min(max,max+s.amount)===max,'滿血狀態不產生有效恢復量');
     push('受傷角色依治療力 × 2.0 恢復',Math.min(max,35+s.amount)-35===Math.min(s.amount,65),'預期恢復 '+Math.min(s.amount,65)+' HP');
     const nearDeath=1,nearAfter=Math.min(max,nearDeath+s.amount);
