@@ -1353,6 +1353,30 @@
   }
 }
 
+
+/* 角色編成中心視窗尺寸與角色圖鑑放大詳細視窗統一 */
+.game-modal:has(.formation-center){
+  box-sizing:border-box;
+  width:min(960px,calc(100vw - 36px));
+  max-width:960px;
+  max-height:min(88dvh,850px);
+  padding:clamp(18px,3vw,30px);
+  border:1px solid #7867a5;
+  border-radius:22px;
+  background:linear-gradient(145deg,#202a45,#151f32);
+}
+.game-modal:has(.formation-center) .modal-head{
+  margin-bottom:18px;
+}
+@media(max-width:640px){
+  .game-modal:has(.formation-center){
+    width:calc(100vw - 20px);
+    max-height:92dvh;
+    padding:16px;
+    border-radius:16px;
+  }
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
