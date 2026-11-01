@@ -1438,8 +1438,8 @@ function firstBossBonus(n){return n%10===0?20:n%5===0?10:0}
 function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
 function unlockedChallengeStages(){
- const maxUnlocked=Math.max(1,Math.min(20,Number(state.stage)||1,Math.max(1,(Number(state.cleared)||0)+1)));
- return Array.from({length:maxUnlocked},(_,i)=>i+1);
+ const mainCleared=Math.max(0,Math.min(20,Number(state.cleared)||0));
+ return Array.from({length:mainCleared},(_,i)=>i+1);
 }
 function challengeRewardState(n,mode){
  const day=taiwanDayKey(),key=day+'-'+String(n),field=mode==='sweep'?'challengeSweepRewardCounts':'challengePlayRewardCounts';
@@ -1470,8 +1470,8 @@ function restoreChallengeMainState(){const snap=state.challengeMainSnapshot;if(s
 function returnToChallengePage(){state.challengeResultActive=false;save();openStageCenter();updateChallengeRewardPreview()}
 function finishChallengeDefeat(){if(!state.challengeMode)return;restoreChallengeMainState();state.challengeResultActive=true;save();selectedCombatAction=null;skillMenuOpen=false;tell('挑戰失敗！本次不扣除每日自行挑戰獎勵次數。');addLog('挑戰失敗：未取得通關獎勵，今日自行挑戰額度不變。');$('defendBtn').disabled=true;$('healBtn').disabled=true;$('skillBtn').disabled=true;render()}
 function startSelectedChallenge(){
- const sel=$('challengeStage');if(!sel)return;
- const n=Number(sel.value);if(!unlockedChallengeStages().includes(n))return;
+ const n=Number(state.challengeLastStage);
+ if(!Number.isInteger(n)||!unlockedChallengeStages().includes(n)){tell('請先通過主線關卡，才能在關卡挑戰中心解鎖該關。');return;}
  state.challengeMainSnapshot={stage:JSON.parse(JSON.stringify(state.stage)),playerHp:JSON.parse(JSON.stringify(state.playerHp)),partyHp:JSON.parse(JSON.stringify(state.partyHp)),activeMember:JSON.parse(JSON.stringify(state.activeMember)),energy:JSON.parse(JSON.stringify(state.energy)),enemyHp:JSON.parse(JSON.stringify(state.enemyHp)),enemyEnergy:JSON.parse(JSON.stringify(state.enemyEnergy)),pendingEnemySkill:JSON.parse(JSON.stringify(state.pendingEnemySkill)),enemySkillNotice:JSON.parse(JSON.stringify(state.enemySkillNotice)),bossCharge:JSON.parse(JSON.stringify(state.bossCharge)),defendNext:JSON.parse(JSON.stringify(state.defendNext)),guardNext:JSON.parse(JSON.stringify(state.guardNext)),supplyUsedStage:JSON.parse(JSON.stringify(state.supplyUsedStage)),potions:JSON.parse(JSON.stringify(state.potions)),stage20Phase:JSON.parse(JSON.stringify(state.stage20Phase)),stage20Rotation:JSON.parse(JSON.stringify(state.stage20Rotation)),stage20BossTurns:JSON.parse(JSON.stringify(state.stage20BossTurns)),stage20SpecialPending:JSON.parse(JSON.stringify(state.stage20SpecialPending)),stage20DebuffTurns:JSON.parse(JSON.stringify(state.stage20DebuffTurns)),stageStorySeen:JSON.parse(JSON.stringify(state.stageStorySeen)),challengeMode:JSON.parse(JSON.stringify(state.challengeMode)),challengeReturnStage:JSON.parse(JSON.stringify(state.challengeReturnStage)),challengeReplayCompleted:JSON.parse(JSON.stringify(state.challengeReplayCompleted))};state.challengeLastStage=n;state.challengeMode=true;state.challengeReturnStage=Math.max(1,Number(state.stage)||1);state.challengeReplayCompleted=false;state.stage=n;state.stage20Phase=0;state.stage20Rotation=0;state.stage20BossTurns=0;state.stage20SpecialPending=false;
  state.energy=0;state.enemyEnergy=0;state.pendingEnemySkill=null;state.enemySkillNotice=null;state.bossCharge=false;state.defendNext=false;state.guardNext=false;state.supplyUsedStage=false;state.potions=1;
  const col=readCollection(),team=(col.formation||[]).map(id=>roster.find(ch=>ch.id===id)).filter(Boolean);
