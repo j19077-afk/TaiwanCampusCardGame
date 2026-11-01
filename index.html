@@ -1392,6 +1392,7 @@ window.addEventListener('pageshow',refreshLobby);refreshLobby();
 // 全域委派事件：確保大廳按鈕在手機版與重新渲染後仍可操作。
 document.addEventListener('click',function(ev){
  const target=ev.target instanceof Element?ev.target:null;if(!target)return;
+ const stageChoice=target.closest('[data-challenge-stage]');if(stageChoice){ev.preventDefault();ev.stopImmediatePropagation();selectChallengeStage(stageChoice.dataset.challengeStage);return;}
  const start=target.closest('#startBtn');
  if(start){ev.preventDefault();ev.stopImmediatePropagation();showGame();return;}
  const daily=target.closest('#dailyBtn');
