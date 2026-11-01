@@ -1268,7 +1268,7 @@
  close.addEventListener('click',dismiss);backdrop.addEventListener('click',e=>{if(e.target===backdrop)dismiss()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!backdrop.hidden)dismiss()});
 })();
 
-function forceLobby(){if(gameApp.style.display!=='none')save();gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)}
+function forceLobby(){currentScreen='lobby';if(gameApp.style.display!=='none')save();gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)}
 // 返回大廳按鈕已由 gameBackBtn / lobbyHomeBtn 的 onclick 直接處理；不再使用全域捕獲攔截，以免影響戰鬥操作事件。
 
 function localDayKey(d=new Date()){try{const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));if(p.year&&p.month&&p.day)return p.year+'-'+p.month+'-'+p.day}catch(e){console.error('台灣日期判斷失敗，改用本機日期',e)}return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -1414,8 +1414,8 @@ let state;
 function floatNumber(targetId,text,heal=false){const target=$(targetId);if(!target)return;const fighter=target.closest('.fighter');if(!fighter)return;const n=document.createElement('span');n.className='hp-damage-float '+(fighter.classList.contains('enemy')?'enemy-damage':'player-damage')+(heal?' heal-number':'');n.textContent=text;fighter.append(n);setTimeout(()=>n.remove(),950)}
 function animateFighter(id,kind){const el=$(id);if(!el)return;if(kind==='hp-flash'){const bar=el.closest('.bar');const target=bar||el;target.classList.remove('hp-flash');void target.offsetWidth;target.classList.add('hp-flash');setTimeout(()=>target.classList.remove('hp-flash'),450);return}el.classList.remove('hit','attack-pulse','victory');void el.offsetWidth;el.classList.add(kind);setTimeout(()=>el.classList.remove(kind),450)}
 function updateHpBar(id,current,maximum,side){const fill=$(id);if(!fill)return;const max=Math.max(1,Number(maximum)||1),hp=Math.max(0,Math.min(max,Number(current)||0)),ratio=hp/max;fill.style.width='100%';fill.style.height='100%';fill.style.transform='scaleX('+ratio+')';fill.style.transformOrigin='left center';fill.style.flex='0 0 auto';fill.style.background=ratio<=0?'#344055':ratio<0.25?'linear-gradient(90deg,#ff334f,#b80f35)':ratio<0.6?'linear-gradient(90deg,#ffd166,#f0a52b)':side==='enemy'?'linear-gradient(90deg,#ff647c,#ffb06e)':'linear-gradient(90deg,#50d6a5,#a6edba)';fill.setAttribute('aria-valuenow',String(hp));fill.setAttribute('aria-valuemin','0');fill.setAttribute('aria-valuemax',String(max));fill.setAttribute('role','progressbar')}
-function showGame(){lobby.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';gameApp.style.display='grid';document.body.style.overflow='';try{window.history.replaceState({screen:'game'},'','#game')}catch(err){}window.scrollTo({top:0,behavior:'smooth'});render();if(!state.stageStorySeen&&state.enemyHp>0)setTimeout(showStageStory,0)}
-function showLobby(){gameApp.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';lobby.style.display='grid';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}window.scrollTo({top:0,behavior:'smooth'});refreshLobby()}
+function showGame(){currentScreen='battle';lobby.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';gameApp.style.display='grid';document.body.style.overflow='';try{window.history.replaceState({screen:'game'},'','#game')}catch(err){}window.scrollTo({top:0,behavior:'smooth'});render();if(!state.stageStorySeen&&state.enemyHp>0)setTimeout(showStageStory,0)}
+function showLobby(){currentScreen='lobby';gameApp.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';lobby.style.display='grid';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}window.scrollTo({top:0,behavior:'smooth'});refreshLobby()}
 function returnToLobby(){if(challengeMode)restoreMainlineAfterChallenge();forceLobby()}
 $('lobbyHomeBtn') && ($('lobbyHomeBtn').onclick=returnToLobby);$('gameBackBtn').onclick=returnToLobby;
 try{state={...defaults(),...JSON.parse(localStorage.getItem('campusCardMiniSave')||'{}')}}catch(e){state=defaults()}if(typeof state.supplyUsedStage!=='boolean')state.supplyUsedStage=Number(state.potions)<=0;state.supplyUsedStage=!!state.supplyUsedStage;state.potions=state.supplyUsedStage?0:1;if(!Number.isFinite(state.energy))state.energy=0;state.energy=Math.max(0,Math.min(100,state.energy));if(!Number.isFinite(state.enemyEnergy))state.enemyEnergy=0;state.enemyEnergy=Math.max(0,Math.min(100,state.enemyEnergy));if(state.energyStartZeroVersion!==2){state.energy=0;state.enemyEnergy=0;state.pendingEnemySkill=null;state.energyStartZeroVersion=2}if(!state.pendingEnemySkill||!['A','B','C'].includes(state.pendingEnemySkill.type))state.pendingEnemySkill=null;if(!state.enemySkillNotice||!['warning','cast'].includes(state.enemySkillNotice.status))state.enemySkillNotice=null;state.bossCharge=false;
@@ -1452,11 +1452,11 @@ function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
 
 
-let challengeMode=false,challengeReturnStage=1,challengeSelectedStage=1,challengeViewMode='challenge',challengeMainlineSnapshot=null;
+let challengeMode=false,challengeReturnStage=1,challengeSelectedStage=1,challengeViewMode='challenge',challengeMainlineSnapshot=null,currentScreen='lobby';
 function challengeClearedStages(){return clearedSweepStages()}
 function challengeUnlocked(n){const cleared=Math.max(0,Math.min(20,Number(state.cleared)||0));return Number.isInteger(Number(n))&&Number(n)>=1&&Number(n)<=cleared}
 function openChallengeCenter(mode='challenge'){
- if(gameApp.style.display!=='none'){showModal('目前無法進入關卡挑戰中心','<p>請先結束目前的主線戰鬥並返回遊戲大廳，再進入關卡挑戰中心。</p><div class="modal-actions"><button type="button" class="btn primary" data-modal-action="close">知道了</button></div>');return}
+ if(currentScreen!=='lobby'){showModal('目前無法進入關卡挑戰中心','<p>請先結束目前的主線戰鬥並返回遊戲大廳，再進入關卡挑戰中心。</p><div class="modal-actions"><button type="button" class="btn primary" data-modal-action="close">知道了</button></div>');return}
  challengeViewMode=mode;
  const cleared=challengeClearedStages(),remaining=sweepDailyState().remaining;
  const chapterOptions='<option value="1" selected>第一章：校園異變（01–20 關）</option><option value="2" disabled>第二章（尚未開放）</option><option value="3" disabled>第三章（尚未開放）</option>';
@@ -1485,7 +1485,7 @@ function openChallengeStage(n,mode){
  const sweep=$('challengeSweepOne');if(sweep)sweep.onclick=()=>{closeModal();performSingleSweep(n)};
 }
 function startChallengeBattle(n){
- if(gameApp.style.display!=='none'){showModal('目前無法開始挑戰','<p>請先返回遊戲大廳，再開始挑戰關卡。</p>');return}
+ if(currentScreen!=='lobby'){showModal('目前無法開始挑戰','<p>請先返回遊戲大廳，再開始挑戰關卡。</p>');return}
  if(!challengeUnlocked(n)){showModal('尚未解鎖','<p>目前只能挑戰已解鎖的關卡。</p>');return}
  challengeMainlineSnapshot=JSON.parse(JSON.stringify(state));
  challengeReturnStage=Number(state.stage)||1;challengeMode=true;
