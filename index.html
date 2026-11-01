@@ -1291,7 +1291,34 @@
  close.addEventListener('click',dismiss);backdrop.addEventListener('click',e=>{if(e.target===backdrop)dismiss()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!backdrop.hidden)dismiss()});
 })();
 
-function forceLobby(){if(state&&state.challengeMode){const resultStage=Math.max(1,Number(state.stage)||1),completed=!!state.challengeResultActive,completedResult=cloneChallengeValue(state.challengeLastResult||null);if(challengeMainState)restoreChallengeMainState();else{state.stage=Math.max(1,Number(state.challengeReturnStage)||1);state.challengeMode=false;state.challengeReturnStage=null;state.challengeReplayCompleted=false;state.challengeResultActive=false;save()}if(completed&&completedResult){state.challengeLastResult=completedResult}else{state.challengeLastResult={success:false,stage:resultStage,message:'自行挑戰中途撤退；未發放勝利獎勵，也未消耗每日獎勵次數。',total:0,retreated:true}}save()}if(gameApp.style.display!=='none')save();const notice=$('notice');if(notice)notice.textContent='';const log=$('log');if(log)log.innerHTML='';gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)}
+function resetBattleForRetreat(){
+ const col=readCollection(),team=(col.formation||[]).map(id=>roster.find(ch=>ch.id===id)).filter(Boolean);
+ if(!team.length)team.push(roster.find(ch=>ch.id==='yuching'));
+ state.challengeMode=false;state.challengeResultActive=false;state.challengeReturnStage=null;state.challengeReplayCompleted=false;
+ state.energy=0;state.enemyEnergy=0;state.pendingEnemySkill=null;state.enemySkillNotice=null;
+ state.bossCharge=false;state.defendNext=false;state.guardNext=false;state.supplyUsedStage=false;state.potions=1;
+ state.stage20Phase=0;state.stage20Rotation=0;state.stage20BossTurns=0;state.stage20SpecialPending=false;state.stage20DebuffTurns=0;
+ state.enemyHp=enemy().hp;state.partyHp={};team.forEach(ch=>{state.partyHp[ch.id]=maxHp(ch)});
+ state.activeMember=team[0].id;state.playerHp=state.partyHp[state.activeMember];state.stageStorySeen=false;
+ selectedCombatAction=null;skillMenuOpen=false;undoStack=[];
+ $('victoryBanner')?.remove();if($('log'))$('log').innerHTML='<div class="logline">你返回遊戲大廳，本場戰鬥已撤退。再次進入時將開始新的戰鬥。</div>';
+ tell('本場戰鬥已撤退；再次進入遊戲時會以全新戰鬥狀態開始。');
+ try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}
+ challengeMainState=null;delete state.challengeMainSnapshot;save();
+}
+function forceLobby(){
+ const wasChallenge=!!(state&&state.challengeMode);
+ if(wasChallenge){
+  const abandonedStage=Math.max(1,Number(state.stage)||1);
+  if(challengeMainState||state.challengeMainSnapshot){restoreChallengeMainState()}
+  else{state.stage=Math.max(1,Number(state.challengeReturnStage)||1);state.challengeMode=false;state.challengeReturnStage=null;state.challengeReplayCompleted=false;state.challengeResultActive=false}
+  state.challengeLastResult={success:false,stage:abandonedStage,message:'已撤退；不計入通關次數，也不發放勝利獎勵。',total:0,retreated:true};
+ }
+ if(gameApp.style.display!=='none'||wasChallenge)resetBattleForRetreat();
+ const notice=$('notice');if(notice)notice.textContent='';
+ gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';const challenge=$('stageCenterPage');if(challenge)challenge.style.display='none';
+ try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)
+}
 document.addEventListener('click',function(ev){const btn=ev.target.closest('#gameBackBtn,#lobbyHomeBtn');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();forceLobby()},true);
 
 function localDayKey(d=new Date()){try{const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));if(p.year&&p.month&&p.day)return p.year+'-'+p.month+'-'+p.day}catch(e){console.error('台灣日期判斷失敗，改用本機日期',e)}return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
