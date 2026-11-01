@@ -1838,20 +1838,29 @@ function updateChallengeRewardPreview(){
 function selectChallengeStage(n){if(!unlockedChallengeStages().includes(Number(n)))return;state.challengeLastStage=Number(n);document.querySelectorAll('[data-challenge-stage]').forEach(b=>{const active=Number(b.dataset.challengeStage)===state.challengeLastStage;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});updateChallengeRewardPreview();save()}
 
 function startSelectedChallenge(){
- const n=Number(state.challengeLastStage);
- const available=unlockedChallengeStages();
+ const n=Number(state.challengeLastStage),available=unlockedChallengeStages();
  if(!Number.isInteger(n)||!available.includes(n)){
-  tell('第20關尚未正確載入可挑戰清單，請返回並重新開啟關卡挑戰。');
-  openStageCenter();return;
+  openStageCenter();
+  const preview=$('challengeRewardPreview');
+  if(preview)preview.textContent='第20關尚未正確載入可挑戰清單，請重新選擇關卡。';
+  return;
  }
- challengeMainState=state;save();
- const battle={...defaults(),coins:Number(state.coins)||0,challengeLastStage:n,challengeClearedStages:cloneChallengeValue(state.challengeClearedStages||[]),challengeUnlockedStages:cloneChallengeValue(state.challengeUnlockedStages||[]),challengePlayRewardCounts:cloneChallengeValue(state.challengePlayRewardCounts||{}),challengeSweepRewardCounts:cloneChallengeValue(state.challengeSweepRewardCounts||{}),challengeLastResult:null,challengeMode:true,challengeResultActive:false,challengeReturnStage:Math.max(1,Number(state.stage)||1),challengeReplayCompleted:false,stage:n,stage20Phase:0,stage20Rotation:0,stage20BossTurns:0,stage20SpecialPending:false,stage20DebuffTurns:0,stageStorySeen:false};
- battle.energy=0;battle.enemyEnergy=0;battle.pendingEnemySkill=null;battle.enemySkillNotice=null;battle.bossCharge=false;battle.defendNext=false;battle.guardNext=false;battle.supplyUsedStage=false;battle.potions=1;
- const col=readCollection(),team=(col.formation||[]).map(id=>roster.find(ch=>ch.id===id)).filter(Boolean);if(!team.length)team.push(roster.find(ch=>ch.id==='yuching'));
- battle.partyHp={};team.forEach(ch=>{battle.partyHp[ch.id]=maxHp(ch)});battle.activeMember=team[0].id;battle.playerHp=battle.partyHp[battle.activeMember];
- state=battle;state.enemyHp=enemy().hp;selectedCombatAction=null;skillMenuOpen=false;
- try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}
- save();closeModal();showGame();setTimeout(()=>{if(state.enemyHp>0)showStageStory()},0);
+ const mainState=state;
+ try{
+  challengeMainState=mainState;save();
+  const battle={...defaults(),coins:Number(mainState.coins)||0,challengeLastStage:n,challengeClearedStages:cloneChallengeValue(mainState.challengeClearedStages||[]),challengeUnlockedStages:cloneChallengeValue(mainState.challengeUnlockedStages||[]),challengePlayRewardCounts:cloneChallengeValue(mainState.challengePlayRewardCounts||{}),challengeSweepRewardCounts:cloneChallengeValue(mainState.challengeSweepRewardCounts||{}),challengeLastResult:null,challengeMode:true,challengeResultActive:false,challengeReturnStage:Math.max(1,Number(mainState.stage)||1),challengeReplayCompleted:false,stage:n,stage20Phase:0,stage20Rotation:0,stage20BossTurns:0,stage20SpecialPending:false,stage20DebuffTurns:0,stageStorySeen:false};
+  battle.energy=0;battle.enemyEnergy=0;battle.pendingEnemySkill=null;battle.enemySkillNotice=null;battle.bossCharge=false;battle.defendNext=false;battle.guardNext=false;battle.supplyUsedStage=false;battle.potions=1;
+  const col=readCollection(),team=(col.formation||[]).map(id=>roster.find(ch=>ch.id===id)).filter(Boolean);if(!team.length)team.push(roster.find(ch=>ch.id==='yuching'));
+  battle.partyHp={};team.forEach(ch=>{battle.partyHp[ch.id]=maxHp(ch)});battle.activeMember=team[0].id;battle.playerHp=battle.partyHp[battle.activeMember];
+  state=battle;state.enemyHp=enemy().hp;selectedCombatAction=null;skillMenuOpen=false;
+  try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}
+  save();closeModal();showGame();setTimeout(()=>{if(state.enemyHp>0)showStageStory()},0);
+ }catch(err){
+  state=mainState;challengeMainState=null;delete state.challengeMainSnapshot;
+  try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}
+  save();console.error('第'+n+'關挑戰啟動失敗',err);
+  openStageCenter();showModal('挑戰啟動失敗','<p>戰鬥初始化發生錯誤，已返回關卡挑戰中心，原本進度不會被覆蓋。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p><div class="modal-actions"><button type="button" class="btn primary" data-modal-action="sweep-close">關閉</button></div>');
+ }
 }
 document.getElementById('stageCenterBtn')?.addEventListener('click',openStageCenter);
 function cloneChallengeValue(value,seen=new WeakMap()){if(value===null||typeof value!=='object')return value;if(seen.has(value))return seen.get(value);const copy=Array.isArray(value)?[]:{};seen.set(value,copy);Object.keys(value).forEach(key=>{copy[key]=cloneChallengeValue(value[key],seen)});return copy}
