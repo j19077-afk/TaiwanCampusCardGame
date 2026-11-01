@@ -1437,9 +1437,15 @@ function baseReward(n){if(n>=1&&n<=4)return 10;if(n<=8)return 15;if(n<=12)return
 function firstBossBonus(n){return n%10===0?20:n%5===0?10:0}
 function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
+function mainlineClearedStages(){
+ const recorded=Array.isArray(state.clearedStages)?state.clearedStages:[];
+ const set=new Set(recorded.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20));
+ const progress=Math.max(0,Math.min(20,Number(state.cleared)||0));
+ if(set.size===0){for(let n=1;n<=progress;n++)set.add(n)}
+ return [...set].sort((a,b)=>a-b);
+}
 function unlockedChallengeStages(){
- const maxUnlocked=Math.max(1,Math.min(20,Number(state.stage)||1,Math.max(1,(Number(state.cleared)||0)+1)));
- return Array.from({length:maxUnlocked},(_,i)=>i+1);
+ return mainlineClearedStages();
 }
 function openStageCenter(){
  const unlocked=unlockedChallengeStages(),cleared=clearedSweepStages();
@@ -1468,7 +1474,10 @@ document.getElementById('stageCenterBtn')?.addEventListener('click',openStageCen
 function cloneChallengeValue(value,seen=new WeakMap()){if(value===null||typeof value!=='object')return value;if(seen.has(value))return seen.get(value);const copy=Array.isArray(value)?[]:{};seen.set(value,copy);Object.keys(value).forEach(key=>{copy[key]=cloneChallengeValue(value[key],seen)});return copy}
 function challengeRewardState(n,mode){const day=taiwanDayKey(),key=day+'-'+String(n),field=mode==='sweep'?'challengeSweepRewardCounts':'challengePlayRewardCounts';state[field]=state[field]&&typeof state[field]==='object'?state[field]:{};const used=Math.max(0,Math.min(3,Number(state[field][key])||0));return {day,key,field,used,remaining:Math.max(0,3-used)}}
 function sweepDailyState(n=Number($('sweepStage')?.value)||1){return challengeRewardState(n,'sweep')}
-function clearedSweepStages(){return [...new Set((Array.isArray(state.challengeClearedStages)?state.challengeClearedStages:[]).map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20))].sort((a,b)=>a-b)}
+function clearedSweepStages(){
+ const mainline=new Set(mainlineClearedStages());
+ return [...new Set((Array.isArray(state.challengeClearedStages)?state.challengeClearedStages:[]).map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20&&mainline.has(n)))].sort((a,b)=>a-b);
+}
 function sweepReward(n){return replayReward(n)+replayBossBonus(n)}
 function openSweep(){
  const daily=sweepDailyState(),stages=clearedSweepStages();
