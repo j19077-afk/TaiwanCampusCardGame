@@ -1451,7 +1451,9 @@ function firstBossBonus(n){return n%10===0?20:n%5===0?10:0}
 function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
 function unlockedChallengeStages(){
- const mainCleared=Math.max(0,Math.min(20,Number(state.cleared)||0));
+ const clearedFromCounter=Math.max(0,Number(state.cleared)||0);
+ const clearedFromRecords=Array.isArray(state.clearedStages)?state.clearedStages.reduce((max,value)=>{const n=Number(value);return Number.isInteger(n)&&n>=1&&n<=20?Math.max(max,n):max},0):0;
+ const mainCleared=Math.max(0,Math.min(20,clearedFromCounter,20),Math.min(20,clearedFromRecords));
  return Array.from({length:mainCleared},(_,i)=>i+1);
 }
 function challengeRewardState(n,mode){
