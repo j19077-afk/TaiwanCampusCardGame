@@ -1523,7 +1523,11 @@ function mainlineClearedStages(){
  return [...set].sort((a,b)=>a-b);
 }
 function unlockedChallengeStages(){
- return mainlineClearedStages();
+ const newlyUnlocked=mainlineClearedStages();
+ const previouslyUnlocked=Array.isArray(state.challengeUnlockedStages)?state.challengeUnlockedStages.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20):[];
+ const permanent=[...new Set([...previouslyUnlocked,...newlyUnlocked])].sort((a,b)=>a-b);
+ if(JSON.stringify(permanent)!==JSON.stringify(previouslyUnlocked)){state.challengeUnlockedStages=permanent;save()}
+ return permanent;
 }
 function openStageCenter(){
  const unlocked=unlockedChallengeStages(),cleared=clearedSweepStages();
@@ -1550,7 +1554,7 @@ function selectChallengeStage(n){if(!unlockedChallengeStages().includes(Number(n
 function startSelectedChallenge(){
  const n=Number(state.challengeLastStage);if(!Number.isInteger(n)||!unlockedChallengeStages().includes(n))return;
  challengeMainState=state;save();
- const battle={...defaults(),coins:Number(state.coins)||0,challengeLastStage:n,challengeClearedStages:cloneChallengeValue(state.challengeClearedStages||[]),challengePlayRewardCounts:cloneChallengeValue(state.challengePlayRewardCounts||{}),challengeSweepRewardCounts:cloneChallengeValue(state.challengeSweepRewardCounts||{}),challengeLastResult:null,challengeMode:true,challengeResultActive:false,challengeReturnStage:Math.max(1,Number(state.stage)||1),challengeReplayCompleted:false,stage:n,stage20Phase:0,stage20Rotation:0,stage20BossTurns:0,stage20SpecialPending:false,stage20DebuffTurns:0,stageStorySeen:false};
+ const battle={...defaults(),coins:Number(state.coins)||0,challengeLastStage:n,challengeClearedStages:cloneChallengeValue(state.challengeClearedStages||[]),challengeUnlockedStages:cloneChallengeValue(state.challengeUnlockedStages||[]),challengePlayRewardCounts:cloneChallengeValue(state.challengePlayRewardCounts||{}),challengeSweepRewardCounts:cloneChallengeValue(state.challengeSweepRewardCounts||{}),challengeLastResult:null,challengeMode:true,challengeResultActive:false,challengeReturnStage:Math.max(1,Number(state.stage)||1),challengeReplayCompleted:false,stage:n,stage20Phase:0,stage20Rotation:0,stage20BossTurns:0,stage20SpecialPending:false,stage20DebuffTurns:0,stageStorySeen:false};
  battle.energy=0;battle.enemyEnergy=0;battle.pendingEnemySkill=null;battle.enemySkillNotice=null;battle.bossCharge=false;battle.defendNext=false;battle.guardNext=false;battle.supplyUsedStage=false;battle.potions=1;
  const col=readCollection(),team=(col.formation||[]).map(id=>roster.find(ch=>ch.id===id)).filter(Boolean);if(!team.length)team.push(roster.find(ch=>ch.id==='yuching'));
  battle.partyHp={};team.forEach(ch=>{battle.partyHp[ch.id]=maxHp(ch)});battle.activeMember=team[0].id;battle.playerHp=battle.partyHp[battle.activeMember];
@@ -1715,6 +1719,7 @@ function restoreChallengeMainState(){
   main.coins=Number(battle.coins)||Number(main.coins)||0;
   main.challengeLastStage=battle.challengeLastStage??main.challengeLastStage;
   main.challengeClearedStages=cloneChallengeValue(battle.challengeClearedStages||main.challengeClearedStages||[]);
+  main.challengeUnlockedStages=cloneChallengeValue(battle.challengeUnlockedStages||main.challengeUnlockedStages||[]);
   main.challengePlayRewardCounts=cloneChallengeValue(battle.challengePlayRewardCounts||main.challengePlayRewardCounts||{});
   main.challengeSweepRewardCounts=cloneChallengeValue(battle.challengeSweepRewardCounts||main.challengeSweepRewardCounts||{});
   main.challengeLastResult=cloneChallengeValue(battle.challengeLastResult||null);
