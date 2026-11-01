@@ -1276,7 +1276,33 @@
  close.addEventListener('click',dismiss);backdrop.addEventListener('click',e=>{if(e.target===backdrop)dismiss()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!backdrop.hidden)dismiss()});
 })();
 
-function forceLobby(){if(state&&state.challengeMode){if(challengeMainState){restoreChallengeMainState()}else if(state.challengeMainSnapshot){restoreChallengeMainState()}else{state.stage=Math.max(1,Number(state.challengeReturnStage)||1);state.challengeMode=false;state.challengeReturnStage=null;state.challengeReplayCompleted=false;state.stage20Phase=0;state.stage20Rotation=0;state.stage20BossTurns=0;state.stage20SpecialPending=false;state.enemyHp=enemy().hp;state.enemyEnergy=0;state.pendingEnemySkill=null;state.enemySkillNotice=null;save()}}if(gameApp.style.display!=='none')save();gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)}
+function resetBattleForRetreat(){
+ const col=readCollection(),team=(col.formation||[]).map(id=>roster.find(ch=>ch.id===id)).filter(Boolean);
+ if(!team.length)team.push(roster.find(ch=>ch.id==='yuching'));
+ state.challengeMode=false;state.challengeResultActive=false;state.challengeReturnStage=null;state.challengeReplayCompleted=false;
+ state.energy=0;state.enemyEnergy=0;state.pendingEnemySkill=null;state.enemySkillNotice=null;
+ state.bossCharge=false;state.defendNext=false;state.guardNext=false;state.supplyUsedStage=false;state.potions=1;
+ state.stage20Phase=0;state.stage20Rotation=0;state.stage20BossTurns=0;state.stage20SpecialPending=false;state.stage20DebuffTurns=0;
+ state.enemyHp=enemy().hp;state.partyHp={};team.forEach(ch=>{state.partyHp[ch.id]=maxHp(ch)});
+ state.activeMember=team[0].id;state.playerHp=state.partyHp[state.activeMember];state.stageStorySeen=false;
+ selectedCombatAction=null;skillMenuOpen=false;undoStack=[];
+ $('victoryBanner')?.remove();if($('log'))$('log').innerHTML='<div class="logline">你返回遊戲大廳，本場戰鬥已撤退。再次進入時將開始新的戰鬥。</div>';
+ tell('本場戰鬥已撤退；再次進入遊戲時會以全新戰鬥狀態開始。');
+ try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}
+ challengeMainState=null;delete state.challengeMainSnapshot;save();
+}
+function forceLobby(){
+ if(state&&state.challengeMode){
+  const abandonedStage=Math.max(1,Number(state.stage)||1);
+  if(challengeMainState){restoreChallengeMainState()}
+  else if(state.challengeMainSnapshot){restoreChallengeMainState()}
+  else{state.stage=Math.max(1,Number(state.challengeReturnStage)||1);state.challengeMode=false;state.challengeReturnStage=null;state.challengeReplayCompleted=false}
+  state.challengeLastResult={success:false,stage:abandonedStage,message:'已撤退；不計入通關次數，也不發放勝利獎勵。',total:0};
+ }
+ if(gameApp.style.display!=='none'||state.challengeMode)resetBattleForRetreat();
+ gameApp.style.display='none';lobby.style.display='grid';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';const challenge=$('stageCenterPage');if(challenge)challenge.style.display='none';
+ try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}try{refreshLobby()}catch(err){}window.scrollTo(0,0)
+}
 document.addEventListener('click',function(ev){const btn=ev.target.closest('#gameBackBtn,#lobbyHomeBtn');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();forceLobby()},true);
 
 function localDayKey(d=new Date()){try{const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Taipei',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);const p=Object.fromEntries(parts.map(x=>[x.type,x.value]));if(p.year&&p.month&&p.day)return p.year+'-'+p.month+'-'+p.day}catch(e){console.error('台灣日期判斷失敗，改用本機日期',e)}return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -1665,7 +1691,7 @@ function showStageStory(){
  overlay.innerHTML='<section style="width:min(620px,100%);max-height:calc(100dvh - 36px);overflow:auto;box-sizing:border-box;padding:24px;border:1px solid #7d79d8;border-radius:18px;background:linear-gradient(145deg,#111b35,#211a40);"><div style="font-size:.8rem;letter-spacing:.12em;color:#c4bfff;font-weight:800">'+kind+' · STAGE '+n+'</div><h2 style="margin:8px 0 12px">📖 第 '+n+' 關：'+stageTitle(n)+'</h2>'+(n<=19?'<img src="新增圖片/敵方卡牌/stage-'+String(n).padStart(2,'0')+'.png" alt="第 '+n+' 關敵方卡牌" style="display:block;width:min(240px,70%);max-height:42vh;object-fit:contain;margin:0 auto 16px;border-radius:12px" onerror="this.style.display=\'none\'">':'')+'<p style="line-height:1.9;color:#d7def0">'+stageStory(n)+'</p><p>敵人：'+e.name+'　｜　勝利獲得：'+e.reward+' 金幣'+(bonus?'　｜　首次擊敗額外：'+bonus+' 金幣':'')+'</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px"><button id="storyStartBtn" style="padding:12px 18px;border:0;border-radius:10px;background:#62d8c4;color:#102033;font-weight:800;font-size:1rem">⚔️ 開始戰鬥</button><button id="storyLobbyBtn" style="padding:12px 18px;border:1px solid #8293ad;border-radius:10px;background:transparent;color:#f4f6ff;font-size:1rem">返回大廳</button></div></section>';
  overlay.style.display='flex';overlay.setAttribute('aria-modal','true');document.body.style.overflow='hidden';
  document.getElementById('storyStartBtn').onclick=()=>{state.stageStorySeen=true;save();overlay.style.display='none';document.body.style.overflow='';tell('戰鬥開始！擊敗敵人，推進劇情。')};
- document.getElementById('storyLobbyBtn').onclick=()=>{overlay.style.display='none';document.body.style.overflow='';showLobby()};
+ document.getElementById('storyLobbyBtn').onclick=()=>{overlay.style.display='none';document.body.style.overflow='';forceLobby()};
 }
 function save(){try{if(state&&state.challengeMode){localStorage.setItem('campusChallengeBattleSave',JSON.stringify(state));return}localStorage.setItem('campusCardMiniSave',JSON.stringify(state))}catch(e){}}
 function addLog(t){const n=document.createElement('div');n.className='logline';n.textContent=t;$('log').prepend(n);while($('log').children.length>8)$('log').lastElementChild.remove()}
