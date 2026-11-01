@@ -1810,7 +1810,7 @@ function mainlineClearedStages(){
  const recorded=Array.isArray(state.clearedStages)?state.clearedStages:[];
  const set=new Set(recorded.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=50));
  const clearedProgress=Math.max(0,Math.min(50,Number(state.cleared)||0));
- const currentMainlineStage=state.challengeMode?0:Math.max(0,Math.min(50,(Number(state.stage)||1)-1));
+ const currentMainlineStage=state.challengeMode?0:Math.max(0,Math.min(50,Number(state.stage)||1));
  const progress=Math.max(clearedProgress,currentMainlineStage);
  for(let n=1;n<=progress;n++)set.add(n);
  return [...set].sort((a,b)=>a-b);
