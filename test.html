@@ -1203,6 +1203,11 @@
 .challenge-stage-card .challenge-clear-check{position:absolute;top:5px;right:6px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#e8c66f;color:#17263b;font-size:12px;font-weight:1000;line-height:1;box-shadow:0 0 8px #f2cb6d99;}
 @keyframes challenge-cleared-breathe{0%,100%{box-shadow:inset 0 0 0 1px #e8c66f44,0 0 6px #e8c66f44}50%{box-shadow:inset 0 0 0 1px #ffe6a088,0 0 15px #f2cb6d99}}
 @media(prefers-reduced-motion:reduce){.challenge-stage-card.is-cleared{animation:none;box-shadow:inset 0 0 0 1px #e8c66f66,0 0 9px #e8c66f66}}
+/* Selection border: gold indicates only the currently selected cleared stage. */
+.challenge-stage-card.is-cleared{border-color:var(--line);background:#17263b;box-shadow:none;animation:none;}
+.challenge-stage-card.is-open{border-color:var(--line);background:#17263b;}
+.challenge-stage-card.is-selected{border:2px solid #f2cf72;background:#26344a;box-shadow:0 0 9px rgba(242,207,114,.72),inset 0 0 0 1px rgba(255,232,160,.35);}
+.challenge-stage-card.is-locked{opacity:.45;cursor:not-allowed;border-color:var(--line);box-shadow:none;animation:none;}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
@@ -1462,10 +1467,10 @@ function openChallengeCenter(mode='challenge'){
  const cleared=challengeClearedStages(),remaining=sweepDailyState().remaining;
  const chapterOptions='<option value="1" selected>第一章：校園異變（01–20 關）</option><option value="2" disabled>第二章（尚未開放）</option><option value="3" disabled>第三章（尚未開放）</option>';
  const cards=Array.from({length:20},(_,i)=>i+1).map(n=>{
-  const done=cleared.includes(n),unlocked=challengeUnlocked(n),locked=!done&&!unlocked;
-  const status=done?'已通關':locked?'尚未解鎖':'可挑戰';
+  const done=cleared.includes(n),unlocked=challengeUnlocked(n),locked=!unlocked,selected=mode==='challenge'&&challengeSelectedStage===n&&unlocked;
+  const status=unlocked?'已通關':'尚未解鎖';
   const kind=n%10===0?'大頭目':n%5===0?'小頭目':'普通關卡';
-  return '<button type="button" class="challenge-stage-card '+(done?'is-cleared':locked?'is-locked':'is-open')+'" data-challenge-stage="'+n+'" '+(locked?'disabled':'')+'>'+(done?'<span class="challenge-clear-check" aria-label="已通關">✓</span>':'')+'<strong>'+String(n).padStart(2,'0')+'</strong><small>'+kind+'</small><span>'+status+'</span></button>';
+  return '<button type="button" class="challenge-stage-card '+(selected?'is-selected':locked?'is-locked':'is-open')+'" data-challenge-stage="'+n+'" '+(locked?'disabled':'')+'>'+(done?'<span class="challenge-clear-check" aria-label="已通關">✓</span>':'')+'<strong>'+String(n).padStart(2,'0')+'</strong><small>'+kind+'</small><span>'+status+'</span></button>';
  }).join('');
  const modeTabs='<div class="challenge-mode-tabs"><button type="button" class="'+(mode==='challenge'?'active':'')+'" data-challenge-mode="challenge">⚔️ 自行挑戰</button><button type="button" class="'+(mode==='sweep'?'active':'')+'" data-challenge-mode="sweep">⚡ 一鍵掃蕩</button></div>';
  const info=mode==='challenge'?'<p class="muted">選擇已解鎖關卡。已通關關卡可重玩；每次進入戰鬥皆會恢復全隊滿血並重置敵方狀態。</p>':'<div class="challenge-sweep-count">今日剩餘掃蕩次數：<strong>'+remaining+' / 3</strong></div><p class="muted">只能選擇已通關關卡，直接結算重玩獎勵，不進入戰鬥。</p>';
