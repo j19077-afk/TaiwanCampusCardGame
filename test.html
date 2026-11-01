@@ -1477,10 +1477,7 @@ function startSelectedChallenge(){
 document.getElementById('stageCenterBtn')?.addEventListener('click',openStageCenter);
 function sweepDailyState(stage=Number($('sweepStage')?.value)||1){return challengeRewardState(stage,'sweep')}
 function clearedSweepStages(){
- const set=new Set((Array.isArray(state.clearedStages)?state.clearedStages:[]).map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20));
- const progress=Math.max(0,Math.min(20,Number(state.cleared)||0));
- for(let n=1;n<=progress;n++)set.add(n);
- return [...set].sort((a,b)=>a-b);
+ return [...new Set((Array.isArray(state.challengeClearedStages)?state.challengeClearedStages:[]).map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20))].sort((a,b)=>a-b);
 }
 function sweepReward(n){return replayReward(n)+replayBossBonus(n)}
 function openSweep(){
