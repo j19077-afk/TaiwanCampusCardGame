@@ -1377,6 +1377,41 @@
   }
 }
 
+
+/* 桌面版角色編成中心：寬幅視窗與加大角色圖像 */
+@media(min-width:1100px){
+  .game-modal:has(.formation-center){
+    width:min(1180px,calc(100vw - 48px));
+    max-width:1240px;
+    max-height:min(90vh,920px);
+    padding:30px 32px;
+  }
+  .game-modal:has(.formation-center) .formation-center{
+    grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+    gap:18px;
+  }
+  .game-modal:has(.formation-center) .formation-slots{
+    gap:12px;
+  }
+  .game-modal:has(.formation-center) .formation-slot{
+    padding:14px 10px;
+  }
+  .game-modal:has(.formation-center) .formation-picked img{
+    width:88px;
+    height:108px;
+  }
+  .game-modal:has(.formation-center) .formation-roster{
+    gap:14px;
+  }
+  .game-modal:has(.formation-center) .formation-roster .formation-image-only{
+    flex-basis:110px;
+    width:110px;
+    min-width:110px;
+    height:150px;
+    padding:8px;
+  }
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
