@@ -1390,7 +1390,7 @@ document.addEventListener('click',function(ev){
  const daily=target.closest('#dailyBtn');
  if(daily){ev.preventDefault();ev.stopImmediatePropagation();claimDailyGift();return;}
  const menu=target.closest('[data-menu]');
- if(menu){ev.preventDefault();ev.stopImmediatePropagation();try{switch(menu.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'challenge':openChallengeCenter('challenge');break;case'sweep':openChallengeCenter('sweep');break;case'quests':openQuests();break;}}catch(err){console.error('大廳功能開啟失敗',err);showModal('功能載入失敗','<p>此功能載入時發生錯誤，請截圖回報。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p>')}return;}
+ if(menu){ev.preventDefault();ev.stopImmediatePropagation();try{switch(menu.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'challenge':if(challengeClearedStages().length===0){showModal('關卡挑戰中心尚未開放','<p>請先完成第一個主線關卡。主線目前正在挑戰的關卡，必須成功通關後，才會開放該關於挑戰中心的重玩功能。</p><div class="modal-actions"><button type="button" class="btn primary" data-modal-action="close">知道了</button></div>')}else openChallengeCenter('challenge');break;case'sweep':openChallengeCenter('sweep');break;case'quests':openQuests();break;}}catch(err){console.error('大廳功能開啟失敗',err);showModal('功能載入失敗','<p>此功能載入時發生錯誤，請截圖回報。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p>')}return;}
  const action=target.closest('[data-modal-action]');
  if(action){ev.preventDefault();ev.stopImmediatePropagation();switch(action.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'formation-done':closeModal();break;case'challenge-back':openChallengeCenter('challenge');break;case'do-summon':doSummon();break;case'do-ten-summon':doTenSummon();break;case'do-newbie-ten-summon':doNewbieTenSummon();break;case'daily-reward-close':closeModal();break;case'sweep-confirm':confirmSweep();break;case'sweep-close':closeModal();break;}return;}
  const add=target.closest('[data-add-member]');if(add&&!add.disabled){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(add.dataset.addMember);return;}
@@ -1454,7 +1454,7 @@ function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
 
 let challengeMode=false,challengeReturnStage=1,challengeSelectedStage=1,challengeViewMode='challenge';
 function challengeClearedStages(){return clearedSweepStages()}
-function challengeUnlocked(n){const max=Math.min(20,Math.max(1,(Number(state.cleared)||0)+1));return n<=max}
+function challengeUnlocked(n){const cleared=Math.max(0,Math.min(20,Number(state.cleared)||0));return Number.isInteger(Number(n))&&Number(n)>=1&&Number(n)<=cleared}
 function openChallengeCenter(mode='challenge'){
  challengeViewMode=mode;
  const cleared=challengeClearedStages(),remaining=sweepDailyState().remaining;
@@ -1492,7 +1492,7 @@ function startChallengeBattle(n){
  team.forEach(ch=>state.partyHp[ch.id]=maxHp(ch));
  state.activeMember=team[0].id;state.playerHp=state.partyHp[state.activeMember];
  state.energy=0;state.enemyEnergy=0;state.pendingEnemySkill=null;state.enemySkillNotice=null;state.bossCharge=false;state.guardNext=false;state.defendNext=false;state.stage20Phase=0;state.stage20Rotation=0;state.stage20BossTurns=0;state.stage20SpecialPending=false;state.supplyUsedStage=false;state.potions=1;state.stageStorySeen=false;
- selectedCombatAction=null;skillMenuOpen=false;save();closeModal();showGame();addLog('進入關卡挑戰中心：第 '+n+' 關，隊伍生命值及敵方狀態已重置。');
+ selectedCombatAction=null;skillMenuOpen=false;save();closeModal();showGame();$('attackBtn').textContent='⚔️ 普通攻擊';$('attackBtn').disabled=false;$('attackBtn').onclick=()=>{skillMenuOpen=false;handleCombatAction('attack')};addLog('進入關卡挑戰中心：第 '+n+' 關，隊伍生命值及敵方狀態已重置。');
 }
 function finishChallengeBattle(){
  if(!challengeMode)return false;
