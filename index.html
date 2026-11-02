@@ -26,38 +26,6 @@
 #challengeRewardPreview{min-height:70px}
 @media(max-width:700px){.stage-center-page{padding:14px 10px 90px;gap:14px}.stage-center-head{padding:18px}.stage-center-head .btn{width:100%}.stage-center-panel{padding:18px}.challenge-stage-choices{grid-template-columns:1fr;max-height:320px}.stage-center-panel>.muted{min-height:0}}
 
-
-
-/* 關卡挑戰清單與資訊區 BUG 修正：限定本頁 */
-.stage-center-page .challenge-stage-list-panel .challenge-stage-choices{display:grid;grid-template-columns:minmax(0,1fr)!important;}
-.stage-center-page .challenge-stage-list-panel .challenge-stage-choice{width:100%;display:flex;align-items:center;justify-content:flex-start;color:#eef4ff;font-size:1rem;}
-.stage-center-page .challenge-stage-list-panel .challenge-stage-copy{display:grid;visibility:visible;opacity:1;color:#eef4ff;text-align:left;}
-.stage-center-page .challenge-stage-list-panel .challenge-stage-copy strong,.stage-center-page .challenge-stage-list-panel .challenge-stage-copy>span{display:block;visibility:visible;color:#eef4ff;}
-.stage-center-page .challenge-stage-list-panel .challenge-stage-copy small{display:block;visibility:visible;color:#aebed3;}
-.stage-center-page .challenge-stage-detail-panel{display:grid;}
-
-/* 關卡挑戰圖像化介面：僅限關卡挑戰頁 */
-.stage-center-page{max-width:1120px;gap:18px}
-.challenge-stage-list-panel{gap:12px}
-.challenge-stage-choices{display:grid;grid-template-columns:1fr;max-height:440px;overflow-y:auto;gap:10px;padding:3px}
-.challenge-stage-choice{display:flex;align-items:center;gap:14px;min-height:104px;padding:10px 14px;text-align:left}
-.challenge-stage-thumb{flex:0 0 132px;height:78px;display:grid;place-items:center;border:1px solid #526985;border-radius:11px;background:linear-gradient(135deg,#304b68,#17283d 65%,#3b3858);color:#d8e8f8;font-size:1.35rem;font-weight:900;letter-spacing:.08em}
-.challenge-stage-copy{display:grid;gap:4px;min-width:0}
-.challenge-stage-copy strong{font-size:1rem}
-.challenge-stage-copy>span{overflow-wrap:anywhere}
-.challenge-stage-copy small{color:var(--muted)}
-.challenge-stage-detail-panel{display:grid;grid-template-columns:minmax(220px,.85fr) minmax(0,1.15fr);gap:20px;align-items:stretch}
-.challenge-stage-large-art{min-height:230px;display:grid;place-items:center;border:1px solid #526985;border-radius:16px;background:radial-gradient(circle at 50% 35%,#7899b455,transparent 52%),linear-gradient(140deg,#304b68,#17283d 65%,#3b3858);color:#e3efff;font-size:clamp(1.5rem,4vw,2.4rem);font-weight:900;letter-spacing:.08em}
-.challenge-stage-detail-copy{display:flex;flex-direction:column;gap:9px;min-width:0}
-.challenge-stage-detail-copy h2{margin:0;font-size:clamp(1.15rem,2.6vw,1.6rem)}
-.challenge-stage-detail-copy p{margin:0}
-.challenge-stage-quota{display:grid;gap:7px;padding:12px;border:1px solid #405777;border-radius:12px;background:#111d2e}
-.challenge-stage-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:auto}
-.challenge-stage-actions .btn{min-width:0;min-height:52px}
-.challenge-stage-warning{color:#ffd780!important}
-@media(max-width:700px){.challenge-stage-choice{min-height:86px}.challenge-stage-thumb{flex-basis:104px;height:68px}.challenge-stage-detail-panel{grid-template-columns:1fr}.challenge-stage-large-art{min-height:180px}}
-@media(max-width:420px){.challenge-stage-choice{gap:10px;padding:9px}.challenge-stage-thumb{flex-basis:88px;height:62px}.challenge-stage-actions{grid-template-columns:1fr 1fr}}
-
 /* 關卡挑戰中心排版修整 v2：只調整測試版介面 */
 .stage-center-grid{grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr);align-items:start}
 .stage-center-panel{min-width:0;overflow:hidden}
@@ -1872,9 +1840,10 @@ function openStageCenter(){
  const unlocked=unlockedChallengeStages(),cleared=clearedSweepStages();
  const opts=a=>a.map(n=>'<option value="'+n+'">第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</option>').join('');
  const resultStage=state.challengeLastResult&&state.challengeLastResult.success?Number(state.challengeLastResult.stage):NaN;const preferred=Number.isInteger(resultStage)&&resultStage>=1&&resultStage<=50?resultStage:Number(state.challengeLastStage);const selected=unlocked.includes(preferred)?preferred:(unlocked.includes(Number(state.challengeLastStage))?Number(state.challengeLastStage):unlocked[0]);state.challengeLastStage=selected;
- const stageButtons=unlocked.map(n=>'<button type="button" class="challenge-stage-choice '+(n===selected?'selected':'')+'" data-challenge-stage="'+n+'" aria-pressed="'+(n===selected)+'"><span class="challenge-stage-thumb" aria-hidden="true"><span>'+String(n).padStart(2,'0')+'</span></span><span class="challenge-stage-copy"><strong>第 '+String(n).padStart(2,'0')+' 關</strong><span>'+stageTitle(n)+'</span><small>'+stageKind(n)+'</small></span></button>').join('');
+ const stageButtons=unlocked.map(n=>'<button type="button" class="challenge-stage-choice '+(n===selected?'selected':'')+'" data-challenge-stage="'+n+'" aria-pressed="'+(n===selected)+'"><strong>第 '+String(n).padStart(2,'0')+' 關</strong><span>'+stageTitle(n)+'</span><small>'+stageKind(n)+'</small></button>').join('');
 
- const html='<div class="stage-center-head"><div><p class="eyebrow">CAMPUS SYSTEM</p><h1>⚔️ 關卡挑戰</h1><p class="stage-center-intro">每個已解鎖關卡每日共用 3 次額度；手動挑戰與一鍵掃蕩各消耗 1 次。</p></div><button class="btn secondary" id="stageCenterBackBtn" type="button">← 返回遊戲功能</button></div><section class="stage-center-panel challenge-stage-list-panel"><strong>已解鎖關卡</strong><p class="muted">選擇關卡查看場景與挑戰資訊。</p><div class="challenge-stage-choices" id="challengeStageChoices">'+(stageButtons||'<p class="muted">目前尚無已通關的主線關卡，完成第 1 關後即可解鎖關卡挑戰。</p>')+'</div></section><section class="stage-center-panel challenge-stage-detail-panel" id="challengeStageDetail"></section><select id="sweepStage" hidden>'+(cleared.length?opts(cleared):'')+'</select><div id="sweepPreview" hidden></div><div id="sweepActions" hidden></div>';
+ const html='<div class="stage-center-head"><div><p class="eyebrow">CAMPUS SYSTEM</p><h1>⚔️ 關卡挑戰</h1><p class="stage-center-intro">每個已解鎖關卡每日共用 3 次額度；手動挑戰與一鍵掃蕩各消耗 1 次。</p></div><button class="btn secondary" id="stageCenterBackBtn" type="button">← 返回遊戲功能</button></div><div class="stage-center-grid"><section class="stage-center-panel"><strong>自行挑戰</strong><p class="muted">點擊已解鎖關卡卡片選擇挑戰目標。</p><div class="challenge-stage-choices" id="challengeStageChoices">'+(stageButtons||'<p class="muted">目前尚無已通關的主線關卡，完成第 1 關後即可解鎖關卡挑戰。</p>')+'</div><div id="challengeRewardPreview" class="notice" style="margin-top:12px"></div><div class="modal-actions">'+(unlocked.length?'<button class="btn primary" type="button" data-modal-action="challenge-start">開始挑戰</button>':'<button class="btn primary" type="button" disabled>尚未解鎖關卡</button>')+'</div></section><section class="stage-center-panel"><strong>一鍵掃蕩</strong><p class="muted">僅限已完成關卡挑戰者使用；每關與手動挑戰共用每日 3 次額度。</p>'+
+ (cleared.length?'<label for="sweepStage">選擇掃蕩關卡</label><select id="sweepStage">'+opts(cleared)+'</select><div id="sweepPreview" class="notice" style="margin-top:12px"></div><div class="modal-actions" id="sweepActions"></div>':'<p class="muted">目前尚無已通關關卡，完成關卡後即可使用掃蕩。</p>')+'</section></div>';
  let page=$('stageCenterPage');if(!page){page=document.createElement('main');page.id='stageCenterPage';page.className='stage-center-page';$('lobby').parentNode.insertBefore(page,$('lobby').nextSibling)}
  page.innerHTML=html;page.style.display='grid';lobby.style.display='none';gameApp.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';modal.hidden=true;document.body.style.overflow='';try{window.history.replaceState({screen:'stage-center'},'','#stage-center')}catch(e){}window.scrollTo(0,0);
  $('stageCenterBackBtn').onclick=showLobby;
@@ -1882,13 +1851,11 @@ function openStageCenter(){
  updateChallengeRewardPreview();if(cleared.length)updateSweepPreview();
 }
 function updateChallengeRewardPreview(){
- const preview=$('challengeRewardPreview');
- if(preview)preview.style.color='';
- const available=unlockedChallengeStages();if(!available.length){if(preview)preview.textContent='目前尚無已通關的主線關卡，完成第 1 關後即可解鎖關卡挑戰。';const detail=$('challengeStageDetail');if(detail)detail.innerHTML='<p class="muted">目前尚無可挑戰關卡。</p>';return}
+ const preview=$('challengeRewardPreview');if(!preview)return;
+ preview.style.color='';
+ const available=unlockedChallengeStages();if(!available.length){preview.textContent='目前尚無已通關的主線關卡，完成第 1 關後即可解鎖關卡挑戰。';return}
  const n=available.includes(Number(state.challengeLastStage))?Number(state.challengeLastStage):available[0],daily=challengeDailyState(n);
- const cleared=clearedSweepStages(),canSweep=cleared.includes(n),reward=canSweep?sweepReward(n):0,detail=$('challengeStageDetail');
- if(detail)detail.innerHTML='<div class="challenge-stage-large-art" aria-hidden="true"><span>第 '+String(n).padStart(2,'0')+' 關</span></div><div class="challenge-stage-detail-copy"><strong>目前選取關卡</strong><h2>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</h2><p class="muted">'+stageKind(n)+'</p><div class="challenge-stage-quota"><span>今日已使用：<strong>'+(3-daily.remaining)+' / 3 次</strong></span><span>今日剩餘：<strong>'+daily.remaining+' 次</strong></span></div>'+(daily.remaining===0?'<p class="challenge-stage-warning">本關今日額度已用完，台灣時間每日 00:00 重置。</p>':'')+'<div class="challenge-stage-actions"><button class="btn primary" type="button" data-modal-action="challenge-start" '+(daily.remaining<=0?'disabled':'')+'>開始挑戰</button><button class="btn secondary" type="button" data-modal-action="sweep-confirm" '+(daily.remaining<=0||!canSweep?'disabled':'')+'>一鍵掃蕩</button></div>'+(canSweep?'<p class="muted">掃蕩預計獲得 '+reward+' 枚金幣；消耗本關共用額度 1 次。</p>':'<p class="muted">本關尚未完成挑戰，通關後即可使用一鍵掃蕩。</p>')+'</div>';
- if(preview)preview.innerHTML='<strong>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</strong><br>今日剩餘挑戰／掃蕩次數：<strong>'+daily.remaining+' / 3 次</strong>'+(daily.remaining===0?'<p style="color:#ffd780;margin:7px 0 0">本關今日額度已用完，台灣時間每日 00:00 重置。</p>':'');
+ preview.innerHTML='<strong>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</strong><br>今日剩餘挑戰／掃蕩次數：<strong>'+daily.remaining+' / 3 次</strong>'+(daily.remaining===0?'<p style="color:#ffd780;margin:7px 0 0">本關今日額度已用完，台灣時間每日 00:00 重置。</p>':'');
 }
 function selectChallengeStage(n){if(!unlockedChallengeStages().includes(Number(n)))return;state.challengeLastStage=Number(n);document.querySelectorAll('[data-challenge-stage]').forEach(b=>{const active=Number(b.dataset.challengeStage)===state.challengeLastStage;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});updateChallengeRewardPreview();save()}
 
@@ -1959,9 +1926,8 @@ function updateSweepPreview(){
  actions.innerHTML=allowed&&daily.remaining>0?'<button type="button" class="btn primary" data-modal-action="sweep-confirm">確認掃蕩</button>':'<p class="muted">今日掃蕩次數已用完，請明日再使用。</p>';
 }
 function confirmSweep(){
- const select=$('sweepStage'),stageCenter=$('stageCenterPage');
- const inChallengeCenter=!!(stageCenter&&stageCenter.style.display!=='none');
- const n=Number(inChallengeCenter?state.challengeLastStage:(select?select.value:state.challengeLastStage)),daily=sweepDailyState(n);
+ const select=$('sweepStage');if(!select)return;
+ const n=Number(select.value),daily=sweepDailyState(n);
  if(daily.remaining<=0||!clearedSweepStages().includes(n)){updateSweepPreview();return}
  const reward=sweepReward(n);
  state.coins=Math.max(0,Number(state.coins)||0)+reward;state[daily.field][daily.key]=daily.used+1;save();render();refreshLobby();
