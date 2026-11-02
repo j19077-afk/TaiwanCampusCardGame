@@ -1824,11 +1824,18 @@ function mainlineClearedStages(){
  return [...new Set(proof)].sort((a,b)=>a-b);
 }
 function unlockedChallengeStages(){
- // 不沿用舊版 challengeUnlockedStages：舊邏輯曾把目前關卡 stage 誤記為已解鎖。
- const completed=mainlineClearedStages();
- const previous=Array.isArray(state.challengeUnlockedStages)?state.challengeUnlockedStages.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=50):[];
- if(JSON.stringify(completed)!==JSON.stringify(previous)){state.challengeUnlockedStages=completed;save()}
- return completed;
+ // 主線通關只負責新增解鎖；挑戰解鎖清單獨立持久化，永不因主線清單變動而刪除。
+ const key='campusChallengeUnlockedStagesV1';
+ const valid=a=>Array.isArray(a)?a.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=50):[];
+ let stored=[];
+ try{stored=valid(JSON.parse(localStorage.getItem(key)||'[]'))}catch(e){}
+ const previous=valid(state.challengeUnlockedStages);
+ const completed=valid(mainlineClearedStages());
+ const unlocked=[...new Set([...stored,...previous,...completed])].sort((a,b)=>a-b);
+ const changed=JSON.stringify(unlocked)!==JSON.stringify(previous);
+ try{if(JSON.stringify(unlocked)!==JSON.stringify(stored))localStorage.setItem(key,JSON.stringify(unlocked))}catch(e){console.warn('關卡挑戰永久解鎖紀錄保存失敗',e)}
+ if(changed){state.challengeUnlockedStages=unlocked;save()}
+ return unlocked;
 }
 function openStageCenter(){
  const unlocked=unlockedChallengeStages(),cleared=clearedSweepStages();
