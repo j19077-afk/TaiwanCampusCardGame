@@ -1950,8 +1950,9 @@ function updateSweepPreview(){
  actions.innerHTML=allowed&&daily.remaining>0?'<button type="button" class="btn primary" data-modal-action="sweep-confirm">確認掃蕩</button>':'<p class="muted">今日掃蕩次數已用完，請明日再使用。</p>';
 }
 function confirmSweep(){
- const select=$('sweepStage');
- const n=Number(select?select.value:state.challengeLastStage),daily=sweepDailyState(n);
+ const select=$('sweepStage'),stageCenter=$('stageCenterPage');
+ const inChallengeCenter=!!(stageCenter&&stageCenter.style.display!=='none');
+ const n=Number(inChallengeCenter?state.challengeLastStage:(select?select.value:state.challengeLastStage)),daily=sweepDailyState(n);
  if(daily.remaining<=0||!clearedSweepStages().includes(n)){updateSweepPreview();return}
  const reward=sweepReward(n);
  state.coins=Math.max(0,Number(state.coins)||0)+reward;state[daily.field][daily.key]=daily.used+1;save();render();refreshLobby();
