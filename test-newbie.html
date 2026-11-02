@@ -1563,7 +1563,7 @@
 (()=>{
 // 獨立新手測試存檔：所有遊戲資料使用專屬前綴，不讀寫正式版或既有測試頁存檔。
 const __nativeStorage=window.localStorage;
-const __testPrefix='campusSixItemNewbieTest::';
+const __testPrefix='campusSixItemNewbieTestReset20261102::';
 const localStorage={
  getItem(key){return __nativeStorage.getItem(__testPrefix+key)},
  setItem(key,value){return __nativeStorage.setItem(__testPrefix+key,String(value))},
