@@ -1807,8 +1807,8 @@ function firstBossBonus(n){return n%10===0?20:n%5===0?10:0}
 function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
 function mainlineClearedStages(){
- // 關卡挑戰一律讀取正式主線存檔快照的 cleared 通關數，不讀取挑戰戰鬥 state 或舊解鎖陣列，避免兩套 state 不同步造成未通關關卡出現。
- const main=readMainlineSaveSnapshot();
+ // 必須與大廳 refreshLobby 使用同一份主存檔 campusCardMiniSave；不可退回讀取可能過期的 Backup，避免大廳 0 關、挑戰頁卻解鎖第 01 關。
+ let main=null;try{const value=JSON.parse(localStorage.getItem('campusCardMiniSave')||'null');if(value&&typeof value==='object'&&!Array.isArray(value))main=value}catch(e){}
  const count=Math.max(0,Math.min(50,Math.floor(Number(main?.cleared)||0)));
  return Array.from({length:count},(_,i)=>i+1);
 }
