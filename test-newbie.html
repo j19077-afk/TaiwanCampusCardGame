@@ -1563,7 +1563,7 @@
 (()=>{
 // 獨立新手測試存檔：所有遊戲資料使用專屬前綴，不讀寫正式版或既有測試頁存檔。
 const __nativeStorage=window.localStorage;
-const __testPrefix='campusSixItemNewbieTestReset20261102::';
+const __testPrefix='campusSixItemNewbieTestReset20261102V2::';
 const localStorage={
  getItem(key){return __nativeStorage.getItem(__testPrefix+key)},
  setItem(key,value){return __nativeStorage.setItem(__testPrefix+key,String(value))},
@@ -1677,7 +1677,7 @@ const roster=[
  {id:'konan_koyoi',name:'小宵虎南',rarity:'SSR',icon:'🔋',role:'高速攻擊型',image:'images/characters/konan_koyoi.png'}
 ];
 // 新手免費十連使用獨立固定名單；不包含小宵虎南，未來新增角色亦不自動加入。
-const newbieSummonCharacterIds=['yuching','yutong','ruoxue','xingyao','keqing','zihan','anzai_coach'];
+const newbieSummonCharacterIds=['yuching','yutong','ruoxue','xingyao','keqing','zihan'];
 const modal=$('featureModal'),modalTitle=$('modalTitle'),modalBody=$('modalBody');
 // The shared game modal must live outside #lobby because the standalone summon/archive pages hide that ancestor.
 if(modal&&modal.parentElement!==document.body)document.body.appendChild(modal);
