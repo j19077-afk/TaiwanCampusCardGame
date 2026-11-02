@@ -1497,6 +1497,22 @@
 #characterArchive .roster-mini-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
 #characterArchive .character-card h3{margin-top:10px;}
 #characterArchive .roster-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+
+/* 測試版本期焦點角色：大型主視覺卡片，完整保留原圖比例 */
+#summonPage .featured-grid{grid-template-columns:minmax(0,1fr)}
+#summonPage .featured-card.featured-spotlight-hero{min-height:clamp(340px,38vw,500px);align-items:stretch;gap:0}
+#summonPage .featured-card.featured-spotlight-hero .featured-spotlight-art{display:block;flex:0 1 48%;width:48%;max-width:48%;min-width:0;height:auto;max-height:500px;object-fit:contain;object-position:center;background:transparent;align-self:center}
+#summonPage .featured-card.featured-spotlight-hero .featured-info{flex:1;padding:clamp(22px,4vw,48px);gap:14px}
+#summonPage .featured-card.featured-spotlight-hero .featured-info h3{font-size:clamp(1.5rem,3vw,2.25rem)}
+#summonPage .featured-card.featured-spotlight-hero .featured-info p{font-size:clamp(.95rem,1.35vw,1.08rem);line-height:1.9}
+@media(max-width:800px){
+ #summonPage .featured-card.featured-spotlight-hero{flex-direction:column;min-height:0}
+ #summonPage .featured-card.featured-spotlight-hero .featured-spotlight-art{flex:0 1 auto;width:auto;max-width:100%;max-height:52dvh;min-width:0;align-self:center}
+ #summonPage .featured-card.featured-spotlight-hero .featured-info{padding:22px;gap:11px}
+}
+@media(max-width:380px){
+ #summonPage .featured-card.featured-spotlight-hero .featured-info{padding:18px}
+}
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・第一章</div></header>
 <main id="lobby" class="lobby-shell">
@@ -1552,7 +1568,7 @@
  const backdrop=document.getElementById('featuredDetailModal'),body=document.getElementById('featuredDetailBody'),title=document.getElementById('featuredDetailTitle'),close=document.getElementById('featuredDetailClose');if(!backdrop||!body||!title||!close)return;
  // The summon page hides #lobby; keep this dialog outside that hidden ancestor.
  if(backdrop.parentElement!==document.body)document.body.appendChild(backdrop);
- const profiles={ruoxue:{department:'醫學系',year:'三年級',description:'感染災變爆發後，她冷靜分析感染者的行動規律，逐步掌握變異體的弱點。'},zihan:{department:'資訊工程系',year:'四年級',description:'擅長分析研究設施資料，利用科技與環境尋找感染者的弱點，協助小隊避開危險。'},anzai_coach:{department:'校園健康中心',year:'教練',description:'負責校園健康中心的緊急救護工作，以專業與沉著守護每一位仍在戰鬥的隊員。'}};
+ const profiles={ruoxue:{department:'醫學系',year:'三年級',description:'感染災變爆發後，她冷靜分析感染者的行動規律，逐步掌握變異體的弱點。'},zihan:{department:'資訊工程系',year:'四年級',description:'擅長分析研究設施資料，利用科技與環境尋找感染者的弱點，協助小隊避開危險。'},anzai_coach:{department:'校園健康中心',year:'教練',description:'負責校園健康中心的緊急救護工作，以專業與沉著守護每一位仍在戰鬥的隊員。'},konan_koyoi:{department:'校園冒險隊',year:'SSR 焦點角色',description:'手機電量只剩下 1%！將焦慮轉化為攻擊力，在手機關機前結束戰鬥！'}};
   const skillNames={yuching:"超商微波便當！",yutong:"先喝水再說！",ruoxue:"冷氣開到 16 度！",xingyao:"外送倒數三分鐘！",keqing:"主管說再撐一下！",zihan:"已讀不回大法！",konan_koyoi:"手機剩 1%！"};
   const skillDesc={yuching:"三上悠亞拿出剛微波好的便當，香氣吸引附近感染者。她趁敵人爭搶便當的混亂時刻發動猛烈攻擊，成功突破包圍。",yutong:"蘇語彤指定一名存活且生命值未滿的出戰隊員進行治療，治療量等於她目前等級的治療能力；消耗 35 點能量，不占用本回合行動，也不觸發敵方反擊。",ruoxue:"沈若雪一本正經地把冷氣調到 16 度！感染者彷彿感受到月底電費帳單的恐懼，她趁亂發動強力攻勢。",xingyao:"許星瑤進入外送倒數模式，以驚人的速度穿越感染者群。為了不讓餐點超時，她爆發出連自己都無法理解的潛能，迅速發動攻擊。",keqing:"江可晴架起防禦姿勢，大喊「主管說再撐一下！」全隊被社畜精神震懾，趁感染者遲疑時反擊，並減少下一次受到的傷害。",zihan:"顧紫涵對感染者發送訊息後立刻已讀不回。敵人陷入無盡等待與混亂，她趁對方失去攻擊節奏時發動猛烈攻勢。",konan_koyoi:"對敵方單體造成目前技能威力 1.5 倍的傷害；消耗 35 點能量並占用本回合行動，敵方會正常反擊。"};
  function open(id){const ch=roster.find(x=>x.id===id);if(!ch)return;const p=profiles[id];if(!p)return;const st=getCardStats(ch),lv=getLevel(ch);title.textContent=ch.name+' · '+ch.rarity;body.innerHTML='<div class="featured-detail-layout"><div class="featured-detail-art"><img src="'+ch.image+'" alt="'+ch.name+'完整卡牌" onerror="this.alt=\'角色卡牌圖片無法載入\'"></div><div class="featured-detail-info"><p class="character-role">'+p.department+'・'+p.year+'</p><p>'+p.description+'</p><div class="featured-detail-stats"><div><small>角色等級</small><strong>Lv.'+lv+' / '+levelCap(ch)+'</strong></div><div><small>攻擊力</small><strong>⚔️ '+st.atk+'</strong></div><div><small>生命值</small><strong>💚 '+st.hp+'</strong></div><div><small>技能威力</small><strong>✨ '+st.skill+'</strong></div></div><h3>專屬技能｜'+skillNames[id]+'</h3><p>'+skillDesc[id]+'</p></div></div>';backdrop.hidden=false;document.body.style.overflow='hidden';close.focus({preventScroll:true});}
@@ -1716,7 +1732,7 @@ html+='</div><div class="modal-actions"><button class="btn primary" type="button
 function openSummon(){
  const saveData=readGameSave(),col=readCollection(),cost=100,tenCost=1000;
  const html='<div class="archive-page-top"><div><p class="eyebrow">CAMPUS SUMMONING HALL</p><h2>✨ 卡牌召喚</h2><p class="muted">召集夥伴、擴充收藏，為校園冒險做好準備。</p></div><button class="btn secondary" id="summonBackBtn" type="button">← 返回遊戲大廳</button></div>'+
- '<section class="featured-section summon-featured" aria-labelledby="summonFeaturedTitle"><div class="section-heading"><div><p class="eyebrow">CAMPUS SPOTLIGHT</p><h3 id="summonFeaturedTitle">🌟 本期焦點角色</h3></div><span class="muted">點擊角色查看詳細資料</span></div><div class="featured-grid"><article class="featured-card featured-ssr" role="button" tabindex="0" data-featured-character="konan_koyoi" aria-label="查看小宵虎南詳細資料"><div class="featured-info"><span class="featured-tag">SSR · 高速攻擊型</span><h3>小宵虎南</h3><p>手機電量只剩下 1%！將焦慮轉化為攻擊力，在手機關機前結束戰鬥！</p></div></article></div></section>'+
+ '<section class="featured-section summon-featured" aria-labelledby="summonFeaturedTitle"><div class="section-heading"><div><p class="eyebrow">CAMPUS SPOTLIGHT</p><h3 id="summonFeaturedTitle">🌟 本期焦點角色</h3></div><span class="muted">點擊角色查看詳細資料</span></div><div class="featured-grid"><article class="featured-card featured-ssr featured-spotlight-hero" role="button" tabindex="0" data-featured-character="konan_koyoi" aria-label="查看小宵虎南詳細資料"><img class="featured-spotlight-art" src="images/characters/konan_koyoi.png" alt="小宵虎南角色立繪" loading="eager"><div class="featured-info"><span class="featured-tag">SSR · 高速攻擊型</span><h3>小宵虎南</h3><p>手機電量只剩下 1%！將焦慮轉化為攻擊力，在手機關機前結束戰鬥！</p></div></article></div></section>'+
  '<section class="panel summon-page-panel"><div class="summon-page-balance"><span>目前金幣</span><strong>🪙 '+Math.max(0,Number(saveData.coins)||0).toLocaleString('zh-TW')+'</strong></div><div class="summon-banner"><div class="sigil">✦ ✧ ✦</div><strong>校園女神錄召喚陣</strong><span class="muted">召喚你的下一位冒險夥伴</span></div><p>單抽消耗 100 金幣；十連召喚消耗 1000 金幣。新手首次十連抽可免費領取一次，限本機存檔一次性使用。</p><p>每次抽取機率：R 50%、SR 35%、SSR 15%。重複角色轉換為 5 枚金幣。十連召喚至少獲得 1 位 SR 或 SSR（若角色池可用）。</p><div class="modal-actions summon-page-actions">'+(!col.newbieTenClaimed?'<button class="btn primary" type="button" data-modal-action="do-newbie-ten-summon">🎁 新手免費十連（一次性）</button>':'<button class="btn secondary" type="button" disabled>✓ 新手免費十連已領取</button>')+'<button class="btn primary" type="button" data-modal-action="do-summon" '+((Number(saveData.coins)||0)<cost?'disabled':'')+'>✨ 單抽召喚（100 金幣）</button><button class="btn primary" type="button" data-modal-action="do-ten-summon" '+((Number(saveData.coins)||0)<tenCost?'disabled':'')+'>🌟 十連召喚（1000 金幣）</button><button class="btn secondary" type="button" data-modal-action="inventory">🎒 查看背包</button></div><div id="summonResult" aria-live="polite"></div></section>';
  let page=$("summonPage");if(!page){page=document.createElement("main");page.id="summonPage";page.className="lobby-shell";$("lobby").parentNode.insertBefore(page,$("lobby").nextSibling)}
  page.innerHTML=html;page.style.display="grid";lobby.style.display="none";gameApp.style.display="none";const archive=$("archivePage");if(archive)archive.style.display="none";modal.hidden=true;modal.classList.remove("archive-fullscreen");document.body.style.overflow="";try{window.history.replaceState({screen:"summon"},"","#summon")}catch(e){}window.scrollTo(0,0);
