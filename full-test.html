@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>校園女神錄｜完整流程測試中心</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#142238;--line:#344963;--text:#edf3fb;--muted:#a9bad0;--gold:#f4cf7a;--green:#55c99a;--red:#ff8181;--blue:#83b9ff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#0b1220,#14243a);color:var(--text);font:15px/1.6 system-ui,-apple-system,"Noto Sans TC",sans-serif}
+header{padding:26px max(18px,calc((100vw - 1280px)/2));border-bottom:1px solid var(--line);background:#101d30}
+h1{font-size:clamp(24px,4vw,34px);margin:0 0 6px}h2{font-size:20px;margin:0 0 12px}h3{font-size:17px;margin:0 0 6px}
+p{margin:5px 0;color:var(--muted)}a{color:var(--blue)}button,select,textarea{font:inherit}
+main{max-width:1280px;margin:auto;padding:18px;display:grid;gap:16px}
+.panel{background:#142238;border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0}
+.toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+button{border:1px solid #58708f;background:#203752;color:var(--text);border-radius:10px;padding:9px 13px;cursor:pointer}
+button.primary{background:#715a2c;border-color:#c39a4e;color:#fff4d6;font-weight:700}
+button:hover{filter:brightness(1.15)}
+.notice{border-left:4px solid var(--gold);padding:9px 12px;background:#282b31;border-radius:7px;color:#f5e7c5}
+.game-frame{width:100%;height: min(78vh,900px);min-height:570px;border:1px solid #526a87;border-radius:12px;background:#0b1220}
+.frame-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.progress-wrap{height:11px;background:#26384d;border-radius:99px;overflow:hidden;margin:10px 0}
+.progress{height:100%;width:0;background:linear-gradient(90deg,#3da87b,#9ad9a8);transition:width .2s}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.metric{background:#0f1a2a;border:1px solid var(--line);padding:10px;border-radius:10px}.metric b{display:block;font-size:22px}.metric span{font-size:12px;color:var(--muted)}
+.groups{display:grid;gap:13px}.group{border:1px solid var(--line);border-radius:12px;overflow:hidden}.group-title{padding:11px 13px;background:#1b304a;display:flex;justify-content:space-between;gap:8px;align-items:center}.cases{padding:0 13px}
+.case{padding:13px 0;border-bottom:1px solid #2b4059;display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:12px;align-items:center}.case:last-child{border-bottom:0}.case strong{display:block}.case small{display:block;color:var(--muted);margin-top:3px}
+.case select{width:100%;background:#0c1726;color:var(--text);border:1px solid #536a85;border-radius:8px;padding:8px}
+textarea{width:100%;min-height:88px;background:#0c1726;color:var(--text);border:1px solid #536a85;border-radius:9px;padding:10px;resize:vertical}
+footer{text-align:center;color:var(--muted);padding:8px 18px 28px;font-size:12px}
+@media(max-width:720px){main{padding:11px}.summary{grid-template-columns:repeat(2,1fr)}.case{grid-template-columns:1fr}.game-frame{height:70vh;min-height:520px}.panel{padding:12px}}
+</style>
+</head>
+<body>
+<header>
+ <h1>🎓 校園女神錄｜完整流程測試中心</h1>
+ <p>獨立測試工作台 · 遊戲載入自 test.html · 正式版不在測試範圍</p>
+</header>
+<main>
+ <section class="panel">
+  <div class="notice"><b>測試安全規則：</b>本頁只提供操作指引與測試紀錄，不會自動修改遊戲程式、角色數值或正式版。請使用測試帳號；每項操作後依實際結果標記狀態。</div>
+  <div class="toolbar" style="margin-top:13px">
+   <button class="primary" id="goLobby">載入測試大廳</button>
+   <button id="goSummon">載入召喚頁</button>
+   <a href="./test.html#lobby" target="_blank" rel="noopener">另開測試版</a>
+   <a href="./test.html#summon" target="_blank" rel="noopener">另開召喚頁</a>
+  </div>
+ </section>
+ <section class="panel">
+  <div class="frame-head"><div><h2>遊戲操作區</h2><p>可直接在下方操作遊戲；測試紀錄保存在本測試中心的瀏覽器，不會寫入遊戲存檔。</p></div><span id="frameState">尚未載入</span></div>
+  <iframe class="game-frame" id="gameFrame" title="校園女神錄測試版遊戲" src="about:blank"></iframe>
+ </section>
+ <section class="panel">
+  <h2>測試進度總覽</h2>
+  <div class="summary">
+   <div class="metric"><b id="totalCount">0</b><span>測試項目</span></div>
+   <div class="metric"><b id="passCount">0</b><span>通過</span></div>
+   <div class="metric"><b id="failCount">0</b><span>失敗</span></div>
+   <div class="metric"><b id="todoCount">0</b><span>未測試／待確認</span></div>
+  </div>
+  <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+  <p id="progressLabel">完成率 0%</p>
+ </section>
+ <section class="panel">
+  <div class="frame-head"><div><h2>完整流程測試清單</h2><p>每個項目選擇「通過」「失敗」或「未測試」。失敗項目請在下方備註。</p></div><div class="toolbar"><button id="exportBtn">匯出測試紀錄</button><button id="resetBtn">重設測試紀錄</button></div></div>
+  <div class="groups" id="testGroups"></div>
+ </section>
+ <section class="panel">
+  <h2>整體測試備註／問題紀錄</h2>
+  <textarea id="globalNotes" placeholder="記錄錯誤畫面、操作步驟、預期結果與實際結果；可填寫截圖檔名或問題編號。"></textarea>
+  <p>紀錄會自動保存在目前瀏覽器。匯出 JSON 可留存或交由專案維護者分析。</p>
+ </section>
+</main>
+<footer>校園女神錄測試中心 · 獨立檔案 full-test.html · 不會自動變更 test.html 或 index.html</footer>
+<script>
+const groups=[
+ {title:"01｜新手進入與初始狀態",items:[
+  ["新手入口","從測試大廳進入遊戲，確認頁面正常顯示，沒有空白或錯誤。"],
+  ["初始帳號／存檔","確認新手初始資料可載入；記錄初始金幣、進度與持有角色。"],
+  ["大廳資訊","確認冒險進度、金幣、已通關數等欄位顯示合理。"],
+  ["主要導覽","逐一開啟大廳可用的主要功能入口，確認能正常進入及返回。"]
+ ]},
+ {title:"02｜角色圖鑑與角色資料",items:[
+  ["角色圖鑑載入","角色清單能正常顯示，角色名稱、稀有度及定位沒有錯位。"],
+  ["小宵虎南資料","確認小宵虎南可在角色資料系統中辨識，稀有度 SSR、定位高速攻擊型。"],
+  ["小宵虎南數值","確認 ATK 18、技能威力 37、HP 74、治療力 0。"],
+  ["角色圖片","確認小宵虎南使用專屬圖片；若圖片缺失或錯圖，標記失敗並記錄。"],
+  ["角色詳情","開啟角色詳情，確認技能名稱、描述及數值欄位正常。"]
+ ]},
+ {title:"03｜新手召喚與一般召喚",items:[
+  ["新手免費十連","確認新手免費十連入口、消耗及抽取結果符合既有規則。"],
+  ["新手保底名單","確認新手十連 SR／SSR 保底名單維持原設定，不混入小宵虎南。"],
+  ["一般單抽","進入一般召喚執行單抽，確認扣款、結果及角色入庫正常。"],
+  ["一般十連","執行一般十連，確認十張結果、扣款及入庫正常。"],
+  ["小宵虎南可召喚","透過一般召喚驗證小宵虎南在一般角色池；未抽中不代表失敗，需以池資料／足夠抽樣佐證。"],
+  ["保底規則回歸","確認一般十連 SR／SSR 保底規則與既有版本一致。"],
+  ["召喚結果與重複角色","確認抽到重複角色時，遊戲依原有機制處理，不造成存檔錯誤。"]
+ ]},
+ {title:"04｜角色持有、管理與編隊",items:[
+  ["初始持有狀態","確認測試帳號初始不持有小宵虎南（依本次測試重置規則）。"],
+  ["持有角色清單","確認持有角色清單能正確反映抽取結果。"],
+  ["加入編隊","將可用角色加入編隊，確認隊伍人數及角色顯示正常。"],
+  ["移除／替換角色","移除或替換編隊角色，確認隊伍資料更新正常。"],
+  ["預設編隊保存","修改預設編隊並重新開啟，確認內容符合既有保存規則。"],
+  ["小宵虎南重新入隊","取得小宵虎南後，確認能加入編隊及預設編隊。"]
+ ]},
+ {title:"05｜養成與角色功能",items:[
+  ["角色升級入口","確認升級介面可開啟，消耗與升級結果符合原有規則。"],
+  ["養成資料保存","完成一項合法養成操作後重新開啟角色，確認資料保存。"],
+  ["其他角色回歸","抽查其他角色詳情、數值及技能未受小宵虎南整合影響。"]
+ ]},
+ {title:"06｜關卡與戰鬥流程",items:[
+  ["關卡列表","開啟關卡頁，確認關卡進度、解鎖狀態與入口正常。"],
+  ["進入戰鬥","選擇可挑戰關卡，確認隊伍正確載入並進入戰鬥。"],
+  ["普通攻擊","執行普通攻擊，確認傷害、回合及敵方行動正常。"],
+  ["技能施放","使用一般角色技能，確認能量消耗、效果及回合流程正常。"],
+  ["小宵虎南技能","使用「手機剩 1%！」，確認單體目標、35 能量消耗及 1.5 倍技能威力傷害規則。"],
+  ["敵人反擊","技能或攻擊後確認敵方依既有規則反擊。"],
+  ["勝利結算","完成勝利，確認結算畫面、通關進度與獎勵正確。"],
+  ["失敗結算","若可安全測試，確認戰敗流程、返回入口及資料狀態正常。"]
+ ]},
+ {title:"07｜獎勵、金幣與商店",items:[
+  ["測試金幣顯示","確認測試版金幣顯示無限制（∞）。"],
+  ["消費後金幣","進行允許的測試消費，確認金幣仍維持無限制。"],
+  ["關卡獎勵","確認勝利獎勵發放及顯示符合原有規則。"],
+  ["商店／其他兌換","若測試版有此功能，確認入口、交易及結果正常，不測試未授權的付費功能。"]
+ ]},
+ {title:"08｜存檔、重新載入與回歸",items:[
+  ["角色持有存檔","取得角色後重新整理頁面，確認持有狀態保留。"],
+  ["編隊存檔","重新整理後確認編隊與預設編隊保留。"],
+  ["進度存檔","重新整理後確認關卡進度與獎勵資料保留。"],
+  ["一次性重置驗證","再次載入遊戲，確認小宵虎南不會被重複移除。"],
+  ["其他角色回歸","確認原有角色可正常檢視、召喚、編隊及戰鬥。"],
+  ["正式版隔離","確認本次測試未修改正式版 index.html。"]
+ ]}
+];
+const KEY="campus_full_test_checklist_v1";
+const $=id=>document.getElementById(id);
+let state={results:{},notes:""};
+try{const saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved&&saved.results)state=saved}catch(e){}
+function save(){state.notes=$("globalNotes").value;try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}renderStats()}
+function render(){
+ const root=$("testGroups");root.innerHTML="";
+ groups.forEach((g,gi)=>{
+  const wrap=document.createElement("section");wrap.className="group";
+  const head=document.createElement("div");head.className="group-title";
+  const title=document.createElement("strong");title.textContent=g.title;
+  const count=document.createElement("span");count.className="muted";count.textContent=g.items.length+" 項";
+  head.append(title,count);wrap.append(head);
+  const list=document.createElement("div");list.className="cases";
+  g.items.forEach((item,ii)=>{
+   const id=gi+"-"+ii;const row=document.createElement("div");row.className="case";
+   const desc=document.createElement("div");const strong=document.createElement("strong");strong.textContent=item[0];const small=document.createElement("small");small.textContent=item[1];desc.append(strong,small);
+   const sel=document.createElement("select");sel.setAttribute("aria-label",item[0]+"測試狀態");
+   [["todo","未測試"],["pass","通過"],["fail","失敗"],["blocked","待確認／無法測試"]].forEach(([v,t])=>{const o=document.createElement("option");o.value=v;o.textContent=t;sel.append(o)});
+   sel.value=state.results[id]||"todo";sel.addEventListener("change",()=>{state.results[id]=sel.value;save()});
+   row.append(desc,sel);list.append(row);
+  });
+  wrap.append(list);root.append(wrap);
+ });
+ $("globalNotes").value=state.notes||"";renderStats();
+}
+function renderStats(){
+ let total=0,pass=0,fail=0,todo=0;
+ groups.forEach((g,gi)=>g.items.forEach((_,ii)=>{total++;const v=state.results[gi+"-"+ii]||"todo";if(v==="pass")pass++;else if(v==="fail")fail++;else todo++}));
+ $("totalCount").textContent=total;$("passCount").textContent=pass;$("failCount").textContent=fail;$("todoCount").textContent=todo;
+ const pct=Math.round(pass/total*100);$("progress").style.width=pct+"%";$("progressLabel").textContent="通過率 "+pct+"%（僅計通過項目；失敗及未測試不計入）";
+}
+$("globalNotes").addEventListener("input",save);
+function loadGame(hash){$("gameFrame").src="./test.html"+hash;$("frameState").textContent="已載入 test.html"+hash}
+$("goLobby").onclick=()=>loadGame("#lobby");$("goSummon").onclick=()=>loadGame("#summon");
+$("exportBtn").onclick=()=>{const payload={project:"校園女神錄",testPage:"full-test.html",exportedAt:new Date().toISOString(),summary:{total:$("totalCount").textContent,passed:$("passCount").textContent,failed:$("failCount").textContent,pending:$("todoCount").textContent},groups:groups.map((g,gi)=>({title:g.title,items:g.items.map((x,ii)=>({name:x[0],expected:x[1],status:state.results[gi+"-"+ii]||"todo"}))})),notes:state.notes};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="校園女神錄_完整流程測試紀錄.json";a.click();URL.revokeObjectURL(url)};
+$("resetBtn").onclick=()=>{if(!confirm("確定清除本測試中心的所有勾選與備註？不會清除遊戲存檔。"))return;state={results:{},notes:""};save();render()};
+render();loadGame("#lobby");
+</script>
+</body>
+</html>
