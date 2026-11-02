@@ -1652,7 +1652,7 @@ const growthByRarity={R:{atk:1.2,skill:1.5,hp:5},SR:{atk:1.8,skill:2.2,hp:7},SSR
 const cardStats={yuching:{atk:20,skill:36,hp:105,heal:0},yutong:{atk:13,skill:22,hp:95,heal:35},ruoxue:{atk:18,skill:52,hp:90,heal:0},xingyao:{atk:25,skill:34,hp:88,heal:0},keqing:{atk:15,skill:26,hp:125,heal:0},zihan:{atk:17,skill:58,hp:85,heal:0},anzai_coach:{atk:14,skill:30,hp:100,heal:60},konan_koyoi:{atk:18,skill:37,hp:74,heal:0}};
 function rarityMultiplier(ch){return ch.rarity==='SSR'?1.35:ch.rarity==='SR'?1.12:0.88}
 function levelCap(ch){return ch.rarity==='SSR'?50:ch.rarity==='SR'?40:25}
-function getLevel(ch){const c=readCollection();return Math.max(1,Math.min(levelCap(ch),Number(c.levels&&c.levels[ch.id])||1))}
+function getLevel(ch){const c=readCollection();if(!c.owned.includes(ch.id))return 1;return Math.max(1,Math.min(levelCap(ch),Number(c.levels&&c.levels[ch.id])||1))}
 function getCardStats(ch){const b=cardStats[ch.id]||cardStats.yuching,m=rarityMultiplier(ch),lv=getLevel(ch),g=growthByRarity[ch.rarity]||growthByRarity.R;return {atk:Math.round(b.atk*m+(lv-1)*g.atk),skill:Math.round(b.skill*m+(lv-1)*g.skill),hp:Math.round(b.hp*m+(lv-1)*g.hp),heal:Math.round((b.heal||0)*m+(lv-1)*(ch.rarity==='SSR'?1:0.5))}}
 function maxHp(ch){return getCardStats(ch).hp}
 
