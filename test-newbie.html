@@ -1570,16 +1570,22 @@ const localStorage={
  removeItem(key){return __nativeStorage.removeItem(__testPrefix+key)}
 };
 try{
- if(localStorage.getItem('campusSixItemInitialRosterFix')!=='1'){
+ // v2 僅修正尚未領取新手十連、且收藏仍是錯誤初始組合的舊測試存檔。
+ // 不在一般讀取流程刪除角色，確保日後透過召喚取得安西教練後能正常保留。
+ if(localStorage.getItem('campusSixItemInitialRosterFixV2')!=='1'){
   const raw=localStorage.getItem('campusCardCollection');
   if(raw){
    const c=JSON.parse(raw);
-   if(Array.isArray(c.owned))c.owned=c.owned.filter(id=>id!=='anzai_coach');
-   if(Array.isArray(c.formation))c.formation=c.formation.filter(id=>id!=='anzai_coach');
-   if(Array.isArray(c.formationPresets))c.formationPresets=c.formationPresets.map(p=>({...p,formation:Array.isArray(p.formation)?p.formation.filter(id=>id!=='anzai_coach'):[]}));
-   localStorage.setItem('campusCardCollection',JSON.stringify(c));
+   const owned=Array.isArray(c.owned)?[...new Set(c.owned)]:[];
+   const isUnclaimedStarterRoster=c.newbieTenClaimed!==true&&owned.length===2&&owned.includes('yuching')&&owned.includes('anzai_coach');
+   if(isUnclaimedStarterRoster){
+    c.owned=owned.filter(id=>id!=='anzai_coach');
+    if(Array.isArray(c.formation))c.formation=c.formation.filter(id=>id!=='anzai_coach');
+    if(Array.isArray(c.formationPresets))c.formationPresets=c.formationPresets.map(p=>({...p,formation:Array.isArray(p.formation)?p.formation.filter(id=>id!=='anzai_coach'):[]}));
+    localStorage.setItem('campusCardCollection',JSON.stringify(c));
+   }
   }
-  localStorage.setItem('campusSixItemInitialRosterFix','1');
+  localStorage.setItem('campusSixItemInitialRosterFixV2','1');
  }
 }catch(e){}
 let skillMenuOpen=false,selectedCombatAction=null,healingTargetMode=false,healingSelectedTargetId=null;const $=id=>document.getElementById(id);const lobby=$('lobby'),gameApp=$('gameApp');
@@ -1845,28 +1851,28 @@ function firstBossBonus(n){return n%10===0?20:n%5===0?10:0}
 function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
 function mainlineClearedStages(){
+ // 只採用實際通關進度；state.stage 是目前所在關卡，不能視為已通關。
  const recorded=Array.isArray(state.clearedStages)?state.clearedStages:[];
  const set=new Set(recorded.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20));
  const clearedProgress=Math.max(0,Math.min(20,Number(state.cleared)||0));
- const currentMainlineStage=state.challengeMode?0:Math.max(0,Math.min(20,Number(state.stage)||1));
- const progress=Math.max(clearedProgress,currentMainlineStage);
- for(let n=1;n<=progress;n++)set.add(n);
+ for(let n=1;n<=clearedProgress;n++)set.add(n);
  return [...set].sort((a,b)=>a-b);
 }
 function unlockedChallengeStages(){
  const newlyUnlocked=mainlineClearedStages();
- const previouslyUnlocked=Array.isArray(state.challengeUnlockedStages)?state.challengeUnlockedStages.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20):[];
+ const previouslyUnlocked=Array.isArray(state.challengeUnlockedStages)?state.challengeUnlockedStages.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=20&&newlyUnlocked.includes(n)):[];
+ // 舊版可能把初始所在的第 1 關誤存為已解鎖；只保留有實際通關依據的項目。
  const permanent=[...new Set([...previouslyUnlocked,...newlyUnlocked])].sort((a,b)=>a-b);
- if(JSON.stringify(permanent)!==JSON.stringify(previouslyUnlocked)){state.challengeUnlockedStages=permanent;save()}
+ if(JSON.stringify(permanent)!==JSON.stringify(state.challengeUnlockedStages||[])){state.challengeUnlockedStages=permanent;save()}
  return permanent;
 }
 function openStageCenter(){
  const unlocked=unlockedChallengeStages(),cleared=clearedSweepStages();
  const opts=a=>a.map(n=>'<option value="'+n+'">第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</option>').join('');
  const resultStage=state.challengeLastResult&&state.challengeLastResult.success?Number(state.challengeLastResult.stage):NaN;const preferred=Number.isInteger(resultStage)&&resultStage>=1&&resultStage<=20?resultStage:Number(state.challengeLastStage);const selected=unlocked.includes(preferred)?preferred:(unlocked.includes(Number(state.challengeLastStage))?Number(state.challengeLastStage):unlocked[0]);state.challengeLastStage=selected;
- const stageButtons=unlocked.map(n=>'<button type="button" class="challenge-stage-choice '+(n===selected?'selected':'')+'" data-challenge-stage="'+n+'" aria-pressed="'+(n===selected)+'"><strong>第 '+String(n).padStart(2,'0')+' 關</strong><span>'+stageTitle(n)+'</span><small>'+stageKind(n)+'</small></button>').join('');
+ const stageButtons=unlocked.length?unlocked.map(n=>'<button type="button" class="challenge-stage-choice '+(n===selected?'selected':'')+'" data-challenge-stage="'+n+'" aria-pressed="'+(n===selected)+'"><strong>第 '+String(n).padStart(2,'0')+' 關</strong><span>'+stageTitle(n)+'</span><small>'+stageKind(n)+'</small></button>').join(''):'<p class="muted">目前尚無已通關關卡，完成主線第一關後即可解鎖自行挑戰。</p>';
 
- const html='<div class="stage-center-head"><div><p class="eyebrow">CAMPUS SYSTEM</p><h1>⚔️ 關卡挑戰</h1><p class="stage-center-intro">自行挑戰與掃蕩獎勵分開計算；每關各自每日最多 3 次。</p></div><button class="btn secondary" id="stageCenterBackBtn" type="button">← 返回遊戲功能</button></div><div class="stage-center-grid"><section class="stage-center-panel"><strong>自行挑戰</strong><p class="muted">點擊已解鎖關卡卡片選擇挑戰目標。</p><div class="challenge-stage-choices" id="challengeStageChoices">'+stageButtons+'</div><div id="challengeRewardPreview" class="notice" style="margin-top:12px"></div><div class="modal-actions"><button class="btn primary" type="button" data-modal-action="challenge-start">開始挑戰</button></div></section><section class="stage-center-panel"><strong>一鍵掃蕩</strong><p class="muted">僅限已通關關卡；每關每日最多 3 次，與自行挑戰額度分開。</p>'+
+ const html='<div class="stage-center-head"><div><p class="eyebrow">CAMPUS SYSTEM</p><h1>⚔️ 關卡挑戰</h1><p class="stage-center-intro">自行挑戰與掃蕩獎勵分開計算；每關各自每日最多 3 次。</p></div><button class="btn secondary" id="stageCenterBackBtn" type="button">← 返回遊戲功能</button></div><div class="stage-center-grid"><section class="stage-center-panel"><strong>自行挑戰</strong><p class="muted">點擊已解鎖關卡卡片選擇挑戰目標。</p><div class="challenge-stage-choices" id="challengeStageChoices">'+stageButtons+'</div><div id="challengeRewardPreview" class="notice" style="margin-top:12px"></div><div class="modal-actions"><button class="btn primary" type="button" data-modal-action="challenge-start" '+(unlocked.length?'':'disabled')+'>開始挑戰</button></div></section><section class="stage-center-panel"><strong>一鍵掃蕩</strong><p class="muted">僅限已通關關卡；每關每日最多 3 次，與自行挑戰額度分開。</p>'+
  (cleared.length?'<label for="sweepStage">選擇掃蕩關卡</label><select id="sweepStage">'+opts(cleared)+'</select><div id="sweepPreview" class="notice" style="margin-top:12px"></div><div class="modal-actions" id="sweepActions"></div>':'<p class="muted">目前尚無已通關關卡，完成關卡後即可使用掃蕩。</p>')+'</section></div>';
  let page=$('stageCenterPage');if(!page){page=document.createElement('main');page.id='stageCenterPage';page.className='stage-center-page';$('lobby').parentNode.insertBefore(page,$('lobby').nextSibling)}
  page.innerHTML=html;page.style.display='grid';lobby.style.display='none';gameApp.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';modal.hidden=true;document.body.style.overflow='';try{window.history.replaceState({screen:'stage-center'},'','#stage-center')}catch(e){}window.scrollTo(0,0);
@@ -1877,7 +1883,9 @@ function openStageCenter(){
 function updateChallengeRewardPreview(){
  const preview=$('challengeRewardPreview');if(!preview)return;
  preview.style.color='';
- const n=Math.max(1,Number(state.challengeLastStage)||1),daily=challengeRewardState(n,'play');
+ const available=unlockedChallengeStages();
+ if(!available.length){preview.textContent='目前尚無已通關關卡；完成主線第一關後即可解鎖自行挑戰。';return}
+ const n=Math.max(1,Number(state.challengeLastStage)||available[0]),daily=challengeRewardState(n,'play');
  preview.innerHTML='<strong>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</strong><br>今日自行挑戰通關獎勵剩餘：<strong>'+daily.remaining+' / 3 次</strong>'+(daily.remaining===0?'<p style="color:#ffd780;margin:7px 0 0">今日挑戰獎勵已領完，仍可繼續挑戰。</p>':'');
 }
 function selectChallengeStage(n){if(!unlockedChallengeStages().includes(Number(n)))return;state.challengeLastStage=Number(n);document.querySelectorAll('[data-challenge-stage]').forEach(b=>{const active=Number(b.dataset.challengeStage)===state.challengeLastStage;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});updateChallengeRewardPreview();save()}
