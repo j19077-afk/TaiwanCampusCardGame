@@ -27,6 +27,15 @@
 @media(max-width:700px){.stage-center-page{padding:14px 10px 90px;gap:14px}.stage-center-head{padding:18px}.stage-center-head .btn{width:100%}.stage-center-panel{padding:18px}.challenge-stage-choices{grid-template-columns:1fr;max-height:320px}.stage-center-panel>.muted{min-height:0}}
 
 
+
+/* 關卡挑戰清單與資訊區 BUG 修正：限定本頁 */
+.stage-center-page .challenge-stage-list-panel .challenge-stage-choices{display:grid;grid-template-columns:minmax(0,1fr)!important;}
+.stage-center-page .challenge-stage-list-panel .challenge-stage-choice{width:100%;display:flex;align-items:center;justify-content:flex-start;color:#eef4ff;font-size:1rem;}
+.stage-center-page .challenge-stage-list-panel .challenge-stage-copy{display:grid;visibility:visible;opacity:1;color:#eef4ff;text-align:left;}
+.stage-center-page .challenge-stage-list-panel .challenge-stage-copy strong,.stage-center-page .challenge-stage-list-panel .challenge-stage-copy>span{display:block;visibility:visible;color:#eef4ff;}
+.stage-center-page .challenge-stage-list-panel .challenge-stage-copy small{display:block;visibility:visible;color:#aebed3;}
+.stage-center-page .challenge-stage-detail-panel{display:grid;}
+
 /* 關卡挑戰圖像化介面：僅限關卡挑戰頁 */
 .stage-center-page{max-width:1120px;gap:18px}
 .challenge-stage-list-panel{gap:12px}
@@ -1873,13 +1882,13 @@ function openStageCenter(){
  updateChallengeRewardPreview();if(cleared.length)updateSweepPreview();
 }
 function updateChallengeRewardPreview(){
- const preview=$('challengeRewardPreview');if(!preview)return;
- preview.style.color='';
- const available=unlockedChallengeStages();if(!available.length){preview.textContent='目前尚無已通關的主線關卡，完成第 1 關後即可解鎖關卡挑戰。';return}
+ const preview=$('challengeRewardPreview');
+ if(preview)preview.style.color='';
+ const available=unlockedChallengeStages();if(!available.length){if(preview)preview.textContent='目前尚無已通關的主線關卡，完成第 1 關後即可解鎖關卡挑戰。';const detail=$('challengeStageDetail');if(detail)detail.innerHTML='<p class="muted">目前尚無可挑戰關卡。</p>';return}
  const n=available.includes(Number(state.challengeLastStage))?Number(state.challengeLastStage):available[0],daily=challengeDailyState(n);
  const cleared=clearedSweepStages(),canSweep=cleared.includes(n),reward=canSweep?sweepReward(n):0,detail=$('challengeStageDetail');
  if(detail)detail.innerHTML='<div class="challenge-stage-large-art" aria-hidden="true"><span>第 '+String(n).padStart(2,'0')+' 關</span></div><div class="challenge-stage-detail-copy"><strong>目前選取關卡</strong><h2>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</h2><p class="muted">'+stageKind(n)+'</p><div class="challenge-stage-quota"><span>今日已使用：<strong>'+(3-daily.remaining)+' / 3 次</strong></span><span>今日剩餘：<strong>'+daily.remaining+' 次</strong></span></div>'+(daily.remaining===0?'<p class="challenge-stage-warning">本關今日額度已用完，台灣時間每日 00:00 重置。</p>':'')+'<div class="challenge-stage-actions"><button class="btn primary" type="button" data-modal-action="challenge-start" '+(daily.remaining<=0?'disabled':'')+'>開始挑戰</button><button class="btn secondary" type="button" data-modal-action="sweep-confirm" '+(daily.remaining<=0||!canSweep?'disabled':'')+'>一鍵掃蕩</button></div>'+(canSweep?'<p class="muted">掃蕩預計獲得 '+reward+' 枚金幣；消耗本關共用額度 1 次。</p>':'<p class="muted">本關尚未完成挑戰，通關後即可使用一鍵掃蕩。</p>')+'</div>';
- preview.innerHTML='<strong>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</strong><br>今日剩餘挑戰／掃蕩次數：<strong>'+daily.remaining+' / 3 次</strong>'+(daily.remaining===0?'<p style="color:#ffd780;margin:7px 0 0">本關今日額度已用完，台灣時間每日 00:00 重置。</p>':'');
+ if(preview)preview.innerHTML='<strong>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</strong><br>今日剩餘挑戰／掃蕩次數：<strong>'+daily.remaining+' / 3 次</strong>'+(daily.remaining===0?'<p style="color:#ffd780;margin:7px 0 0">本關今日額度已用完，台灣時間每日 00:00 重置。</p>':'');
 }
 function selectChallengeStage(n){if(!unlockedChallengeStages().includes(Number(n)))return;state.challengeLastStage=Number(n);document.querySelectorAll('[data-challenge-stage]').forEach(b=>{const active=Number(b.dataset.challengeStage)===state.challengeLastStage;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});updateChallengeRewardPreview();save()}
 
