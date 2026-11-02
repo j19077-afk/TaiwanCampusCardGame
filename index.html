@@ -1807,9 +1807,10 @@ function firstBossBonus(n){return n%10===0?20:n%5===0?10:0}
 function replayReward(n){return Math.floor(baseReward(n)*0.2)}
 function replayBossBonus(n){return Math.floor(firstBossBonus(n)*0.2)}
 function mainlineClearedStages(){
- // 使用獨立的正式主線通關證明；不讀取舊版 cleared / clearedStages / challengeUnlockedStages，避免舊資料誤開關卡。
- const recorded=Array.isArray(state.mainlineClearedStagesV2)?state.mainlineClearedStagesV2:[];
- return [...new Set(recorded.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=50))].sort((a,b)=>a-b);
+ // 關卡挑戰一律讀取正式主線存檔快照的 cleared 通關數，不讀取挑戰戰鬥 state 或舊解鎖陣列，避免兩套 state 不同步造成未通關關卡出現。
+ const main=readMainlineSaveSnapshot();
+ const count=Math.max(0,Math.min(50,Math.floor(Number(main?.cleared)||0)));
+ return Array.from({length:count},(_,i)=>i+1);
 }
 function unlockedChallengeStages(){
  // 不沿用舊版 challengeUnlockedStages：舊邏輯曾把目前關卡 stage 誤記為已解鎖。
