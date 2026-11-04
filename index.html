@@ -1596,7 +1596,7 @@
 // 戰鬥返回使用捕獲階段的全域點擊攔截，避免其他事件或畫面狀態令按鈕失效。
 
 // Homepage spotlight: show existing roster data in a focused modal; do not alter other screens.
-(function bindFeaturedCharacterModal(){
+function bindFeaturedCharacterModal(){
  const backdrop=document.getElementById('featuredDetailModal'),body=document.getElementById('featuredDetailBody'),title=document.getElementById('featuredDetailTitle'),close=document.getElementById('featuredDetailClose');if(!backdrop||!body||!title||!close)return;
  // The summon page hides #lobby; keep this dialog outside that hidden ancestor.
  if(backdrop.parentElement!==document.body)document.body.appendChild(backdrop);
@@ -1608,7 +1608,7 @@
  document.addEventListener('click',e=>{const target=e.target instanceof Element?e.target:null;const card=target&&target.closest('[data-featured-character]');if(card)open(card.dataset.featuredCharacter)});
  document.addEventListener('keydown',e=>{const target=e.target instanceof Element?e.target:null;const card=target&&target.closest('[data-featured-character]');if(card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();open(card.dataset.featuredCharacter)}});
  close.addEventListener('click',dismiss);backdrop.addEventListener('click',e=>{if(e.target===backdrop)dismiss()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!backdrop.hidden)dismiss()});
-})();
+}}
 
 function resetBattleForRetreat(){
  const col=readCollection(),team=(col.formation||[]).map(id=>roster.find(ch=>ch.id===id)).filter(Boolean);
@@ -1696,6 +1696,7 @@ const roster=[
  {id:'konan_koyoi',name:'小宵虎南',rarity:'SSR',icon:'🔋',role:'高速攻擊型',image:'images/characters/konan_koyoi.png'},
  {id:'qin_yitong',name:'秦依肜',rarity:'SR',icon:'🧙‍♀️',role:'萬聖節小魔女・趣味輔助型',image:'images/characters/秦依肜.png'}
 ];
+bindFeaturedCharacterModal();
 // 僅舊版既有角色可進入新手免費十連；之後新增角色預設排除。
 const newbieTenSummonLegacyIds=new Set(['yuching','yutong','ruoxue','xingyao','keqing','zihan','qin_yitong']);
 const modal=$('featureModal'),modalTitle=$('modalTitle'),modalBody=$('modalBody');
