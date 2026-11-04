@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#172033"><meta name="release" content="1.0.0"><meta name="description" content="校園女神錄正式版：角色收藏、抽卡、角色圖鑑與回合制卡牌冒險。"><title>校園女神錄｜真人角色收藏・卡牌冒險</title>
 <style>
-:root{color-scheme:dark;--bg:#101827;--panel:#19263b;--line:#34445e;--mint:#78d7d0;--gold:#ffd780;--text:#eef4ff;--muted:#a6b4cb}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#2b4566,#101827 65%);color:var(--text);font:16px/1.5 system-ui,"Noto Sans TC",sans-serif;min-height:100vh}header{padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#101827dd;border-bottom:1px solid var(--line)}h1{margin:0;font-size:clamp(1.25rem,3vw,2rem)}h2{margin:0 0 12px}.eyebrow{color:var(--mint);letter-spacing:.13em;font-size:.75rem;margin:0 0 5px}.muted{color:var(--muted);font-size:.9rem}.wrap{max-width:1100px;margin:auto;padding:22px 16px 38px;display:grid;gap:16px}.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.pill{border:1px solid var(--line);background:#111b2b;border-radius:999px;padding:7px 12px;color:var(--gold);font-weight:700}.panel{background:linear-gradient(145deg,#1c2b42,#152136);border:1px solid var(--line);border-radius:18px;padding:clamp(15px,3vw,24px);box-shadow:0 12px 32px #0002}.arena{display:grid;grid-template-columns:1fr 36px 1fr;gap:12px;align-items:stretch}.fighter{background:#101b2c;border:1px solid #2c3e59;border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}.avatar{width:92px;height:92px;border-radius:24px;display:grid;place-items:center;font-size:3.3rem;background:linear-gradient(145deg,#2e4a6b,#1b2a40);border:1px solid #45607e;margin-bottom:9px}.enemy .avatar{background:linear-gradient(145deg,#5b3049,#2a2039)}.fighter h3{margin:0 0 3px;font-size:1.08rem}.hp-label{width:100%;display:flex;justify-content:space-between;font-size:.82rem;margin:13px 0 5px}.bar{height:10px;width:100%;background:#344055;border-radius:999px;overflow:hidden}.fill{height:100%;width:100%;background:linear-gradient(90deg,#50d6a5,#a6edba);transition:width .25s}.enemy .fill{background:linear-gradient(90deg,#ff647c,#ffb06e)}.energy-hud{box-sizing:border-box;width:clamp(180px,26vw,400px);max-width:100%;margin:0 auto 5px}.energy-bar{position:relative;margin:0;height:28px;border:1px solid #6675a7;background:#202b45}.energy-fill{position:absolute;top:0;right:0;bottom:0;left:auto;background:linear-gradient(90deg,#7d8cff,#c5a8ff)}.energy-bar-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;line-height:1;color:#fff;text-shadow:0 1px 3px #111;white-space:nowrap;pointer-events:none}.enemy-energy-hud .energy-fill{right:auto;left:0;background:linear-gradient(90deg,#c5a8ff,#7d8cff)}.versus{display:grid;place-items:center;font-weight:900;color:var(--mint)}.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}.btn{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:800;cursor:pointer;transition:transform .12s,filter .12s}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.primary{background:linear-gradient(100deg,#78d7d0,#7ee0b1);color:#10202a}.secondary{background:#2b3b55;color:var(--text);border:1px solid #4a5d79}.danger{background:#3a2636;color:#ffb9c3;border:1px solid #714051}.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}.notice{margin-top:14px;border-radius:12px;padding:13px 15px;background:#111b2b;border:1px solid #2d405b;min-height:50px}.lower{display:grid;grid-template-columns:1fr 1fr;gap:16px}.reward{color:var(--gold);font-weight:800}.log{display:flex;flex-direction:column;gap:8px;max-height:210px;overflow:auto}.logline{border-left:3px solid #4d6b8b;padding:6px 10px;background:#111b2b;border-radius:0 8px 8px 0;font-size:.9rem}.foot{text-align:center;color:var(--muted);font-size:.8rem}@media(max-width:650px){.arena{grid-template-columns:1fr 22px 1fr;gap:6px}.fighter{padding:11px 8px}.avatar{width:68px;height:68px;font-size:2.5rem;border-radius:18px}.lower{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}.wrap{padding:14px 10px 26px}}
+:root{color-scheme:dark;--bg:#101827;--panel:#19263b;--line:#34445e;--mint:#78d7d0;--gold:#ffd780;--text:#eef4ff;--muted:#a6b4cb}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#2b4566,#101827 65%);color:var(--text);font:16px/1.5 system-ui,"Noto Sans TC",sans-serif;min-height:100vh}header{padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#101827dd;border-bottom:1px solid var(--line)}h1{margin:0;font-size:clamp(1.25rem,3vw,2rem)}h2{margin:0 0 12px}.eyebrow{color:var(--mint);letter-spacing:.13em;font-size:.75rem;margin:0 0 5px}.muted{color:var(--muted);font-size:.9rem}.wrap{max-width:1100px;margin:auto;padding:22px 16px 38px;display:grid;gap:16px}.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.pill{border:1px solid var(--line);background:#111b2b;border-radius:999px;padding:7px 12px;color:var(--gold);font-weight:700}.panel{background:linear-gradient(145deg,#1c2b42,#152136);border:1px solid var(--line);border-radius:18px;padding:clamp(15px,3vw,24px);box-shadow:0 12px 32px #0002}.arena{display:grid;grid-template-columns:1fr 36px 1fr;gap:12px;align-items:stretch}.fighter{background:#101b2c;border:1px solid #2c3e59;border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}.avatar{width:92px;height:92px;border-radius:24px;display:grid;place-items:center;font-size:3.3rem;background:linear-gradient(145deg,#2e4a6b,#1b2a40);border:1px solid #45607e;margin-bottom:9px}.enemy .avatar{background:linear-gradient(145deg,#5b3049,#2a2039)}.fighter h3{margin:0 0 3px;font-size:1.08rem}.hp-label{width:100%;display:flex;justify-content:space-between;font-size:.82rem;margin:13px 0 5px}.bar{height:10px;width:100%;background:#344055;border-radius:999px;overflow:hidden}.fill{height:100%;width:100%;background:linear-gradient(90deg,#50d6a5,#a6edba);transition:width .25s}.enemy .fill{background:linear-gradient(90deg,#ff647c,#ffb06e)}.energy-hud{box-sizing:border-box;width:clamp(180px,26vw,400px);max-width:100%;margin:0 auto 5px}.energy-bar{position:relative;margin:0;height:28px;border:1px solid #6675a7;background:#202b45}.energy-fill{position:absolute;top:0;right:0;bottom:0;left:auto;background:linear-gradient(90deg,#7d8cff,#c5a8ff)}.energy-bar-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;line-height:1;color:#fff;text-shadow:0 1px 3px #111;white-space:nowrap;pointer-events:none}.enemy-energy-hud .energy-fill{right:auto;left:0;background:linear-gradient(90deg,#c5a8ff,#7d8cff)}.versus{display:grid;place-items:center;font-weight:900;color:var(--mint)}.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}.btn{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:800;cursor:pointer;transition:transform .12s,filter .12s}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.primary{background:linear-gradient(100deg,#78d7d0,#7ee0b1);color:#10202a}.secondary{background:#2b3b55;color:var(--text);border:1px solid #4a5d79}.danger{background:#3a2636;color:#ffb9c3;border:1px solid #714051}.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}.notice{margin-top:14px;border-radius:12px;padding:13px 15px;background:#111b2b;border:1px solid #2d405b;min-height:50px}.lower{display:grid;grid-template-columns:1fr 1fr;gap:16px}.reward{color:var(--gold);font-weight:800}.log{display:flex;flex-direction:column;gap:8px;max-height:210px;overflow:auto}.logline{border-left:3px solid #4d6b8b;padding:6px 10px;background:#111b2b;border-radius:0 8px 8px 0;font-size:.9rem;white-space:pre-line}.foot{text-align:center;color:var(--muted);font-size:.8rem}@media(max-width:650px){.arena{grid-template-columns:1fr 22px 1fr;gap:6px}.fighter{padding:11px 8px}.avatar{width:68px;height:68px;font-size:2.5rem;border-radius:18px}.lower{grid-template-columns:1fr}.actions{grid-template-columns:1fr 1fr}.wrap{padding:14px 10px 26px}}
 
 .lobby-shell{max-width:1100px;margin:0 auto;padding:24px 16px 36px;display:grid;gap:18px}
 .stage-center-page{max-width:1000px;margin:0 auto;padding:24px 16px 110px;display:grid;gap:16px}.stage-center-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.stage-center-head h1{margin:4px 0;font-size:clamp(1.7rem,4vw,2.4rem)}.stage-center-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.stage-center-panel{padding:clamp(16px,3vw,24px);border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#1b2b42,#152136);display:grid;gap:12px}.stage-center-panel select{width:100%;min-height:48px;padding:12px;border:1px solid #526985;border-radius:10px;background:#111d2e;color:#eef4ff;font:inherit}.stage-center-panel .modal-actions{margin-top:4px}.stage-center-page .stage-center-intro{color:#aebdd1;margin:0}@media(max-width:700px){.stage-center-page{padding:18px 12px 100px}.stage-center-grid{grid-template-columns:1fr}.stage-center-head .btn{width:100%}}
@@ -2104,7 +2104,7 @@ function stage20EnemyCounter(e){
   state.stage20SpecialPending=false;
   state.enemyEnergy=0;
   state.stage20BossTurns=0;
-  addLog('💥 E-00 上一回合能量已滿100/100，本回合施放特殊必殺技「'+skill.name+'」！');
+  addLog('E-00 發動特殊必殺技「'+skill.name+'」！');
   setEnemySkillNotice('cast',skill.name,e.name);battleFx('enemyAvatar','ultimate');battleShake();
   targets=skill.type==='all'?living:[living[Math.floor(Math.random()*living.length)]];
   damage=skill.damage;
@@ -2118,7 +2118,7 @@ function stage20EnemyCounter(e){
   if(energyAfter>=100){
    state.stage20SpecialPending=true;
    setEnemySkillNotice('warning',p.special.name,e.name);battleFx('enemyAvatar','charge');
-   addLog('⚠️ E-00 能量已滿100/100！下一個敵方回合才會施放特殊必殺技「'+p.special.name+'」，請做好防禦！');
+   addLog('E-00 能量達到 100，下一回合將發動「'+p.special.name+'」。');
   }else{
    state.enemySkillNotice=null;
   }
@@ -2127,15 +2127,15 @@ function stage20EnemyCounter(e){
  let total=0;
  for(const target of targets){
   let hit=damage;
-  if(state.defendNext){hit=Math.ceil(hit*.7);addLog('防禦生效！本次傷害減少30%。')}
-  if(state.guardNext){hit=Math.ceil(hit*.5);addLog('星盾守護生效！額外抵擋部分傷害。')}
+  if(state.defendNext){hit=Math.ceil(hit*.7);addLog('防禦生效：本次傷害減少 30%。')}
+  if(state.guardNext){hit=Math.ceil(hit*.5);addLog('星盾守護生效：抵擋部分傷害。')}
   const before=state.partyHp[target.id]??maxHp(target),actual=Math.min(before,hit);
   state.partyHp[target.id]=Math.max(0,before-hit);total+=actual;
   if(target.id===state.activeMember)state.playerHp=state.partyHp[target.id];
   floatNumber('playerHpBar','-'+actual);animateFighter('playerHpBar','hp-flash');
-  addLog(skill?'「'+skill.name+'」命中：'+target.name+' 受到 '+actual+' 點固定傷害。':'敵方普通攻擊：'+target.name+' 受到 '+actual+' 點傷害。');
+  addLog(skill?'- '+target.name+' 受到 '+actual+' 點傷害。':'敵方普通攻擊：\n- '+target.name+' 受到 '+actual+' 點傷害。');
   if(state.partyHp[target.id]<=0){
-   addLog(target.name+' 倒下了！');
+   addLog(target.name+'倒下了！');
    const next=living.find(ch=>ch.id!==target.id&&(state.partyHp[ch.id]??0)>0);
    if(next&&target.id===state.activeMember){state.activeMember=next.id;state.playerHp=state.partyHp[next.id];tell(target.name+' 倒下了！已切換至 '+next.name+'。')}
    else if(!team.some(id=>(state.partyHp[id]??0)>0)){state.playerHp=0;tell('💫 全隊倒下！請重新挑戰第20關。')}
@@ -2173,7 +2173,7 @@ function stage50EnemyCounter(e){
   state.stage50SpecialPending=false;
   state.enemyEnergy=0;
   state.stage50BossTurns=0;
-  addLog('💥 N-00 上一回合能量已滿100/100，本回合施放特殊必殺技「'+skill.name+'」！');
+  addLog('N-00 發動特殊必殺技「'+skill.name+'」！');
   setEnemySkillNotice('cast',skill.name,e.name);battleFx('enemyAvatar','ultimate');battleShake();
   targets=skill.type==='all'?living:[living[Math.floor(Math.random()*living.length)]];
   damage=skill.damage;
@@ -2187,7 +2187,7 @@ function stage50EnemyCounter(e){
   if(energyAfter>=100){
    state.stage50SpecialPending=true;
    setEnemySkillNotice('warning',p.special.name,e.name);battleFx('enemyAvatar','charge');
-   addLog('⚠️ N-00 能量已滿100/100！下一個敵方回合才會施放特殊必殺技「'+p.special.name+'」，請做好防禦！');
+   addLog('N-00 能量達到 100，下一回合將發動「'+p.special.name+'」。');
   }else{
    state.enemySkillNotice=null;
   }
@@ -2196,15 +2196,15 @@ function stage50EnemyCounter(e){
  let total=0;
  for(const target of targets){
   let hit=damage;
-  if(state.defendNext){hit=Math.ceil(hit*.7);addLog('防禦生效！本次傷害減少30%。')}
-  if(state.guardNext){hit=Math.ceil(hit*.5);addLog('星盾守護生效！額外抵擋部分傷害。')}
+  if(state.defendNext){hit=Math.ceil(hit*.7);addLog('防禦生效：本次傷害減少 30%。')}
+  if(state.guardNext){hit=Math.ceil(hit*.5);addLog('星盾守護生效：抵擋部分傷害。')}
   const before=state.partyHp[target.id]??maxHp(target),actual=Math.min(before,hit);
   state.partyHp[target.id]=Math.max(0,before-hit);total+=actual;
   if(target.id===state.activeMember)state.playerHp=state.partyHp[target.id];
   floatNumber('playerHpBar','-'+actual);animateFighter('playerHpBar','hp-flash');
-  addLog(skill?'「'+skill.name+'」命中：'+target.name+' 受到 '+actual+' 點固定傷害。':'敵方普通攻擊：'+target.name+' 受到 '+actual+' 點傷害。');
+  addLog(skill?'- '+target.name+' 受到 '+actual+' 點傷害。':'敵方普通攻擊：\n- '+target.name+' 受到 '+actual+' 點傷害。');
   if(state.partyHp[target.id]<=0){
-   addLog(target.name+' 倒下了！');
+   addLog(target.name+'倒下了！');
    const next=living.find(ch=>ch.id!==target.id&&(state.partyHp[ch.id]??0)>0);
    if(next&&target.id===state.activeMember){state.activeMember=next.id;state.playerHp=state.partyHp[next.id];tell(target.name+' 倒下了！已切換至 '+next.name+'。')}
    else if(!team.some(id=>(state.partyHp[id]??0)>0)){state.playerHp=0;tell('💫 全隊倒下！請重新挑戰第50關。')}
@@ -2298,37 +2298,37 @@ function enemyCounterCore(e){
   if(skill.type==='B'){
    const before=Math.max(0,Number(state.energy)||0),after=Math.max(0,before-20),reduced=before-after;
    state.energy=after;
-   addLog('⚠️ '+e.name+' 施放「'+skill.name+'」！全隊總能量降低 '+reduced+' 點（'+before+' → '+after+'）。');
+   addLog(e.name+'發動「'+skill.name+'」：\n- 我方能量減少 '+reduced+' 點。');
    state.defendNext=false;state.guardNext=false;return null;
   }
   if(skill.type==='C'){
    const cap=Math.max(1,Number(e.hp)||1),before=Math.max(0,Number(state.enemyHp)||0),after=Math.min(cap,before+Math.round(cap*0.15)),restored=after-before;
    state.enemyHp=after;
    if(restored>0){floatNumber('enemyHpBar','+'+restored,true);animateFighter('enemyHpBar','hp-flash')}
-   addLog('💚 '+e.name+' 施放「'+skill.name+'」！恢復 '+restored+' 點生命值（'+after+' / '+cap+'）。');
+   addLog(e.name+'發動「'+skill.name+'」：\n- 恢復 '+restored+' 點生命。');
    state.defendNext=false;state.guardNext=false;return null;
   }
   let hit=0,targets=[];
   if(boss){
    hit=e.atk+Math.floor(Math.random()*5);
-   if(bigBoss){hit=Math.round(hit*(n>=16?2.05:n>=11?1.75:1.45));targets=livingTeam;addLog('💥 '+e.name+' 施放 BOSS 必殺技「'+skill.name+'」！')}
-   else{hit=Math.round(hit*(n>=16?2.25:n>=11?1.9:1.55));targets=[active];addLog('💥 '+e.name+' 施放 BOSS 必殺技「'+skill.name+'」！')}
-  }else{hit=Math.max(1,Math.round(e.atk*2));targets=[active];addLog('💥 '+e.name+' 施放技能「'+skill.name+'」！')}
+   if(bigBoss){hit=Math.round(hit*(n>=16?2.05:n>=11?1.75:1.45));targets=livingTeam;addLog(e.name+'發動 BOSS 必殺技「'+skill.name+'」！')}
+   else{hit=Math.round(hit*(n>=16?2.25:n>=11?1.9:1.55));targets=[active];addLog(e.name+'發動 BOSS 必殺技「'+skill.name+'」！')}
+  }else{hit=Math.max(1,Math.round(e.atk*2));targets=[active];addLog(e.name+'發動技能「'+skill.name+'」！')}
   if((Number(state.enemyAttackDebuffTurns)||0)>0)hit=Math.ceil(hit*0.85);
   let total=0;
   for(const target of targets){
    if(!target||(state.partyHp[target.id]??0)<=0)continue;
    let damage=hit;
    if(team.includes('keqing'))damage=Math.max(1,damage-3);
-   if(state.defendNext){const reduction=boss&&bigBoss?0.15:0.30;damage=Math.ceil(damage*(1-reduction));addLog('防禦生效！本次傷害減少 '+Math.round(reduction*100)+'%。')}
-   if(state.guardNext){damage=Math.ceil(damage*0.5);addLog('星盾守護生效！抵擋部分傷害。')}
+   if(state.defendNext){const reduction=boss&&bigBoss?0.15:0.30;damage=Math.ceil(damage*(1-reduction));addLog('防禦生效：本次傷害減少 '+Math.round(reduction*100)+'%。')}
+   if(state.guardNext){damage=Math.ceil(damage*0.5);addLog('星盾守護生效：抵擋部分傷害。')}
    const hpBefore=state.partyHp[target.id]??maxHp(target),actualHit=Math.min(hpBefore,damage);
    state.partyHp[target.id]=Math.max(0,hpBefore-damage);total+=actualHit;
    if(target.id===state.activeMember)state.playerHp=state.partyHp[target.id];
    floatNumber('playerHpBar','-'+actualHit);animateFighter('playerHpBar','hp-flash');
-   addLog('「'+skill.name+'」命中：'+target.name+' 受到 '+actualHit+' 點傷害。');
+   addLog('- '+target.name+' 受到 '+actualHit+' 點傷害。');
    if(state.partyHp[target.id]<=0){
-    addLog(target.name+' 倒下了！');
+    addLog(target.name+'倒下了！');
     const next=livingTeam.find(ch=>ch.id!==target.id&&(state.partyHp[ch.id]??0)>0);
     if(next&&target.id===state.activeMember){state.activeMember=next.id;state.playerHp=state.partyHp[next.id];tell(target.name+' 倒下了！已切換至 '+next.name+'。')}
     else if(!team.some(id=>(state.partyHp[id]??0)>0)){state.playerHp=0;tell('💫 全隊死亡！請按下「失敗/撤退」返回。')}
@@ -2347,31 +2347,31 @@ function enemyCounterCore(e){
   if(!target)continue;
   let damage=hit;
   if(team.includes('keqing'))damage=Math.max(1,damage-3);
-  if(state.defendNext){damage=Math.ceil(damage*0.7);addLog('防禦生效！本次傷害減少 30%。')}
-  if(state.guardNext){damage=Math.ceil(damage*0.5);addLog('星盾守護生效！抵擋部分傷害。')}
+  if(state.defendNext){damage=Math.ceil(damage*0.7);addLog('防禦生效：本次傷害減少 30%。')}
+  if(state.guardNext){damage=Math.ceil(damage*0.5);addLog('星盾守護生效：抵擋部分傷害。')}
   const hpBefore=state.partyHp[target.id]??maxHp(target),actualHit=Math.min(hpBefore,damage);
   state.partyHp[target.id]=Math.max(0,hpBefore-damage);total+=actualHit;
   if(target.id===state.activeMember)state.playerHp=state.partyHp[target.id];
   floatNumber('playerHpBar','-'+actualHit);animateFighter('playerHpBar','hp-flash');
-  addLog('敵人普通攻擊：'+target.name+' 受到 '+actualHit+' 點傷害。');
+  addLog(e.name+'普通攻擊：\n- '+target.name+' 受到 '+actualHit+' 點傷害。');
   if(state.partyHp[target.id]<=0){
-   addLog(target.name+' 倒下了！');
+   addLog(target.name+'倒下了！');
    const next=livingTeam.find(ch=>ch.id!==target.id&&(state.partyHp[ch.id]??0)>0);
    if(next&&target.id===state.activeMember){state.activeMember=next.id;state.playerHp=state.partyHp[next.id];tell(target.name+' 倒下了！已切換至 '+next.name+'。')}
    else if(!team.some(id=>(state.partyHp[id]??0)>0)){state.playerHp=0;tell('💫 全隊死亡！請按下「失敗/撤退」返回。')}
   }
  }
- if(announcedSkill)addLog('⚠️ '+e.name+' 能量達到 100/100！即將施放「'+announcedSkill.name+'」，請做好防禦！');
+ if(announcedSkill)addLog(e.name+'能量達到 100，準備發動「'+announcedSkill.name+'」。');
  state.defendNext=false;state.guardNext=false;return total;
 }
 function enemyCounter(e){const activeDebuff=Math.max(0,Number(state.enemyAttackDebuffTurns)||0);try{return enemyCounterCore(e)}finally{if(activeDebuff>0)state.enemyAttackDebuffTurns=activeDebuff-1}}
 function handleCombatAction(action){if(state.playerHp<=0||state.enemyHp<=0)return;const label={attack:'普通攻擊',defend:'防禦',heal:'補給'}[action];if(!label)return;if(selectedCombatAction!==action){skillMenuOpen=false;selectedCombatAction=action;addLog('已選擇「'+label+'」指令，再按一次即可執行；也可改選其他指令。');tell('已選擇：'+label+'。再次點選同一按鍵即可執行。');render();return;}selectedCombatAction=null;if(action==='attack')attack();else if(action==='defend')defend();else if(action==='heal')heal()}
-function attack(){if(state.playerHp<=0||state.enemyHp<=0)return;$('victoryBanner')?.remove();const e=enemy(),team=readCollection().formation||[],teamSize=team.length,active=roster.find(ch=>ch.id===state.activeMember)||roster[0],d=getCardStats(active).atk+Math.floor((state.stage-1)/3)*2+Math.max(1,teamSize)*2+Math.floor(Math.random()*5),actualDamage=Math.min(state.enemyHp,d);state.enemyHp=Math.max(0,state.enemyHp-d);state.energy=Math.min(100,state.energy+10);floatNumber('enemyHpBar','-'+actualDamage);animateFighter('enemyHpBar','hp-flash');animateFighter('enemyAvatar','hit');battleFx('enemyAvatar','slash');battleShake();addLog(active.name+' 發動普通攻擊，造成 '+actualDamage+' 點傷害，恢復 10 點能量。');if(state.enemyHp<=0){if(Number(state.stage)===20&&advanceStage20Phase()){render();return}if(Number(state.stage)===50&&advanceStage50Phase()){render();return}render();win();return}const hit=enemyCounter(e);if(state.playerHp>0&&hit!==null)tell('你造成 '+actualDamage+' 點傷害，恢復 10 點能量；敵人反擊造成 '+hit+' 點傷害。');render()}
+function attack(){if(state.playerHp<=0||state.enemyHp<=0)return;$('victoryBanner')?.remove();const e=enemy(),team=readCollection().formation||[],teamSize=team.length,active=roster.find(ch=>ch.id===state.activeMember)||roster[0],d=getCardStats(active).atk+Math.floor((state.stage-1)/3)*2+Math.max(1,teamSize)*2+Math.floor(Math.random()*5),actualDamage=Math.min(state.enemyHp,d);state.enemyHp=Math.max(0,state.enemyHp-d);state.energy=Math.min(100,state.energy+10);floatNumber('enemyHpBar','-'+actualDamage);animateFighter('enemyHpBar','hp-flash');animateFighter('enemyAvatar','hit');battleFx('enemyAvatar','slash');battleShake();addLog(active.name+'發動普通攻擊：\n- 對敵方造成 '+actualDamage+' 點傷害。\n- 恢復 10 點能量。');if(state.enemyHp<=0){if(Number(state.stage)===20&&advanceStage20Phase()){render();return}if(Number(state.stage)===50&&advanceStage50Phase()){render();return}render();win();return}const hit=enemyCounter(e);if(state.playerHp>0&&hit!==null)tell('你造成 '+actualDamage+' 點傷害，恢復 10 點能量；敵人反擊造成 '+hit+' 點傷害。');render()}
 function openHealingTargetPicker(caster){if(state.energy<35){tell('能量不足！治療必殺技需要 35 點能量。');return;}const team=(readCollection().formation||[]).map(id=>roster.find(ch=>ch.id===id)).filter(Boolean),targets=team.filter(ch=>{const hp=Number(state.partyHp?.[ch.id]??maxHp(ch));return hp>0&&hp<maxHp(ch)});if(!targets.length){tell('目前沒有可治療的隊友（包含自己）。');return;}healingTargetMode=true;healingSelectedTargetId=null;skillMenuOpen=false;selectedCombatAction=null;tell('💚 請先點選一名受傷的存活隊員，選取後再按「確認補血」。');render()}
-function performCharacterHeal(targetId){const caster=roster.find(ch=>ch.id===state.activeMember)||roster[0],target=roster.find(ch=>ch.id===targetId),team=readCollection().formation||[];if(!['yutong','anzai_coach'].includes(caster.id)||getCardStats(caster).heal<=0||!target||!team.includes(targetId)||state.playerHp<=0||state.enemyHp<=0||state.energy<35)return;const before=Number(state.partyHp?.[targetId]??maxHp(target));if(before<=0||before>=maxHp(target))return;const amount=getCardStats(caster).heal*(caster.id==='anzai_coach'?2:1),after=Math.min(maxHp(target),before+amount),restored=after-before;if(restored<=0)return;state.energy-=35;healingTargetMode=false;healingSelectedTargetId=null;state.partyHp=state.partyHp||{};state.partyHp[targetId]=after;if(targetId===state.activeMember)state.playerHp=after;$('skillBackBtn').textContent='↩ 返回';$('skillBackBtn').hidden=true;$('victoryBanner')?.remove();if(targetId===state.activeMember)floatNumber('playerHpBar','+'+restored,true);addLog(caster.name+'施放「'+(caster.id==='anzai_coach'?'健康中心緊急補血':'先喝水再說！')+'」，消耗 35 點能量，指定治療 '+target.name+'，恢復 '+restored+' HP；不占用行動且不觸發敵方反擊。');tell('💚 '+target.name+' 恢復 '+restored+' HP，消耗 35 點能量。');save();render()}
-function useSkill(){const active=roster.find(ch=>ch.id===state.activeMember)||roster[0];if(state.playerHp<=0||state.enemyHp<=0)return;if(active.id==='yutong'||active.id==='anzai_coach'){if(getCardStats(active).heal<=0)return;if(state.energy<35){tell('能量不足！治療必殺技需要 35 點能量。');return;}openHealingTargetPicker(active);return;}if(state.energy<35)return;$('victoryBanner')?.remove();const e=enemy(),team=readCollection().formation||[],cost=35,enemyHpBefore=state.enemyHp;state.energy-=cost;let d=0,msg='';state.partyHp=state.partyHp||{};if(active.id==='qin_yitong'){const base=getCardStats(active).skill;d=Math.round(base*1.8)+Math.floor((state.stage-1)/3)*3+Math.floor(Math.random()*5);msg='秦依肜使出「糖果大作戰！」';state.enemyAttackDebuffTurns=Math.max(2,Number(state.enemyAttackDebuffTurns)||0);state.enemyHp=Math.max(0,state.enemyHp-d);addLog(msg+'：對敵方單體造成 '+Math.min(enemyHpBefore,d)+' 點傷害，並降低其攻擊力 15%，持續 2 個敵方回合（BOSS 有效）；消耗 35 點能量。')}else if(active.id==='konan_koyoi'){const base=getCardStats(active).skill;d=Math.round(base*1.5)+Math.floor((state.stage-1)/3)*3+Math.floor(Math.random()*5);msg='小宵虎南施放「手機剩 1%！」';state.enemyHp=Math.max(0,state.enemyHp-d);addLog(msg+'，對敵方單體造成技能威力 1.5 倍傷害（另計關卡加成與隨機值），消耗 35 點能量，造成 '+Math.min(enemyHpBefore,d)+' 點傷害。')}else if(active.id==='keqing'){state.guardNext=true;d=18+Math.floor(Math.random()*6);msg='江可晴施放「主管說再撐一下！」';state.enemyHp=Math.max(0,state.enemyHp-d);addLog(msg+'，造成 '+Math.min(enemyHpBefore,d)+' 點傷害，並使下次受到的傷害減半。')}else{const base=getCardStats(active).skill;d=base+Math.floor((state.stage-1)/3)*3+Math.floor(Math.random()*5);if(active.id==='ruoxue')msg='沈若雪施放「冷氣開到 16 度！」';else if(active.id==='xingyao')msg='許星瑤施放「外送倒數三分鐘！」';else if(active.id==='zihan')msg='顧紫涵施放「已讀不回大法！」';else msg='三上悠亞施放「超商微波便當！」';state.enemyHp=Math.max(0,state.enemyHp-d);addLog(msg+'，消耗 35 能量並造成 '+Math.min(enemyHpBefore,d)+' 點傷害。')}const actualDamage=Math.min(enemyHpBefore,d);if(actualDamage>0){floatNumber('enemyHpBar','-'+actualDamage);animateFighter('enemyHpBar','hp-flash');animateFighter('enemyAvatar','hit');battleFx('enemyAvatar','ultimate');battleShake()}if(state.enemyHp<=0){if(Number(state.stage)===20&&advanceStage20Phase()){render();return}if(Number(state.stage)===50&&advanceStage50Phase()){render();return}render();win();return}const hit=enemyCounter(e);if(state.playerHp>0&&!['yutong','anzai_coach'].includes(active.id)&&hit!==null)tell(msg+'造成 '+actualDamage+' 點傷害；敵人反擊造成 '+hit+' 點傷害。');render()}
-function defend(){if(state.playerHp<=0||state.enemyHp<=0)return;$('victoryBanner')?.remove();const e=enemy();state.defendNext=true;state.energy=Math.min(100,state.energy+5);battleFx('playerAvatar','shield');addLog((roster.find(ch=>ch.id===state.activeMember)?.name||'目前角色')+' 採取防禦姿態：下一次敵方攻擊傷害減少 30%，恢復 5 點能量。');const hit=enemyCounter(e);if(state.playerHp>0&&hit!==null)tell('🛡️ 防禦成功！敵人反擊造成 '+hit+' 點傷害。');render()}
-function heal(){const active=roster.find(ch=>ch.id===state.activeMember)||roster[0],cap=maxHp(active);if(state.supplyUsedStage||state.playerHp>=cap||state.enemyHp<=0)return;state.partyHp=state.partyHp||{};state.partyHp[active.id]=Math.min(cap,(state.partyHp[active.id]??state.playerHp)+50);const a=state.partyHp[active.id]-state.playerHp;state.playerHp=state.partyHp[active.id];battleFx('playerAvatar','heal');state.supplyUsedStage=true;state.potions=0;floatNumber('playerHpBar','+'+a,true);addLog('使用本關補給，恢復 '+a+' 點生命值（上限 50）。');tell('補給生效！恢復 '+a+' 點生命值；本關補給已使用。');render()}
+function performCharacterHeal(targetId){const caster=roster.find(ch=>ch.id===state.activeMember)||roster[0],target=roster.find(ch=>ch.id===targetId),team=readCollection().formation||[];if(!['yutong','anzai_coach'].includes(caster.id)||getCardStats(caster).heal<=0||!target||!team.includes(targetId)||state.playerHp<=0||state.enemyHp<=0||state.energy<35)return;const before=Number(state.partyHp?.[targetId]??maxHp(target));if(before<=0||before>=maxHp(target))return;const amount=getCardStats(caster).heal*(caster.id==='anzai_coach'?2:1),after=Math.min(maxHp(target),before+amount),restored=after-before;if(restored<=0)return;state.energy-=35;healingTargetMode=false;healingSelectedTargetId=null;state.partyHp=state.partyHp||{};state.partyHp[targetId]=after;if(targetId===state.activeMember)state.playerHp=after;$('skillBackBtn').textContent='↩ 返回';$('skillBackBtn').hidden=true;$('victoryBanner')?.remove();if(targetId===state.activeMember)floatNumber('playerHpBar','+'+restored,true);addLog(caster.name+'發動「'+(caster.id==='anzai_coach'?'健康中心緊急補血':'先喝水再說！')+'」：\n- 治療 '+target.name+'，恢復 '+restored+' 點生命。\n- 消耗 35 點能量。');tell('💚 '+target.name+' 恢復 '+restored+' HP，消耗 35 點能量。');save();render()}
+function useSkill(){const active=roster.find(ch=>ch.id===state.activeMember)||roster[0];if(state.playerHp<=0||state.enemyHp<=0)return;if(active.id==='yutong'||active.id==='anzai_coach'){if(getCardStats(active).heal<=0)return;if(state.energy<35){tell('能量不足！治療必殺技需要 35 點能量。');return;}openHealingTargetPicker(active);return;}if(state.energy<35)return;$('victoryBanner')?.remove();const e=enemy(),team=readCollection().formation||[],cost=35,enemyHpBefore=state.enemyHp;state.energy-=cost;let d=0,msg='';state.partyHp=state.partyHp||{};if(active.id==='qin_yitong'){const base=getCardStats(active).skill;d=Math.round(base*1.8)+Math.floor((state.stage-1)/3)*3+Math.floor(Math.random()*5);msg='秦依肜使出「糖果大作戰！」';state.enemyAttackDebuffTurns=Math.max(2,Number(state.enemyAttackDebuffTurns)||0);state.enemyHp=Math.max(0,state.enemyHp-d);addLog('秦依肜發動「糖果大作戰！」：\n- 對敵方造成 '+Math.min(enemyHpBefore,d)+' 點傷害。\n- 敵方攻擊力降低 15%，持續 2 個敵方回合（BOSS 有效）。\n- 消耗 35 點能量。')}else if(active.id==='konan_koyoi'){const base=getCardStats(active).skill;d=Math.round(base*1.5)+Math.floor((state.stage-1)/3)*3+Math.floor(Math.random()*5);msg='小宵虎南施放「手機剩 1%！」';state.enemyHp=Math.max(0,state.enemyHp-d);addLog('小宵虎南發動「手機剩 1%！」：\n- 對敵方造成 '+Math.min(enemyHpBefore,d)+' 點傷害。\n- 消耗 35 點能量。')}else if(active.id==='keqing'){state.guardNext=true;d=18+Math.floor(Math.random()*6);msg='江可晴施放「主管說再撐一下！」';state.enemyHp=Math.max(0,state.enemyHp-d);addLog('江可晴發動「主管說再撐一下！」：\n- 對敵方造成 '+Math.min(enemyHpBefore,d)+' 點傷害。\n- 我方下次受到的傷害減半。\n- 消耗 35 點能量。')}else{const base=getCardStats(active).skill;d=base+Math.floor((state.stage-1)/3)*3+Math.floor(Math.random()*5);if(active.id==='ruoxue')msg='沈若雪施放「冷氣開到 16 度！」';else if(active.id==='xingyao')msg='許星瑤施放「外送倒數三分鐘！」';else if(active.id==='zihan')msg='顧紫涵施放「已讀不回大法！」';else msg='三上悠亞施放「超商微波便當！」';state.enemyHp=Math.max(0,state.enemyHp-d);addLog(active.name+'發動「'+(active.id==='ruoxue'?'冷氣開到 16 度！':active.id==='xingyao'?'外送倒數三分鐘！':active.id==='zihan'?'已讀不回大法！':'超商微波便當！')+'」：\n- 對敵方造成 '+Math.min(enemyHpBefore,d)+' 點傷害。\n- 消耗 35 點能量。')}const actualDamage=Math.min(enemyHpBefore,d);if(actualDamage>0){floatNumber('enemyHpBar','-'+actualDamage);animateFighter('enemyHpBar','hp-flash');animateFighter('enemyAvatar','hit');battleFx('enemyAvatar','ultimate');battleShake()}if(state.enemyHp<=0){if(Number(state.stage)===20&&advanceStage20Phase()){render();return}if(Number(state.stage)===50&&advanceStage50Phase()){render();return}render();win();return}const hit=enemyCounter(e);if(state.playerHp>0&&!['yutong','anzai_coach'].includes(active.id)&&hit!==null)tell(msg+'造成 '+actualDamage+' 點傷害；敵人反擊造成 '+hit+' 點傷害。');render()}
+function defend(){if(state.playerHp<=0||state.enemyHp<=0)return;$('victoryBanner')?.remove();const e=enemy();state.defendNext=true;state.energy=Math.min(100,state.energy+5);battleFx('playerAvatar','shield');addLog((roster.find(ch=>ch.id===state.activeMember)?.name||'目前角色')+'進入防禦：\n- 下次受到的傷害減少 30%。\n- 恢復 5 點能量。');const hit=enemyCounter(e);if(state.playerHp>0&&hit!==null)tell('🛡️ 防禦成功！敵人反擊造成 '+hit+' 點傷害。');render()}
+function heal(){const active=roster.find(ch=>ch.id===state.activeMember)||roster[0],cap=maxHp(active);if(state.supplyUsedStage||state.playerHp>=cap||state.enemyHp<=0)return;state.partyHp=state.partyHp||{};state.partyHp[active.id]=Math.min(cap,(state.partyHp[active.id]??state.playerHp)+50);const a=state.partyHp[active.id]-state.playerHp;state.playerHp=state.partyHp[active.id];battleFx('playerAvatar','heal');state.supplyUsedStage=true;state.potions=0;floatNumber('playerHpBar','+'+a,true);addLog('使用本關補給：\n- 恢復 '+a+' 點生命。');tell('補給生效！恢復 '+a+' 點生命值；本關補給已使用。');render()}
 function closePartyDefeatModal(){$('partyDefeatOverlay')?.remove();document.body.style.overflow=''}
 function showPartyDefeatModal(){
  if($('partyDefeatOverlay'))return;
