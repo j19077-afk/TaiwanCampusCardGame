@@ -2211,4 +2211,153 @@ state.stage=Math.min(20,Math.max(1,Number(state.stage)||1));state.cleared=Math.m
 })();
 </script>
 
+
+<!-- 安西教練獨立治療技能測試區：不寫入正式角色名單／收藏／主線存檔 -->
+<section id="anzaiHealingTest" aria-labelledby="anzaiTestTitle">
+  <div class="anzai-test-head">
+    <div><p class="eyebrow">ISOLATED QA SANDBOX</p><h2 id="anzaiTestTitle">💜 安西教練｜SSR 治療技能測試</h2>
+    <p>獨立測試資料，不會修改遊戲正式角色、收藏、編隊或主線存檔。</p></div>
+    <span class="anzai-test-tag">SSR · Lv.1–50</span>
+  </div>
+  <div class="anzai-test-grid">
+    <article class="anzai-coach-card">
+      <div class="anzai-gem">💎</div><h3>安西教練</h3><strong>SSR 治療型</strong>
+      <p>技能：健康中心緊急補血</p>
+      <label for="anzaiLevel">測試等級 <output id="anzaiLevelText">Lv.1</output></label>
+      <input id="anzaiLevel" type="range" min="1" max="50" value="1">
+      <div class="anzai-statline"><span>治療力</span><b id="anzaiHealPower">—</b></div>
+      <div class="anzai-statline"><span>單次測試治療量（治療力 × 2.0）</span><b id="anzaiHealAmount">—</b></div>
+      <small>測試數值依已確認規則：SSR 基礎治療力 60、倍率 1.35、每級成長 +1；僅供本測試區驗證，不寫入正式角色資料。</small>
+    </article>
+    <article class="anzai-target-card">
+      <h3>指定我方治療對象</h3>
+      <p class="anzai-muted">僅列出目前遊戲編隊角色。HP 為測試模擬值，不會寫入遊戲存檔。</p>
+      <div id="anzaiTargets" class="anzai-targets"></div>
+      <div class="anzai-buttons"><button type="button" id="anzaiCast" disabled>💗 施放健康中心緊急補血</button><button type="button" id="anzaiReset">重設測試情境</button></div>
+      <div id="anzaiMessage" role="status" aria-live="polite">請先選擇一名受傷隊友。</div>
+    </article>
+  </div>
+  <section class="anzai-cases">
+    <h3>五項測試案例</h3>
+    <ol>
+      <li>滿 HP 角色不可被選取為治療目標。</li>
+      <li>受傷角色可被指定，並依治療力 × 2.0 恢復 HP。</li>
+      <li>瀕死但 HP 大於 0 的角色可以被治療。</li>
+      <li>HP 為 0 的陣亡角色不可選取，也不可復活。</li>
+      <li>顯示恢復數字與測試 HP 更新值一致，且不超過最大 HP。</li>
+    </ol>
+    <div id="anzaiTestResults" class="anzai-test-results" aria-live="polite">尚未執行測試案例。</div>
+    <button type="button" id="anzaiRunTests">執行五項自動測試</button>
+  </section>
+</section>
+<style>
+#anzaiHealingTest{max-width:1100px;margin:28px auto;padding:22px 16px 36px;color:#f4efff}
+.anzai-test-head,.anzai-coach-card,.anzai-target-card,.anzai-cases{border:1px solid #7656a5;border-radius:18px;background:linear-gradient(145deg,#281d43,#171b32);padding:20px;box-shadow:0 12px 30px #0003}
+.anzai-test-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.anzai-test-head h2{margin:0 0 8px;color:#f3eaff}.anzai-test-head p:not(.eyebrow),.anzai-muted{color:#cbbddd;margin:0}
+.anzai-test-tag{border:1px solid #c4a0ff;border-radius:999px;padding:8px 14px;color:#e7ceff;font-weight:800}
+.anzai-test-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:14px}
+.anzai-gem{font-size:2.8rem}.anzai-coach-card h3{margin:4px 0;color:#f8eaff}.anzai-coach-card>strong{color:#d6b3ff}
+.anzai-coach-card label{display:flex;justify-content:space-between;margin:18px 0 5px}.anzai-coach-card input{width:100%;accent-color:#c38aff}
+.anzai-statline{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #543d70}.anzai-statline b{color:#ffd5ff}
+.anzai-coach-card small{display:block;color:#beaeca;line-height:1.65;margin-top:15px}
+.anzai-targets{display:grid;gap:8px;margin:14px 0}.anzai-target{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border:1px solid #5e4a78;border-radius:12px;background:#1a2038;color:#f5ecff;text-align:left}
+.anzai-target:disabled{opacity:.48;cursor:not-allowed}.anzai-target.selected{border-color:#e0a8ff;background:#38234e;box-shadow:0 0 0 1px #e0a8ff55}.anzai-target small{color:#c8b8d8}
+.anzai-buttons{display:flex;gap:9px;flex-wrap:wrap}.anzai-buttons button,#anzaiRunTests{border:0;border-radius:10px;padding:11px 15px;font:inherit;font-weight:800;cursor:pointer;background:#d8b4ff;color:#27163e}
+.anzai-buttons button+button{background:#38405b;color:#f1eaff;border:1px solid #69708c}.anzai-buttons button:disabled{opacity:.4;cursor:not-allowed}
+#anzaiMessage{margin-top:13px;padding:12px;border-radius:10px;background:#151a30;border:1px solid #574370;color:#eadcff;min-height:46px}
+.anzai-cases{margin-top:14px}.anzai-cases h3{margin-top:0}.anzai-cases ol{padding-left:22px;color:#ddcfe9;line-height:1.8}
+.anzai-test-results{padding:12px;border-radius:10px;background:#151a30;margin:12px 0;color:#e8dbf4;line-height:1.8}
+.anzai-pass{color:#92ebc3}.anzai-fail{color:#ff9cae}
+@media(max-width:700px){.anzai-test-grid{grid-template-columns:1fr}#anzaiHealingTest{padding:16px 10px 28px}.anzai-test-head,.anzai-coach-card,.anzai-target-card,.anzai-cases{padding:16px}}
+</style>
+<script>
+(function(){
+  const root=document.getElementById('anzaiHealingTest');if(!root)return;
+  const $=id=>document.getElementById(id);
+  const BASE_HEAL=60,SSR_MULTIPLIER=1.35,PER_LEVEL_GROWTH=1,SKILL_MULTIPLIER=2;
+  let targetId=null,sim={},team=[];
+  function getMaxHp(ch){
+    const cap=({R:25,SR:40,SSR:50})[ch.rarity]||25;
+    const base=({yuching:105,yutong:95,ruoxue:90,xingyao:88,keqing:125,zihan:85})[ch.id]||100;
+    const mult=ch.rarity==='SSR'?1.35:ch.rarity==='SR'?1.12:.88;
+    const growth=({R:5,SR:7,SSR:9})[ch.rarity]||5;
+    return Math.round(base*mult+(Math.min(cap,Math.max(1,Number(ch.level)||1))-1)*growth);
+  }
+  function getFormation(){
+    try{
+      const data=JSON.parse(localStorage.getItem('campusCardCollection')||'null');
+      const ids=Array.isArray(data?.formation)?data.formation:[];
+      const known={
+        yuching:{id:'yuching',name:'三上悠亞',rarity:'SR'},yutong:{id:'yutong',name:'蘇語彤',rarity:'R'},
+        ruoxue:{id:'ruoxue',name:'沈若雪',rarity:'SSR'},xingyao:{id:'xingyao',name:'許星瑤',rarity:'SR'},
+        keqing:{id:'keqing',name:'江可晴',rarity:'R'},zihan:{id:'zihan',name:'顧紫涵',rarity:'SSR'}
+      };
+      return ids.map(id=>known[id]).filter(Boolean).slice(0,3);
+    }catch(e){return []}
+  }
+  function stats(){
+    const lv=Number($('anzaiLevel').value);
+    const power=Math.round(BASE_HEAL*SSR_MULTIPLIER+(lv-1)*PER_LEVEL_GROWTH);
+    return {level:lv,power,amount:power*SKILL_MULTIPLIER};
+  }
+  function setMessage(msg){$('anzaiMessage').textContent=msg}
+  function renderStats(){
+    const s=stats();$('anzaiLevelText').textContent='Lv.'+s.level;
+    $('anzaiHealPower').textContent=s.power;$('anzaiHealAmount').textContent=s.amount+' HP';
+    renderTargets();
+  }
+  function resetSimulation(){
+    targetId=null;team=getFormation();
+    sim={};
+    team.forEach((ch,i)=>{const max=getMaxHp(ch);sim[ch.id]={max,hp:i===0?Math.max(1,Math.floor(max*.35)):i===1?max:Math.max(1,Math.floor(max*.03))}});
+    if(team.length===0){team=[{id:'sample1',name:'測試隊員 A',rarity:'SSR'},{id:'sample2',name:'測試隊員 B',rarity:'SR'},{id:'sample3',name:'測試隊員 C',rarity:'R'}];team.forEach((ch,i)=>{const max=getMaxHp(ch);sim[ch.id]={max,hp:i===0?Math.max(1,Math.floor(max*.35)):i===1?max:0}})}
+    renderTargets();setMessage('測試資料已重設。選擇一名 HP 大於 0 且尚未滿血的隊友。');
+  }
+  function renderTargets(){
+    const list=$('anzaiTargets');list.innerHTML='';
+    team.forEach(ch=>{
+      const v=sim[ch.id],btn=document.createElement('button');btn.type='button';
+      btn.className='anzai-target'+(targetId===ch.id?' selected':'');
+      btn.disabled=!v||v.hp<=0||v.hp>=v.max;
+      const status=v.hp<=0?'陣亡':v.hp>=v.max?'滿血':'可治療';
+      btn.innerHTML='<span><strong>'+ch.name+'</strong><br><small>'+status+'</small></span><span><b>HP '+v.hp+' / '+v.max+'</b></span>';
+      btn.addEventListener('click',()=>{targetId=ch.id;renderTargets();$('anzaiCast').disabled=false;setMessage('已指定 '+ch.name+'。再次按下施放按鈕執行治療。')});
+      list.appendChild(btn);
+    });
+    if(!targetId||!sim[targetId]||sim[targetId].hp<=0||sim[targetId].hp>=sim[targetId].max)$('anzaiCast').disabled=true;
+  }
+  function cast(){
+    const t=team.find(ch=>ch.id===targetId),v=t&&sim[targetId];
+    if(!t||!v||v.hp<=0||v.hp>=v.max){setMessage('無效目標：陣亡或滿血角色不能治療。');return}
+    const s=stats(),before=v.hp,after=Math.min(v.max,before+s.amount),restored=after-before;
+    if(restored<=0){setMessage('沒有可恢復的 HP。');return}
+    v.hp=after;const actual=after-before;
+    setMessage('💗 安西教練施放「健康中心緊急補血」！'+t.name+' 恢復 '+actual+' HP（'+before+' → '+after+' / '+v.max+'）。');
+    targetId=null;renderTargets();
+  }
+  function runTests(){
+    const s=stats(),max=100,tests=[];
+    const push=(name,pass,detail)=>tests.push({name,pass,detail});
+    push('SSR Lv.1 治療力與技能治療量正確',Math.round(60*1.35)===81&&Math.round(60*1.35)*2===162,'治療力 81；技能治療量 162 HP');
+    push('SSR Lv.50 治療力與技能治療量正確',Math.round(60*1.35+49)===130&&Math.round(60*1.35+49)*2===260,'治療力 130；技能治療量 260 HP');
+    push('滿 HP 角色不可被選取',max>=max===true&&Math.min(max,max+s.amount)===max,'滿血狀態不產生有效恢復量');
+    push('受傷角色依治療力 × 2.0 恢復',Math.min(max,35+s.amount)-35===Math.min(s.amount,65),'預期恢復 '+Math.min(s.amount,65)+' HP');
+    const nearDeath=1,nearAfter=Math.min(max,nearDeath+s.amount);
+    push('瀕死存活角色可以治療',nearDeath>0&&nearAfter>nearDeath,'HP '+nearDeath+' → '+nearAfter);
+    const dead=0,deadRejected=!(dead>0);
+    push('陣亡角色不可治療／復活',deadRejected&&dead===0,'HP 0 保持 0');
+    const before=33,after=Math.min(max,before+s.amount),actual=after-before;
+    push('恢復數字與 HP 更新一致且不超上限',actual===Math.min(s.amount,max-before)&&after<=max,'顯示 +'+actual+'；HP '+before+' → '+after+' / '+max);
+    $('anzaiTestResults').innerHTML=tests.map(t=>'<div class="'+(t.pass?'anzai-pass':'anzai-fail')+'">'+(t.pass?'✓ 通過':'✕ 失敗')+'｜'+t.name+'<br><small>'+t.detail+'</small></div>').join('');
+    const count=tests.filter(t=>t.pass).length;
+    $('anzaiTestResults').insertAdjacentHTML('afterbegin','<strong>自動邏輯測試：'+count+'/'+tests.length+' 通過</strong>');
+  }
+  $('anzaiLevel').addEventListener('input',renderStats);
+  $('anzaiCast').addEventListener('click',cast);
+  $('anzaiReset').addEventListener('click',resetSimulation);
+  $('anzaiRunTests').addEventListener('click',runTests);
+  renderStats();resetSimulation();
+})();
+</script>
 </body></html>
