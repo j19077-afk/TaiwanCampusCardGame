@@ -1,0 +1,65 @@
+name: Isolated production diagnostics
+on:
+  push:
+    branches:
+      - diagnostic/isolation-8a0d85e
+    paths:
+      - 'index.html'
+      - '.github/workflows/diagnostic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout isolated branch
+        uses: actions/checkout@v4
+      - name: Validate inline JavaScript and local assets
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re, subprocess, tempfile, sys
+          html = Path("index.html").read_text(encoding="utf-8")
+          class Scan(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=False)
+                  self.scripts=[]; self.current=None; self.refs=[]
+              def handle_starttag(self, tag, attrs):
+                  a=dict(attrs)
+                  if tag.lower()=="script":
+                      self.current={"attrs":a,"parts":[]}
+                  for key in ("src","href"):
+                      value=a.get(key,"")
+                      if value and not value.startswith(("http://","https://","data:","#","//")):
+                          self.refs.append(value.split("?",1)[0].split("#",1)[0])
+              def handle_data(self, data):
+                  if self.current is not None: self.current["parts"].append(data)
+              def handle_endtag(self, tag):
+                  if tag.lower()=="script" and self.current is not None:
+                      self.scripts.append(self.current); self.current=None
+          scan=Scan(); scan.feed(html); scan.close()
+          errors=[]
+          for n, item in enumerate(scan.scripts,1):
+              if item["attrs"].get("src"): continue
+              typ=item["attrs"].get("type","").lower()
+              if typ and typ not in ("text/javascript","application/javascript","module"): continue
+              code="".join(item["parts"])
+              with tempfile.NamedTemporaryFile("w",suffix=".js",encoding="utf-8") as f:
+                  f.write(code); f.flush()
+                  p=subprocess.run(["node","--check",f.name],capture_output=True,text=True)
+                  if p.returncode: errors.append(f"Inline script {n}: {p.stderr.strip()}")
+          missing=[]
+          for ref in sorted(set(scan.refs)):
+              p=Path(ref)
+              if not p.exists(): missing.append(ref)
+          print(f"HTML bytes: {len(html.encode('utf-8'))}")
+          print(f"Inline scripts checked: {sum(not x['attrs'].get('src') for x in scan.scripts)}")
+          print(f"Local asset references: {len(set(scan.refs))}")
+          print(f"Missing local assets: {len(missing)}")
+          for item in missing: print("MISSING:",item)
+          for item in errors: print("JS ERROR:",item)
+          if errors or missing: sys.exit(1)
+          print("DIAGNOSTIC CHECKS PASSED")
+          PY
