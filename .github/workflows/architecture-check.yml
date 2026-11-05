@@ -1,0 +1,26 @@
+name: Validate isolated architecture test
+on:
+  push:
+    branches: ["rebuild/web-architecture-test-20261105"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check required files
+        run: |
+          test -f test.html
+          test -f assets/css/app.css
+          test -f assets/js/app.js
+      - name: Check JavaScript syntax
+        run: node --check assets/js/app.js
+      - name: Check separated asset references
+        run: |
+          grep -Fq './assets/css/app.css' test.html
+          grep -Fq './assets/js/app.js' test.html
+          ! grep -Eq '<style|<script>' test.html
+          grep -Fq '../../campus-hero.png.png' assets/css/app.css
