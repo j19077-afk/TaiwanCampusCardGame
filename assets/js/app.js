@@ -1,5 +1,10 @@
 
-(()=>{\n// 舊測試頁專用存檔隔離：避免測試用無限金幣覆寫正式版進度。\nconst __nativeStorage=window.localStorage;\nconst __testPrefix='campusSixItemLegacyTest20261102::';\nconst localStorage={getItem(key){return __nativeStorage.getItem(__testPrefix+key)},setItem(key,value){return __nativeStorage.setItem(__testPrefix+key,String(value))},removeItem(key){return __nativeStorage.removeItem(__testPrefix+key)}};\nlet skillMenuOpen=false,selectedCombatAction=null,healingTargetMode=false,healingSelectedTargetId=null;const $=id=>document.getElementById(id);const lobby=$('lobby'),gameApp=$('gameApp');
+(()=>{
+// 舊測試頁專用存檔隔離：避免測試用無限金幣覆寫正式版進度。
+const __nativeStorage=window.localStorage;
+const __testPrefix='campusSixItemLegacyTest20261102::';
+const localStorage={getItem(key){return __nativeStorage.getItem(__testPrefix+key)},setItem(key,value){return __nativeStorage.setItem(__testPrefix+key,String(value))},removeItem(key){return __nativeStorage.removeItem(__testPrefix+key)}};
+let skillMenuOpen=false,selectedCombatAction=null,healingTargetMode=false,healingSelectedTargetId=null;const $=id=>document.getElementById(id);const lobby=$('lobby'),gameApp=$('gameApp');
 // 戰鬥返回使用捕獲階段的全域點擊攔截，避免其他事件或畫面狀態令按鈕失效。
 
 // Homepage spotlight: show existing roster data in a focused modal; do not alter other screens.
