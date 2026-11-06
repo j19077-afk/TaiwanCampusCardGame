@@ -1976,7 +1976,10 @@ function challengeDailyState(n,source=state){
 function sweepDailyState(n=Number($('sweepStage')?.value)||1){return challengeDailyState(n)}
 function clearedSweepStages(){
  const unlocked=new Set(unlockedChallengeStages());
- return [...new Set((Array.isArray(state.challengeClearedStages)?state.challengeClearedStages:[]).map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=50&&unlocked.has(n)))].sort((a,b)=>a-b);
+ const challengeCleared=Array.isArray(state.challengeClearedStages)?state.challengeClearedStages:[];
+ // 掃蕩資格同時承認正式主線通關紀錄與挑戰模式通關紀錄。
+ const mainlineCleared=mainlineClearedStages();
+ return [...new Set([...mainlineCleared,...challengeCleared].map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=50&&unlocked.has(n)))].sort((a,b)=>a-b);
 }
 function sweepReward(n){return replayReward(n)+replayBossBonus(n)}
 function openSweep(){
