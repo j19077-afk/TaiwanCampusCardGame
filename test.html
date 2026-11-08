@@ -2470,7 +2470,8 @@ $('battleParty').addEventListener('click',ev=>{const btn=ev.target.closest('[dat
 
 $('battleParty').addEventListener('click',ev=>{if(ev.target.closest('#healConfirmBtn')){if(!healingTargetMode||!healingSelectedTargetId)return;performCharacterHeal(healingSelectedTargetId)}if(ev.target.closest('#healCancelSelectBtn')){healingSelectedTargetId=null;tell('已取消本次選取，請重新選擇治療隊員。');render()}});const logBox=$('log'),logToggle=$('toggleFullLog');if(logBox&&logToggle){logToggle.addEventListener('click',()=>{const all=logBox.classList.toggle('show-all');logToggle.textContent=all?'收合紀錄 ↑':'查看全部紀錄 ↓';logToggle.setAttribute('aria-expanded',String(all));const hint=document.querySelector('.battle-history-hint');if(hint)hint.textContent=all?'完整戰鬥歷史 · 最新紀錄置頂':'最新 3 筆紀錄 · 點擊可查看完整戰鬥歷史';});}
 $('attackBtn').onclick=()=>handleCombatAction('attack');$('defendBtn').onclick=()=>handleCombatAction('defend');$('skillBtn').onclick=()=>{selectedCombatAction=null;if(!skillMenuOpen){skillMenuOpen=true;render();return;}if(state.energy<35){tell('能量不足！必殺技需要 35 點能量。');addLog('必殺技執行失敗：能量不足（需要 35 點）。');return;}skillMenuOpen=false;useSkill()};$('skillBackBtn').onclick=()=>{if(healingTargetMode){healingTargetMode=false;healingSelectedTargetId=null;tell('已取消治療選擇。');}$('skillBackBtn').textContent='↩ 返回';skillMenuOpen=false;render()};$('healBtn').onclick=()=>handleCombatAction('heal');$('resetBtn').onclick=reset;window.history.replaceState({screen:location.hash==='#game'?'game':'lobby'},'',location.hash==='#game'?'#game':'#lobby');const syncScreen=()=>{if(location.hash==='#game')showGame();else if(location.hash==='#archive')openArchive();else if(location.hash==='#summon')openSummon();else showLobby()};window.addEventListener('popstate',syncScreen);window.addEventListener('hashchange',syncScreen);if(!Number.isFinite(state.stage)||state.stage<1)state=defaults();
-state.stage=Math.min(50,Math.max(1,Number(state.stage)||1));state.mainlineClearedStagesV2=Array.isArray(state.mainlineClearedStagesV2)?[...new Set(state.mainlineClearedStagesV2.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=50))].sort((a,b)=>a-b):Array.from({length:Math.max(0,state.stage-1)},(_,i)=>i+1);state.cleared=state.mainlineClearedStagesV2.length?Math.max(...state.mainlineClearedStagesV2):0;if(Number(state.stage)===20&&!Number.isInteger(Number(state.stage20Phase))){state.stage20Phase=0;state.stage20SpecialPending=false;state.stage20Rotation=0;state.stage20BossTurns=0;state.enemyHp=stage20Config().hp;state.enemyEnergy=0;state.pendingEnemySkill=null;state.enemySkillNotice=null}if(Number(state.stage)===50&&!Number.isInteger(Number(state.stage50Phase))){state.stage50Phase=0;state.stage50SpecialPending=false;state.stage50Rotation=0;state.stage50BossTurns=0;state.enemyHp=stage50Config().hp;state.enemyEnergy=0;state.pendingEnemySkill=null;state.enemySkillNotice=null}if(state.enemyHp<=0)state.enemyHp=enemy().hp;if(typeof state.bossCharge!=='boolean')state.bossCharge=false;if(state.playerHp<=0)tell('你目前已經被擊倒。按「重新開始遊戲」再次挑戰。');bindBattleFxSettings();render();if(location.hash==='#archive')openArchive();else if(location.hash==='#game'||(typeof restoredChallengeBattle!=='undefined'&&restoredChallengeBattle))showGame();else showLobby();})();
+state.stage=Math.min(50,Math.max(1,Number(state.stage)||1));state.mainlineClearedStagesV2=Array.isArray(state.mainlineClearedStagesV2)?[...new Set(state.mainlineClearedStagesV2.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=50))].sort((a,b)=>a-b):Array.from({length:Math.max(0,state.stage-1)},(_,i)=>i+1);state.cleared=state.mainlineClearedStagesV2.length?Math.max(...state.mainlineClearedStagesV2):0;if(Number(state.stage)===20&&!Number.isInteger(Number(state.stage20Phase))){state.stage20Phase=0;state.stage20SpecialPending=false;state.stage20Rotation=0;state.stage20BossTurns=0;state.enemyHp=stage20Config().hp;state.enemyEnergy=0;state.pendingEnemySkill=null;state.enemySkillNotice=null}if(Number(state.stage)===50&&!Number.isInteger(Number(state.stage50Phase))){state.stage50Phase=0;state.stage50SpecialPending=false;state.stage50Rotation=0;state.stage50BossTurns=0;state.enemyHp=stage50Config().hp;state.enemyEnergy=0;state.pendingEnemySkill=null;state.enemySkillNotice=null}if(state.enemyHp<=0)state.enemyHp=enemy().hp;if(typeof state.bossCharge!=='boolean')state.bossCharge=false;if(state.playerHp<=0)tell('你目前已經被擊倒。按「重新開始遊戲」再次挑戰。');bindBattleFxSettings();render();if(location.hash==='#archive')openArchive();else if(location.hash==='#game'||(typeof restoredChallengeBattle!=='undefined'&&restoredChallengeBattle))showGame();else showLobby();
+window.CampusApocBridge={getTeam:function(){const col=readCollection(),ids=Array.isArray(col.formation)?col.formation:[];return ids.map(id=>roster.find(c=>c.id===id)).filter(Boolean).map(ch=>{const stats=getCardStats(ch);return{id:ch.id,name:ch.name,maxHp:stats.hp,hp:stats.hp,atk:stats.atk,skill:stats.skill,heal:stats.heal}})},addCoins:function(amount){state.coins=Math.max(0,Number(state.coins)||0)+Math.max(0,Number(amount)||0);save();refreshLobby();return state.coins},enterPage:function(){gameApp.style.display='none';lobby.style.display='none';['archivePage','summonPage','stageCenterPage'].forEach(id=>{const el=$(id);if(el)el.style.display='none'})},returnLobby:function(){showLobby()}};})();
 </script>
 <script>
 (function(){
@@ -2566,19 +2567,13 @@ function ensurePage(){
 function showCenter(){
  run=null;logLines=[];
  const s=loadSave(),root=ensurePage(),content=root.querySelector('#apocContent');
- if(typeof lobby!=='undefined'&&lobby)lobby.style.display='none';
- if(typeof gameApp!=='undefined'&&gameApp)gameApp.style.display='none';
- ['archivePage','summonPage','stageCenterPage'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none'});
+ if(!window.CampusApocBridge)throw new Error('主遊戲介面尚未載入');window.CampusApocBridge.enterPage();
  root.style.display='grid';document.body.style.overflow='';
  try{history.replaceState({screen:'apocalypse-survival'},'','#apocalypse-survival')}catch(e){}
  content.innerHTML='<div class="apoc-overview"><div class="apoc-stat"><span>最高解鎖</span><strong>第 '+s.highestUnlocked+' 層</strong></div><div class="apoc-stat"><span>今日剩餘挑戰</span><strong>'+s.remaining+' / 3 次</strong></div></div><div class="apoc-reset-note">每日台灣時間 00:00 恢復 3 次；最高解鎖層數永久保存。已解鎖關卡可重玩，五層共用每日次數。</div><div class="apoc-stage-grid">'+APOC_STAGES.map((st,i)=>{const n=i+1,unlocked=n<=s.highestUnlocked,available=s.remaining>0;return '<article class="apoc-stage '+(unlocked?'is-unlocked':'is-locked')+'"><div class="apoc-stage-number">第 '+n+' 層</div><div class="apoc-stage-icon">'+(n===5?'☣️':'🏫')+'</div><h3>'+st.title+'</h3><p>'+st.place+' · '+st.enemies.map(e=>e.type).join('＋')+'</p><div class="apoc-reward">勝利獎勵：'+APOC_REWARDS[i]+' 金幣</div><button type="button" class="btn '+(unlocked?'primary':'secondary')+'" data-apoc-start="'+n+'" '+(!unlocked||!available?'disabled':'')+'>'+(unlocked?(available?'⚔️ 進入挑戰':'今日次數已用完'):'🔒 尚未解鎖')+'</button></article>'}).join('')+'</div><p class="apoc-footnote">同一場戰鬥最多同時出現 2 位敵人。離開、重新整理或關閉頁面會使未完成挑戰失敗，已扣除次數不退還。</p>';
  // 關卡按鈕統一由下方 document capture delegation 處理，避免頁面重繪或外層事件攔截造成失效。
 }
-function currentTeam(){
- const col=readCollection(),ids=Array.isArray(col.formation)?col.formation:[],team=ids.map(id=>roster.find(c=>c.id===id)).filter(Boolean);
- if(!team.length){const fallback=roster.find(c=>c.id==='yuching')||roster[0];if(fallback)team.push(fallback)}
- return team;
-}
+function currentTeam(){const bridge=window.CampusApocBridge;if(!bridge||typeof bridge.getTeam!=='function')throw new Error('主遊戲角色資料介面尚未就緒');const team=bridge.getTeam();if(!team.length)throw new Error('目前沒有可出戰角色，請先確認隊伍編成');return team;}
 function startRun(stage){
  const s=loadSave();
  if(!Number.isInteger(stage)||stage<1||stage>s.highestUnlocked||s.remaining<=0){showCenter();return}
@@ -2646,8 +2641,7 @@ function finishRun(won,message){
   const reward=APOC_REWARDS[stage-1],s=loadSave();
   s.highestUnlocked=Math.max(s.highestUnlocked,Math.min(5,stage+1));
   if(!storeSave(s)){run=null;showCenter();return}
-  state.coins=Math.max(0,Number(state.coins)||0)+reward;
-  save();
+  if(!window.CampusApocBridge||typeof window.CampusApocBridge.addCoins!=='function')throw new Error('主遊戲金幣存檔介面尚未就緒');window.CampusApocBridge.addCoins(reward);
   addLog('勝利！獲得 '+reward+' 金幣。');
   run=null;showResult(true,stage,reward,message);
  }else{
@@ -2662,7 +2656,7 @@ function showResult(won,stage,reward,message){
 document.addEventListener('click',function(ev){
  const target=ev.target instanceof Element?ev.target:null;if(!target)return;
  const back=target.closest('#apocBackBtn');
- if(back){ev.preventDefault();ev.stopImmediatePropagation();if(run)finishRun(false,'離開挑戰，視為本次失敗。');showLobby();return}
+ if(back){ev.preventDefault();ev.stopImmediatePropagation();if(run)finishRun(false,'離開挑戰，視為本次失敗。');window.CampusApocBridge.returnLobby();return}
  const start=target.closest('#apocalypseSurvivalPage [data-apoc-start]');
  if(start&&!start.disabled){ev.preventDefault();ev.stopImmediatePropagation();try{startRun(Number(start.dataset.apocStart))}catch(err){console.error('末日生存戰進場錯誤',err);const box=document.querySelector('#apocalypseSurvivalPage #apocContent');if(box)box.insertAdjacentHTML('afterbegin','<p class="apoc-footnote">挑戰載入失敗：'+escapeText(err&&err.message||String(err))+'</p>')}return}
 },true);
