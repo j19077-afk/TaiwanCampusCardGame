@@ -2548,8 +2548,11 @@ function dayKey(){try{return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tai
 function loadSave(){
  let v={};try{v=JSON.parse(localStorage.getItem(APOC_KEY)||'{}')||{}}catch(e){}
  const today=dayKey();
- const out={version:1,highestUnlocked:Math.max(1,Math.min(5,Math.floor(Number(v.highestUnlocked)||1))),dailyDate:typeof v.dailyDate==='string'?v.dailyDate:today,remaining:Number.isFinite(Number(v.remaining))?Math.max(0,Math.min(3,Math.floor(Number(v.remaining)))):3,totalWins:Math.max(0,Math.floor(Number(v.totalWins)||0))};
- if(out.dailyDate!==today){out.dailyDate=today;out.remaining=3;storeSave(out)}
+ const savedVersion=Math.max(0,Math.floor(Number(v.version)||0));
+ const out={version:2,highestUnlocked:Math.max(1,Math.min(5,Math.floor(Number(v.highestUnlocked)||1))),dailyDate:typeof v.dailyDate==='string'?v.dailyDate:today,remaining:(v.remaining===null||v.remaining===undefined||!Number.isFinite(Number(v.remaining)))?3:Math.max(0,Math.min(3,Math.floor(Number(v.remaining)))),totalWins:Math.max(0,Math.floor(Number(v.totalWins)||0))};
+ // v1 測試存檔曾可能在未真正進場時留下 0 次；升級時只校正一次每日次數，保留永久進度與勝場。
+ if(savedVersion<2){out.dailyDate=today;out.remaining=3;storeSave(out)}
+ else if(out.dailyDate!==today){out.dailyDate=today;out.remaining=3;storeSave(out)}
  return out;
 }
 function storeSave(v){try{localStorage.setItem(APOC_KEY,JSON.stringify(v));return true}catch(e){console.error('校園末日生存戰存檔失敗',e);return false}}
