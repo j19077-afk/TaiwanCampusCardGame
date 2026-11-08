@@ -2580,7 +2580,7 @@ function startRun(stage){
  s.remaining=Math.max(0,s.remaining-1);
  if(!storeSave(s)){showCenter();return}
  const team=currentTeam();
- run={stage,entryDate:s.dailyDate,remainingAtEntry:s.remaining,team:team.map(ch=>({id:ch.id,name:ch.name,maxHp:maxHp(ch),hp:maxHp(ch),atk:getCardStats(ch).atk,skill:getCardStats(ch).skill,heal:getCardStats(ch).heal})),active:0,energy:0,defending:false,supplyUsed:false,enemies:APOC_STAGES[stage-1].enemies.map((e,i)=>({...e,maxHp:e.hp,hp:e.hp,index:i})),finished:false};
+ run={stage,entryDate:s.dailyDate,remainingAtEntry:s.remaining,team:team.map(ch=>({...ch})),active:0,energy:0,defending:false,supplyUsed:false,enemies:APOC_STAGES[stage-1].enemies.map((e,i)=>({...e,maxHp:e.hp,hp:e.hp,index:i})),finished:false};
  logLines=['第 '+stage+' 層開始：'+APOC_STAGES[stage-1].title+'。挑戰次數已扣除 1 次。'];
  renderBattle();
 }
