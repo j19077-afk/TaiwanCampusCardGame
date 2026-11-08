@@ -1628,6 +1628,134 @@
  .battle-shatter-piece{animation-duration:.01ms!important}
 }
 
+
+/* BATTLE_UI_C+D_PREMIUM_V1: visual-only battle interface refinement; preserve gameplay and handlers. */
+#gameApp #battlePanel{
+ position:relative;isolation:isolate;overflow:hidden;
+ background:
+  radial-gradient(ellipse at 16% 8%,rgba(91,160,194,.16),transparent 36%),
+  radial-gradient(ellipse at 88% 18%,rgba(160,91,168,.18),transparent 34%),
+  linear-gradient(145deg,#1b304b 0%,#142239 54%,#101a2b 100%);
+ border-color:#58708e;box-shadow:0 20px 55px rgba(0,0,0,.34),inset 0 1px rgba(226,239,255,.08);
+}
+#gameApp #battlePanel:before{
+ content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.42;
+ background:repeating-linear-gradient(132deg,transparent 0 42px,rgba(170,205,230,.025) 43px 44px,transparent 45px 88px);
+}
+#gameApp #battlePanel>.battle-arena,
+#gameApp #battlePanel>.battle-action-layout{position:relative;z-index:1}
+#gameApp .battle-arena>.fighter{
+ border-color:rgba(155,194,225,.34);
+ background:linear-gradient(155deg,rgba(43,70,98,.96),rgba(20,35,55,.98) 72%);
+ box-shadow:0 12px 28px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.09);
+}
+#gameApp .battle-arena>.fighter.enemy{
+ border-color:rgba(226,112,139,.48);
+ background:linear-gradient(155deg,rgba(83,48,70,.96),rgba(31,27,47,.99) 72%);
+ box-shadow:0 12px 30px rgba(0,0,0,.28),inset 0 1px rgba(255,220,230,.08);
+}
+#gameApp .battle-arena>.player-fighter>.avatar{
+ filter:drop-shadow(0 8px 16px rgba(83,208,190,.19));
+}
+#gameApp .battle-arena>.fighter.enemy>.avatar{
+ filter:drop-shadow(0 8px 18px rgba(255,83,112,.2));
+}
+#gameApp .battle-arena>.fighter>.avatar img{
+ filter:drop-shadow(0 4px 9px rgba(0,0,0,.28));
+}
+#gameApp .battle-arena>.fighter>h3{
+ text-shadow:0 2px 12px rgba(0,0,0,.35);letter-spacing:.025em;
+}
+#gameApp .battle-arena>.player-fighter>.bar>.fill{
+ background:linear-gradient(180deg,#a4f0ca 0%,#48cfa4 100%);
+ box-shadow:0 0 12px rgba(76,220,169,.24);
+}
+#gameApp .battle-arena>.fighter.enemy>.bar>.fill{
+ background:linear-gradient(180deg,#ff9b9f 0%,#ef526e 100%);
+ box-shadow:0 0 12px rgba(255,77,108,.25);
+}
+#gameApp .battle-arena>.versus{
+ color:#ffe09a;text-shadow:0 0 12px rgba(255,205,113,.4),0 2px 4px #0008;
+}
+#gameApp .battle-action-layout{gap:12px 18px}
+#gameApp .battle-action-right .notice{
+ border:1px solid rgba(117,158,196,.24);border-left:3px solid #79d7d0;
+ border-radius:12px;background:linear-gradient(100deg,#101e31,#14243a);
+ box-shadow:inset 0 1px rgba(255,255,255,.035);
+}
+#gameApp .compact-combat-controls>.btn{
+ min-height:58px;border-radius:13px;font-weight:800;
+ box-shadow:0 5px 12px rgba(0,0,0,.16),inset 0 1px rgba(255,255,255,.07);
+}
+#gameApp .compact-combat-controls>#attackBtn{
+ color:#10202a!important;background:linear-gradient(110deg,#8be1d7,#75d9ae)!important;
+ border:1px solid #b2f2df!important;box-shadow:0 6px 18px rgba(88,213,177,.2),inset 0 1px #ffffff88!important;
+}
+#gameApp .compact-combat-controls>#attackBtn:hover:not(:disabled){filter:brightness(1.08)!important;box-shadow:0 8px 22px rgba(88,213,177,.28)!important}
+#gameApp .compact-combat-controls>#defendBtn{background:linear-gradient(145deg,#354f70,#263b56)!important;border-color:#58799c!important}
+#gameApp .compact-combat-controls>#skillBtn{background:linear-gradient(145deg,#514274,#342b55)!important;border-color:#806bb0!important}
+#gameApp .compact-combat-controls>#healBtn{background:linear-gradient(145deg,#315d56,#24453f)!important;border-color:#548f7d!important}
+#gameApp .compact-combat-controls>.btn:disabled{filter:saturate(.45);box-shadow:none;opacity:.48}
+#gameApp #battlePanel>.party-sidebar,
+#gameApp .battle-action-right .party-sidebar{
+ border:1px solid rgba(120,170,196,.3);
+ background:linear-gradient(145deg,#192d45,#132237);
+ box-shadow:inset 0 1px rgba(255,255,255,.045);
+}
+#gameApp .battle-action-right .party-sidebar h3{
+ color:#8de1d2;font-size:14px;letter-spacing:.06em;
+}
+#gameApp .battle-party{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#gameApp .battle-party>.battle-ally{
+ min-width:0;min-height:76px;padding:10px 8px;border-radius:12px;
+ border:1px solid #3b526d;background:linear-gradient(145deg,#1d3048,#15243a);
+ color:#eaf2ff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+ box-shadow:inset 0 1px rgba(255,255,255,.035);transition:border-color .16s,background .16s,transform .16s,box-shadow .16s;
+}
+#gameApp .battle-party>.battle-ally .ally-name{font-weight:800;font-size:clamp(.78rem,1vw,.92rem);overflow-wrap:anywhere}
+#gameApp .battle-party>.battle-ally .ally-hp{font-size:.76rem;color:#b9cce0}
+#gameApp .battle-party>.battle-ally.active{
+ border-color:#78d7d0;background:linear-gradient(145deg,#24505a,#1b394b);
+ box-shadow:0 0 0 1px rgba(120,215,208,.25),0 0 18px rgba(89,210,191,.12);
+}
+#gameApp .battle-party>.battle-ally .ally-active-label{color:#91ead7;font-size:.7rem;font-weight:800}
+#gameApp .battle-party>.battle-ally:disabled{opacity:.42;filter:saturate(.5)}
+#gameApp .battle-party>.battle-ally:not(:disabled):hover{border-color:#8bded2;transform:translateY(-1px)}
+#gameApp .battle-party>.battle-ally.healing-target-selected{border-color:#9df0c9;box-shadow:0 0 0 2px rgba(120,230,177,.18)}
+#gameApp .battle-history-panel{
+ border-color:#405a78;background:linear-gradient(145deg,#1b2d45,#142239);
+ box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+#gameApp .battle-history-heading h2{letter-spacing:.02em}
+#gameApp .battle-history-panel .nav-btn{
+ border-color:#58718f;background:#192b42;color:#dce9f8;min-height:38px;
+}
+#gameApp .battle-history-panel .nav-btn:hover{border-color:#8bded2;background:#203951}
+#gameApp .battle-history-panel .logline{
+ border-left-color:#79d7d0;background:#101f32;border-radius:0 9px 9px 0;
+}
+@media(max-width:900px){
+ #gameApp .battle-action-layout{gap:10px}
+ #gameApp .battle-party>.battle-ally{min-height:72px}
+}
+@media(max-width:560px){
+ #gameApp #battlePanel{padding:10px 8px;gap:10px}
+ #gameApp .battle-arena>.fighter{padding:8px 5px}
+ #gameApp .compact-combat-controls>.btn{min-height:52px;padding:10px 5px;font-size:clamp(.76rem,3.1vw,.9rem)}
+ #gameApp .compact-combat-controls>.btn small{font-size:.72em}
+ #gameApp .battle-action-right .party-sidebar{padding:9px}
+ #gameApp .battle-party{gap:5px}
+ #gameApp .battle-party>.battle-ally{min-height:68px;padding:8px 4px}
+ #gameApp .battle-party>.battle-ally .ally-name{font-size:clamp(.68rem,2.8vw,.8rem)}
+ #gameApp .battle-party>.battle-ally .ally-hp{font-size:clamp(.62rem,2.5vw,.72rem)}
+ #gameApp .battle-history-panel{padding:12px}
+ #gameApp .battle-history-heading{align-items:flex-start;flex-wrap:wrap}
+ #gameApp .battle-history-panel .nav-btn{min-height:36px;padding:7px 9px}
+}
+@media(prefers-reduced-motion:reduce){
+ #gameApp .battle-party>.battle-ally{transition:none}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・現代文明崩壞篇</div></header>
 <main id="lobby" class="lobby-shell">
