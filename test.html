@@ -2671,7 +2671,7 @@ function finishRun(won,message){
 function showResult(won,stage,reward,message){
  window.CampusApocBridge?.showFeaturePage();
  const s=loadSave(),root=ensurePage(),content=root.querySelector('#apocContent'),st=APOC_STAGES[stage-1];
- const storyText=won?(stage===5?st.ending:st.victory):st.defeat;
+ const storyText=won?st.victory:st.defeat;
  const continuation=won?(st.nextClue?'<div class="apoc-reset-note"><strong>下一關線索</strong><br>'+escapeText(st.nextClue)+'</div>':'<div class="apoc-reset-note"><strong>番外篇結局</strong><br>'+escapeText(st.ending)+'</div>'):'<p class="apoc-muted">你可以重新整隊後再次挑戰；未通關前不會解鎖下一道防線。</p>';
  content.innerHTML='<section class="apoc-result '+(won?'victory':'defeat')+'"><div class="apoc-result-icon">'+(won?'🏆':'🛡️')+'</div><p class="eyebrow">FIVE LAST DEFENCES · RESULT</p><h2>'+(won?(stage===5?'五道防線已全部解除':'成功突破這道防線'):'暫時撤退')+'</h2><p>第 '+stage+' 關｜'+escapeText(st.title)+'</p><p>'+escapeText(message)+'</p><div class="apoc-reset-note"><strong>'+(won?'戰後劇情':'目前局勢')+'</strong><br>'+escapeText(storyText)+'</div>'+continuation+(won?'<div class="apoc-result-reward">＋'+reward+' 金幣</div>':'<p class="apoc-muted">本次已消耗 1 次挑戰機會，不發放金幣。</p>')+'<p class="apoc-muted">今日剩餘挑戰：'+s.remaining+' / 3 次 · 最高解鎖：第 '+s.highestUnlocked+' 關</p><button class="btn primary" id="apocResultBack">'+(stage===5&&won?'返回番外篇列表':'返回五關列表')+'</button></section>';
  content.querySelector('#apocResultBack').addEventListener('click',showCenter);
