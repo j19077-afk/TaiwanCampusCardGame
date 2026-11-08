@@ -2234,4 +2234,83 @@ state.stage=Math.min(20,Math.max(1,Number(state.stage)||1));state.cleared=Math.m
 })();
 </script>
 
+
+<script>
+/* BATTLE_BUTTON_FALLBACK_V1
+   Isolated delegated input fallback for the test page.
+   Capture-phase routing prevents stale/direct handlers from swallowing button input. */
+(function(){
+  'use strict';
+  function safeRun(label,fn){
+    try{fn()}catch(err){
+      console.error('[test.html] '+label+' click failed:',err);
+      const hint=document.getElementById('battleHint')||document.getElementById('battleStatus');
+      if(hint)hint.textContent='操作未完成：'+String(err&&err.message||err);
+    }
+  }
+  document.addEventListener('click',function(ev){
+    const target=ev.target instanceof Element?ev.target:null;
+    if(!target)return;
+    const button=target.closest('button');
+    if(!button)return;
+    const id=button.id;
+    const isBattleControl=['attackBtn','defendBtn','skillBtn','skillBackBtn','healBtn','resetBtn','toggleFullLog','battleFxSettingsBtn','gameBackBtn'].includes(id)
+      || !!target.closest('#battleParty #healConfirmBtn,#battleParty #healCancelSelectBtn');
+    if(!isBattleControl)return;
+    ev.preventDefault();
+    ev.stopImmediatePropagation();
+    safeRun(id||'battle control',function(){
+      if(id==='battleFxSettingsBtn'){
+        const panel=document.getElementById('battleFxSettings');
+        if(panel){panel.hidden=!panel.hidden;button.setAttribute('aria-expanded',String(!panel.hidden));}
+        return;
+      }
+      if(id==='gameBackBtn'){
+        if(typeof forceLobby==='function')forceLobby();else if(typeof showLobby==='function')showLobby();
+        return;
+      }
+      if(id==='attackBtn'){handleCombatAction('attack');return;}
+      if(id==='defendBtn'){handleCombatAction('defend');return;}
+      if(id==='healBtn'){handleCombatAction('heal');return;}
+      if(id==='resetBtn'){reset();return;}
+      if(id==='skillBtn'){
+        selectedCombatAction=null;
+        if(!skillMenuOpen){skillMenuOpen=true;render();return;}
+        if(state.energy<35){tell('能量不足！必殺技需要 35 點能量。');addLog('必殺技執行失敗：能量不足（需要 35 點）。');return;}
+        skillMenuOpen=false;useSkill();return;
+      }
+      if(id==='skillBackBtn'){
+        if(healingTargetMode){healingTargetMode=false;healingSelectedTargetId=null;tell('已取消治療選擇。');}
+        button.textContent='↩ 返回';skillMenuOpen=false;render();return;
+      }
+      if(id==='toggleFullLog'){
+        const logBox=document.getElementById('log');
+        if(logBox){const all=logBox.classList.toggle('show-all');button.textContent=all?'收合紀錄 ↑':'查看全部紀錄 ↓';button.setAttribute('aria-expanded',String(all));const hint=document.querySelector('.battle-history-hint');if(hint)hint.textContent=all?'完整戰鬥歷史 · 最新紀錄置頂':'最新 3 筆紀錄 · 點擊可查看完整戰鬥歷史';}
+        return;
+      }
+      if(target.closest('#healConfirmBtn')){
+        if(healingTargetMode&&healingSelectedTargetId)performCharacterHeal(healingSelectedTargetId);
+        return;
+      }
+      if(target.closest('#healCancelSelectBtn')){
+        healingSelectedTargetId=null;tell('已取消本次選取，請重新選擇治療隊員。');render();
+      }
+    });
+  },true);
+  document.addEventListener('change',function(ev){
+    const el=ev.target;
+    if(!el||!['battleFxEnabled','battleShakeEnabled','battleFxUltimateEnabled','battleFxBossEnabled','battleFxHealingEnabled','battleFxQuality'].includes(el.id))return;
+    safeRun('battle effect settings',function(){if(typeof saveBattleFxSettings==='function')saveBattleFxSettings();});
+  },true);
+  document.addEventListener('DOMContentLoaded',function(){
+    safeRun('battle effect settings initialization',function(){
+      if(typeof getBattleFxSettings!=='function')return;
+      const cfg=getBattleFxSettings();
+      const values={battleFxEnabled:cfg.enabled,battleShakeEnabled:cfg.shake,battleFxUltimateEnabled:cfg.ultimate,battleFxBossEnabled:cfg.boss,battleFxHealingEnabled:cfg.healing,battleFxQuality:cfg.quality};
+      Object.keys(values).forEach(function(id){const el=document.getElementById(id);if(el)el.value==='checkbox'?(el.checked=!!values[id]):(el.value=values[id]);});
+    });
+  },{once:true});
+})();
+</script>
+
 </body></html>
