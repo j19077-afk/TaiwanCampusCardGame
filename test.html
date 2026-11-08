@@ -2481,7 +2481,7 @@ window.CampusApocBridge={
  startBattle:function(meta){const feature=document.getElementById('apocalypseSurvivalPage');if(feature)feature.style.display='none';state.apocalypseBattleMeta=meta;state.challengeMode=true;state.challengeResultActive=false;state.challengeMainSnapshot=cloneChallengeValue(readMainlineSaveSnapshot()||state);challengeMainState=cloneChallengeValue(state.challengeMainSnapshot);state.stage=1;state.enemyHp=meta.enemies[0].hp;state.energy=0;state.enemyEnergy=0;state.playerHp=Number(state.partyHp?.[state.activeMember])||maxHp(roster.find(c=>c.id===state.activeMember)||roster[0]);state.partyHp={};const team=(readCollection().formation||[]);team.forEach(id=>{const ch=roster.find(c=>c.id===id);if(ch)state.partyHp[id]=getCardStats(ch).hp});state.activeMember=team.find(id=>state.partyHp[id]>0)||team[0];state.playerHp=state.partyHp[state.activeMember];state.supplyUsedStage=false;state.potions=1;state.stageStorySeen=true;selectedCombatAction=null;skillMenuOpen=false;healingTargetMode=false;healingSelectedTargetId=null;save();showGame()},
  onEnemyDefeated:function(){const meta=state.apocalypseBattleMeta;if(!meta)return false;meta.index++;if(meta.index<meta.enemies.length){const next=meta.enemies[meta.index];state.enemyHp=next.hp;state.energy=Math.min(100,state.energy+10);addLog('擊敗感染者！下一名敵人：'+next.type+'。');render();return true}state.apocalypseBattleMeta=null;restoreChallengeMainState();if(typeof meta.onVictory==='function')meta.onVictory();return true},
  onDefeat:function(){const meta=state.apocalypseBattleMeta;if(!meta)return false;state.apocalypseBattleMeta=null;restoreChallengeMainState();if(typeof meta.onDefeat==='function')meta.onDefeat();return true}
-};})();})();
+};})();
 </script>
 <script>
 (function(){
