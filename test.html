@@ -1458,6 +1458,30 @@
 @keyframes battleFxShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px)}75%{transform:translateX(2px)}}
 @media(prefers-reduced-motion:reduce){.battle-fx-impact::after,.battle-fx-slash::after,.battle-fx-ultimate::after,.battle-fx-heal::after,.battle-fx-shield::after,.battle-fx-charge::after,.battle-fx-death::after,.battle-fx-shake{animation:none!important}}
 
+
+/* Battle controls must remain above oversized fighter artwork and effects. */
+#gameApp #battlePanel{position:relative;isolation:isolate;overflow:visible}
+#gameApp #battlePanel>.battle-arena{position:relative;z-index:1;pointer-events:none}
+#gameApp #battlePanel>.battle-arena .fighter,
+#gameApp #battlePanel>.battle-arena .versus{pointer-events:none}
+#gameApp #battlePanel>.battle-arena .fighter button,
+#gameApp #battlePanel>.battle-arena .fighter a,
+#gameApp #battlePanel>.battle-arena .fighter input{pointer-events:auto}
+#gameApp #battlePanel>.party-sidebar{position:relative;z-index:3;pointer-events:auto}
+#gameApp #battlePanel>.actions,
+#gameApp #battlePanel>.lower,
+#gameApp #battlePanel>.notice,
+#gameApp #battlePanel>.topline{position:relative;z-index:4;pointer-events:auto}
+#gameApp #battlePanel button,
+#gameApp #battlePanel input,
+#gameApp #battlePanel select{touch-action:manipulation}
+#gameApp #battlePanel .battle-shatter-layer,
+#gameApp #battlePanel .battle-fx-slash::before,
+#gameApp #battlePanel .battle-fx-ultimate::before,
+#gameApp #battlePanel .battle-fx-heal::before,
+#gameApp #battlePanel .battle-fx-boss::before,
+#gameApp #battlePanel .battle-fx-boss-charge::before{pointer-events:none!important}
+
 /* Battle VFX enhancement: cinematic anime-RPG effects, isolated to test.html */
 .battle-fx-settings{gap:7px}
 .fx-quality-select{min-height:38px;max-width:190px;padding:7px 10px;border:1px solid #526985;border-radius:9px;background:#111d2e;color:#eef4ff;font:inherit}
