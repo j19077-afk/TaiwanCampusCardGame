@@ -1557,6 +1557,77 @@
   line-height:1.45;
   overflow-wrap:anywhere;
 }
+
+/* BATTLE_FX_CD_ADAPTIVE_V1: isolated visual-only enhancement; no gameplay/event changes */
+#battlePanel .player-portrait,
+#battlePanel .enemy .avatar{overflow:visible}
+#battlePanel .battle-fx-slash,
+#battlePanel .battle-fx-impact,
+#battlePanel .battle-fx-ultimate,
+#battlePanel .battle-fx-heal,
+#battlePanel .battle-fx-shield,
+#battlePanel .battle-fx-charge{will-change:filter}
+#battlePanel .battle-fx-slash::before,
+#battlePanel .battle-fx-impact::before,
+#battlePanel .battle-fx-ultimate::before,
+#battlePanel .battle-fx-heal::before,
+#battlePanel .battle-fx-shield::before,
+#battlePanel .battle-fx-charge::before{
+ content:"";position:absolute;inset:-12%;border-radius:inherit;pointer-events:none;z-index:4;opacity:0;
+}
+#battlePanel .battle-fx-slash::before{
+ background:linear-gradient(128deg,transparent 28%,rgba(255,255,255,.0) 39%,rgba(255,255,255,.95) 47%,rgba(115,210,255,.72) 51%,rgba(255,255,255,.0) 61%,transparent 72%);
+ animation:battleFxSlashArc .46s cubic-bezier(.16,.72,.22,1) both;
+}
+#battlePanel .battle-fx-impact::before{
+ background:radial-gradient(circle,rgba(255,255,255,.85) 0 3%,rgba(255,214,130,.5) 8%,transparent 62%);
+ animation:battleFxImpactBloom .5s ease-out both;
+}
+#battlePanel .battle-fx-ultimate::before{
+ border:3px solid rgba(255,220,145,.85);
+ box-shadow:0 0 18px rgba(198,143,255,.9),inset 0 0 18px rgba(255,220,145,.5);
+ animation:battleFxUltimateRing .92s cubic-bezier(.12,.7,.2,1) both;
+}
+#battlePanel .battle-fx-heal::before{
+ background:repeating-conic-gradient(from 0deg,rgba(102,255,180,.0) 0deg 18deg,rgba(102,255,180,.58) 20deg 22deg,rgba(102,255,180,0) 25deg 45deg);
+ mask-image:radial-gradient(circle,transparent 0 28%,#000 34% 58%,transparent 72%);
+ animation:battleFxHealHalo .82s ease-out both;
+}
+#battlePanel .battle-fx-shield::before{
+ border:3px solid rgba(120,210,255,.8);
+ box-shadow:0 0 18px rgba(80,180,255,.8),inset 0 0 16px rgba(80,180,255,.35);
+ animation:battleFxShieldBloom .72s ease-out both;
+}
+#battlePanel .battle-fx-charge::before{
+ border:2px dashed rgba(255,90,105,.95);
+ box-shadow:0 0 22px rgba(255,35,65,.55),inset 0 0 18px rgba(255,35,65,.28);
+ animation:battleFxBossPulse 1.05s ease-in-out infinite alternate;
+}
+#battlePanel .battle-fx-shake{will-change:transform}
+#battlePanel .hp-damage-float{z-index:12;text-shadow:0 2px 5px #07101f,0 0 12px currentColor}
+.battle-shatter-layer,.battle-shatter-layer *{pointer-events:none!important}
+@keyframes battleFxSlashArc{0%{opacity:0;transform:translate(-13%,12%) scale(.72) rotate(-8deg)}24%{opacity:1}100%{opacity:0;transform:translate(13%,-12%) scale(1.18) rotate(4deg)}}
+@keyframes battleFxImpactBloom{0%{opacity:0;transform:scale(.28)}28%{opacity:1}100%{opacity:0;transform:scale(1.35)}}
+@keyframes battleFxUltimateRing{0%{opacity:0;transform:scale(.38) rotate(-25deg)}28%{opacity:1}100%{opacity:0;transform:scale(1.3) rotate(35deg)}}
+@keyframes battleFxHealHalo{0%{opacity:0;transform:rotate(-35deg) scale(.65)}30%{opacity:.95}100%{opacity:0;transform:rotate(55deg) scale(1.2)}}
+@keyframes battleFxShieldBloom{0%{opacity:0;transform:scale(.7)}35%{opacity:1}100%{opacity:0;transform:scale(1.16)}}
+@keyframes battleFxBossPulse{0%{opacity:.25;transform:scale(.96)}100%{opacity:.9;transform:scale(1.06)}}
+/* Adaptive quality: preserve full effects on capable displays; reduce motion on constrained/mobile or accessibility settings. */
+@media(max-width:600px),(prefers-reduced-motion:reduce){
+ #battlePanel .battle-fx-ultimate::before,#battlePanel .battle-fx-charge::before{animation-duration:.55s}
+ #battlePanel .battle-fx-slash::before{animation-duration:.32s}
+ #battlePanel .battle-fx-heal::before{opacity:.65}
+}
+@media(prefers-reduced-motion:reduce){
+ #battlePanel .battle-fx-slash::before,#battlePanel .battle-fx-impact::before,
+ #battlePanel .battle-fx-ultimate::before,#battlePanel .battle-fx-heal::before,
+ #battlePanel .battle-fx-shield::before,#battlePanel .battle-fx-charge::before{
+  animation-duration:.01ms!important;animation-iteration-count:1!important
+ }
+ #battlePanel .battle-fx-shake{animation:none!important}
+ .battle-shatter-piece{animation-duration:.01ms!important}
+}
+
 </style></head><body>
 <header><div><p class="eyebrow">BROWSER MINI GAME</p><h1>校園女神錄</h1></div><div class="pill">✦ 校園冒險・現代文明崩壞篇</div></header>
 <main id="lobby" class="lobby-shell">
