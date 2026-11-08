@@ -2607,12 +2607,12 @@ function playerAction(action){
  if(!run||run.finished||!aliveEnemies().length)return;
  const c=activeMember(),target=aliveEnemies()[0];run.notice='';
  if(action==='attack'){
-  const dmg=Math.max(1,c.atk+Math.floor(run.team.length)*2+Math.floor(Math.random()*5));
+  const buff=Number(c.attackBuff)>0?1.2:1;const dmg=Math.max(1,Math.round((c.atk+run.team.length*2+Math.floor(Math.random()*5))*buff));
   target.hp=Math.max(0,target.hp-dmg);run.energy=Math.min(100,run.energy+10);addLog(c.name+' 普通攻擊 '+target.type+'，造成 '+dmg+' 點傷害。');
  }else if(action==='skill'){
   if(run.energy<35)return;
   run.energy-=35;
-  if(c.id==='yili'){run.team.forEach(x=>{x.attackBuff=2});addLog('一粒發動「全隊集合！勝利應援！」，全隊攻擊力提升 20%，持續 2 次我方攻擊。')}
+  if(c.id==='yili'){run.team.forEach(x=>{x.attackBuff=3});addLog('一粒發動「全隊集合！勝利應援！」，全隊攻擊力提升 20%，持續 2 次我方攻擊。')}
   else{
    const dmg=Math.max(1,(c.skill||c.atk*2)+Math.floor(Math.random()*5));
    target.hp=Math.max(0,target.hp-dmg);addLog(c.name+'施放專屬技能，對 '+target.type+' 造成 '+dmg+' 點傷害。');
