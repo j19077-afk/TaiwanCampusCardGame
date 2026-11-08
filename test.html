@@ -2550,9 +2550,9 @@ function loadSave(){
  let v={};try{v=JSON.parse(localStorage.getItem(APOC_KEY)||'{}')||{}}catch(e){}
  const today=dayKey();
  const savedVersion=Math.max(0,Math.floor(Number(v.version)||0));
- const out={version:3,highestUnlocked:Math.max(1,Math.min(5,Math.floor(Number(v.highestUnlocked)||1))),dailyDate:typeof v.dailyDate==='string'?v.dailyDate:today,remaining:(v.remaining===null||v.remaining===undefined||!Number.isFinite(Number(v.remaining)))?3:Math.max(0,Math.min(3,Math.floor(Number(v.remaining)))),};
- // v1/v2 測試存檔可能在玩家尚未真正進場前就被錯誤寫成 0 次；升級至 v3 時一次性恢復今日 3 次，保留永久進度與勝場。
- if(savedVersion<3){out.dailyDate=today;out.remaining=3;storeSave(out)}
+ const out={version:4,highestUnlocked:Math.max(1,Math.min(5,Math.floor(Number(v.highestUnlocked)||1))),dailyDate:typeof v.dailyDate==='string'?v.dailyDate:today,remaining:(v.remaining===null||v.remaining===undefined||!Number.isFinite(Number(v.remaining)))?3:Math.max(0,Math.min(3,Math.floor(Number(v.remaining)))),};
+ // v1/v2/v3 測試存檔曾可能在未正式進場前被錯誤寫成 0 次；升級至 v4 時一次性恢復今日 3 次，保留永久解鎖進度。
+ if(savedVersion<4){out.dailyDate=today;out.remaining=3;storeSave(out)}
  else if(out.dailyDate!==today){out.dailyDate=today;out.remaining=3;storeSave(out)}
  return out;
 }
