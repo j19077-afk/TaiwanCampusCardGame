@@ -1920,7 +1920,149 @@ document.addEventListener('click',function(ev){
  const daily=target.closest('#dailyBtn');
  if(daily){ev.preventDefault();ev.stopImmediatePropagation();claimDailyGift();return;}
  const menu=target.closest('[data-menu]');
- if(menu){ev.preventDefault();ev.stopImmediatePropagation();try{switch(menu.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'quests':openQuests();break;case'stage-center':openStageCenter();break;}}catch(err){console.error('大廳功能開啟失敗',err);showModal('功能載入失敗','<p>此功能載入時發生錯誤，請截圖回報。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[x]))+'</p><div class="modal-actions"><button type="button" class="btn primary" data-modal-action="sweep-close">關閉</button></div>');
+ if(menu){ev.preventDefault();ev.stopImmediatePropagation();try{switch(menu.dataset.menu){case'archive':openArchive();break;case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'quests':openQuests();break;case'stage-center':openStageCenter();break;}}catch(err){console.error('大廳功能開啟失敗',err);showModal('功能載入失敗','<p>此功能載入時發生錯誤，請截圖回報。</p><p style="word-break:break-word">'+String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</p>')}return;}
+ const action=target.closest('[data-modal-action]');
+ if(action){ev.preventDefault();ev.stopImmediatePropagation();switch(action.dataset.modalAction){case'summon':openSummon();break;case'inventory':openInventory();break;case'formation':openFormation();break;case'formation-done':closeModal();break;case'do-summon':doSummon();break;case'do-ten-summon':doTenSummon();break;case'do-newbie-ten-summon':doNewbieTenSummon();break;case'daily-reward-close':closeModal();break;case'challenge-start':startSelectedChallenge();break;case'sweep-confirm':confirmSweep();break;case'sweep-execute':executeStageSweep();break;case'sweep-close':closeModal();break;}return;}
+ const add=target.closest('[data-add-member]');if(add&&!add.disabled){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(add.dataset.addMember);return;}
+ const remove=target.closest('[data-remove-member]');if(remove){ev.preventDefault();ev.stopImmediatePropagation();changeFormation(remove.dataset.removeMember,true);return;}
+},true);
+function claimDailyGift(){
+ const day=localDayKey(),testDaily=new URLSearchParams(location.search).get('testDaily')==='1';
+ if(!testDaily&&localStorage.getItem('campusDailyGift')===day){refreshLobby();return;}
+ const s=readGameSave(),last=localStorage.getItem('campusDailyGift')||'',yesterday=new Date(Date.now()-86400000),yesterdayKey=localDayKey(yesterday);
+ let streak=Number(localStorage.getItem('campusDailyStreak')||0);streak=last===yesterdayKey?Math.min(7,streak+1):1;
+ const bonus=Math.min(streak,7),reward=20+bonus;
+ s.coins=(Number(s.coins)||0)+reward;localStorage.setItem('campusCardMiniSave',JSON.stringify(s));
+ if(!testDaily){localStorage.setItem('campusDailyGift',day);localStorage.setItem('campusDailyStreak',String(streak));}
+ if(typeof state!=='undefined'&&state){state.coins=s.coins;save();render();}
+ refreshLobby();showModal('🎁 每日登入補給','<p>成功領取 '+reward+' 枚金幣（基本 20 枚＋連續登入獎勵 '+bonus+' 枚）。</p><p>每日補給於台灣時間 00:00 更新。</p><div class="modal-actions"><button type="button" class="btn primary" data-modal-action="daily-reward-close">太好了</button></div>');
+}
+
+
+const defaults=()=>({stage:1,coins:0,cleared:0,playerHp:100,energy:0,enemyEnergy:0,pendingEnemySkill:null,enemySkillNotice:null,potions:1,supplyUsedStage:false,enemyHp:55,guardNext:false,defendNext:false,bossCharge:false,stage20Phase:0,stage20SpecialPending:false,stage20Rotation:0,stage20BossTurns:0,stage50Phase:0,stage50SpecialPending:false,stage50Rotation:0,stage50BossTurns:0});
+let state;
+let challengeMainState=null;
+const BATTLE_FX_KEY='campusBattleFxSettings';
+function getBattleFxSettings(){try{const v=JSON.parse(localStorage.getItem(BATTLE_FX_KEY)||'{}');return{enabled:v.enabled!==false,shake:v.shake!==false}}catch(e){return{enabled:true,shake:true}}}
+function saveBattleFxSettings(){const v={enabled:!!$('battleFxEnabled')?.checked,shake:!!$('battleShakeEnabled')?.checked};try{localStorage.setItem(BATTLE_FX_KEY,JSON.stringify(v))}catch(e){}}
+function battleFx(target,kind){const cfg=getBattleFxSettings();if(!cfg.enabled||!target)return;const el=typeof target==='string'?$(target):target;if(!el)return;if(kind==='death'){battleCardShatter(el);return}const cls='battle-fx-'+kind;el.classList.remove(cls);void el.offsetWidth;el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),kind==='ultimate'?1050:kind==='heal'?750:500)}
+function battleCardShatter(el){const image=el.querySelector('img');if(!image)return;el.querySelectorAll('.battle-shatter-layer').forEach(n=>n.remove());const layer=document.createElement('div');layer.className='battle-shatter-layer';layer.setAttribute('aria-hidden','true');const pieces=[['top-left','inset(0 50% 50% 0)','-24px','-22px','-13deg'],['top-right','inset(0 0 50% 50%)','24px','-22px','13deg'],['bottom-left','inset(50% 50% 0 0)','-24px','22px','13deg'],['bottom-right','inset(50% 0 0 50%)','24px','22px','-13deg']];pieces.forEach(([name,clip,x,y,rot],i)=>{const shard=image.cloneNode(true);shard.removeAttribute('id');shard.alt='';shard.className='battle-shatter-piece '+name;shard.style.clipPath=clip;shard.style.setProperty('--shard-x',x);shard.style.setProperty('--shard-y',y);shard.style.setProperty('--shard-rot',rot);shard.style.animationDelay=(i*35)+'ms';layer.appendChild(shard)});el.appendChild(layer);image.classList.add('battle-shatter-source');layer.addEventListener('animationend',()=>{}, {once:true});setTimeout(()=>{image.classList.remove('battle-shatter-source');layer.remove()},1150)}
+function battleShake(target='battlePanel'){const cfg=getBattleFxSettings();if(!cfg.enabled||!cfg.shake||!target)return;const el=$(target)||document.querySelector(target);if(!el)return;el.classList.remove('battle-fx-shake');void el.offsetWidth;el.classList.add('battle-fx-shake');setTimeout(()=>el.classList.remove('battle-fx-shake'),260)}
+function bindBattleFxSettings(){const btn=$('battleFxSettingsBtn'),panel=$('battleFxSettings');if(!btn||!panel)return;const cfg=getBattleFxSettings();$('battleFxEnabled').checked=cfg.enabled;$('battleShakeEnabled').checked=cfg.shake;btn.addEventListener('click',()=>{panel.hidden=!panel.hidden;btn.setAttribute('aria-expanded',String(!panel.hidden))});$('battleFxEnabled').addEventListener('change',saveBattleFxSettings);$('battleShakeEnabled').addEventListener('change',saveBattleFxSettings)}
+function floatNumber(targetId,text,heal=false){const target=$(targetId);if(!target)return;const fighter=target.closest('.fighter');if(!fighter)return;const n=document.createElement('span');n.className='hp-damage-float '+(fighter.classList.contains('enemy')?'enemy-damage':'player-damage')+(heal?' heal-number':'');n.textContent=text;fighter.append(n);setTimeout(()=>n.remove(),950)}
+function animateFighter(id,kind){const el=$(id);if(!el)return;if(kind==='hp-flash'){const bar=el.closest('.bar');const target=bar||el;target.classList.remove('hp-flash');void target.offsetWidth;target.classList.add('hp-flash');setTimeout(()=>target.classList.remove('hp-flash'),450);return}el.classList.remove('hit','attack-pulse','victory');void el.offsetWidth;el.classList.add(kind);setTimeout(()=>el.classList.remove(kind),450)}
+function updateHpBar(id,current,maximum,side){const fill=$(id);if(!fill)return;const max=Math.max(1,Number(maximum)||1),hp=Math.max(0,Math.min(max,Number(current)||0)),ratio=hp/max;fill.style.width='100%';fill.style.height='100%';fill.style.transform='scaleX('+ratio+')';fill.style.transformOrigin='left center';fill.style.flex='0 0 auto';fill.style.background=ratio<=0?'#344055':ratio<0.25?'linear-gradient(90deg,#ff334f,#b80f35)':ratio<0.6?'linear-gradient(90deg,#ffd166,#f0a52b)':side==='enemy'?'linear-gradient(90deg,#ff647c,#ffb06e)':'linear-gradient(90deg,#50d6a5,#a6edba)';fill.setAttribute('aria-valuenow',String(hp));fill.setAttribute('aria-valuemin','0');fill.setAttribute('aria-valuemax',String(max));fill.setAttribute('role','progressbar')}
+function showGame(){lobby.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';const challenge=$('stageCenterPage');if(challenge)challenge.style.display='none';gameApp.style.display='grid';document.body.style.overflow='';try{window.history.replaceState({screen:'game'},'','#game')}catch(err){}window.scrollTo({top:0,behavior:'smooth'});render();if(!state.stageStorySeen&&state.enemyHp>0)setTimeout(showStageStory,0)}
+function showLobby(){gameApp.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';const challenge=$('stageCenterPage');if(challenge)challenge.style.display='none';lobby.style.display='grid';try{window.history.replaceState({screen:'lobby'},'','#lobby')}catch(err){}window.scrollTo({top:0,behavior:'smooth'});refreshLobby()}
+function returnToLobby(){forceLobby()}
+$('lobbyHomeBtn') && ($('lobbyHomeBtn').onclick=returnToLobby);
+let restoredChallengeBattle=null;try{const savedChallenge=JSON.parse(localStorage.getItem('campusChallengeBattleSave')||'null');if(savedChallenge&&savedChallenge.challengeMode===true&&Number.isInteger(Number(savedChallenge.stage))&&Number(savedChallenge.stage)>=1&&Number(savedChallenge.stage)<=50)restoredChallengeBattle=savedChallenge}catch(e){}try{state={...defaults(),...(restoredChallengeBattle||JSON.parse(localStorage.getItem('campusCardMiniSave')||'{}'))}}catch(e){state=defaults()}if(restoredChallengeBattle){state.challengeMode=true;state.challengeResultActive=false;challengeMainState=state.challengeMainSnapshot?cloneChallengeValue(state.challengeMainSnapshot):readMainlineSaveSnapshot();if(!challengeMainState)challengeMainState={...defaults(),stage:Math.max(1,Number(state.challengeReturnStage)||1),coins:Number(state.coins)||0,cleared:Math.max(0,(Number(state.challengeReturnStage)||1)-1)};state.challengeMainSnapshot=cloneChallengeValue(challengeMainState)}else{state.challengeMode=false;state.challengeResultActive=false;delete state.challengeMainSnapshot;try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}}if(typeof state.supplyUsedStage!=='boolean')state.supplyUsedStage=Number(state.potions)<=0;state.supplyUsedStage=!!state.supplyUsedStage;state.potions=state.supplyUsedStage?0:1;if(!Number.isFinite(state.energy))state.energy=0;state.energy=Math.max(0,Math.min(100,state.energy));if(!Number.isFinite(state.enemyEnergy))state.enemyEnergy=0;state.enemyEnergy=Math.max(0,Math.min(100,state.enemyEnergy));if(state.energyStartZeroVersion!==2){state.energy=0;state.enemyEnergy=0;state.pendingEnemySkill=null;state.energyStartZeroVersion=2}if(!state.pendingEnemySkill||!['A','B','C'].includes(state.pendingEnemySkill.type))state.pendingEnemySkill=null;if(!state.enemySkillNotice||!['warning','cast'].includes(state.enemySkillNotice.status))state.enemySkillNotice=null;state.bossCharge=false;
+const enemies=[{name:'校園巡邏者',desc:'在校園裡巡查的普通對手',icon:'👾',hp:55,atk:7},{name:'圖書館石像',desc:'守護古老筆記的石像',icon:'🪨',hp:75,atk:10},{name:'夜巡影獸',desc:'擅長突襲的影子怪物',icon:'🐺',hp:95,atk:13},{name:'學園守門者',desc:'守住舊校舍入口的強敵',icon:'🐉',hp:125,atk:16}];
+const stageStories=[["崩壞的第一堂課","警報響起，學生接連感染。小隊必須離開教室。"],["血色教學走廊","迅捷喪屍堵住走廊，小隊突破包圍前往樓梯間。"],["最後的午餐","餐廳仍有食物與倖存者，感染者也被聲響吸引。"],["保健室的求救聲","尋找藥品時，病歷顯示感染早於警報，並留下 E-01 代號。"],["感染女王：醫務室的支配者","感染女王現身校園醫務室，操控感染者阻擋去路；擊敗她後取得校園門禁卡。"],["無聲的圖書館","拿到門禁卡後，小隊躲進圖書館。書架後的終端機顯示，校方曾把一批代號 E 的樣本送往地下設施；此時，黑暗中的感染者已悄悄包圍入口。"],["被封鎖的地下室","小隊從圖書館找到地下室通行碼，發現運送紀錄被刻意刪改。走廊盡頭傳來撞擊聲，一扇標示「生物樣本區」的厚重鐵門正不斷震動。"],["消失的研究紀錄","地下室終端機只留下破碎檔案。小隊修復資料後得知，研究團隊曾試圖以病毒提升人體適應力，事故當晚有人下令清除所有紀錄。"],["禁忌實驗室","門禁卡開啟了最深處的實驗區。警報記錄指出，研究人員在失控前已撤離，但實驗艙仍在運作；一隻變異感染體突破玻璃，擋住小隊前進的路。"],["E-01：初始感染體","小隊迎戰最早完成感染實驗的 E-01。擊敗它後，終端機播放出一段研究員留言：E-01 並非源頭，而是用來測試病毒控制能力的第一個成功樣本。"],["被包圍的中庭","離開實驗室後，小隊發現校園裡的感染者正朝同一方向移動，像是受到某種訊號指揮。中庭已被層層包圍，必須突破包圍才能前往宿舍尋找倖存者。"],["女生宿舍的倖存者","小隊在宿舍找到一群倖存者，其中一人隱瞞了自己曾接觸研究樣本的事實。混亂中感染者闖入房間，小隊必須守住出口，並取得通往天台的鑰匙。"],["天台求救訊號","天台上的求救發射器竟連接到地下研究設施的緊急頻道。回傳訊息揭露：校園封鎖不是單純救援失敗，而是有人試圖把感染事件困在校內；遠處的避難所仍有訊號。"],["失守的避難所","小隊趕到避難所時，防線已經崩潰，倖存者正往外撤離。一隻披著破損防護裝備的重裝感染體堵住唯一出口，必須擊敗它才能帶領眾人離開。"],["校園封鎖線","突破封鎖線後，小隊終於離開校園。救援頻道卻傳來新的警告：E-02 已離開研究中心，並展現出遠超 E-01 的進化能力；訊息附上城市研究中心的座標。"],["死寂的城市街道","城市街道空無一人，沿路的緊急廣播不斷重播同一段撤離指令。小隊循著座標前進，發現感染者也在朝研究中心聚集，彷彿那裡正發出召喚。"],["被遺棄的研究中心","研究中心早已人去樓空，牆上的封鎖紀錄顯示緊急處置曾被人為中止。小隊找到最後一批實驗資料，確認 E-02 正守在核心區入口。"],["E-02：進化個體","E-02 能根據對手的攻擊迅速改變戰鬥模式。激戰後，小隊從它身上的資料模組取得核心區座標，並得知所有感染者的異常訊號都源自更深處的 E-00。"],["病毒核心區","小隊抵達研究中心最深處，發現巨大的訊號中樞與生物核心相連。控制台顯示，只要核心仍在運作，感染者就會持續受到指揮；然而關閉系統可能引發最後一次全面暴走。"],["E-00：原初母體","原初母體 E-00 從核心艙中甦醒，感染訊號瞬間覆蓋整座研究中心。小隊必須突破三個進化階段，摧毀母體並關閉訊號中樞，才能結束 E-00 所引發的核心危機。\n\n擊敗 E-00 後，研究設施遭到嚴重破壞，第一階段的研究危機暫時告一段落。然而，研究紀錄揭露 E 系列並非最早期的研究成果，資料中出現更早的零號樣本代號——N-00。與此同時，校園外圍仍有師生受困，封鎖系統停止運作，感染者開始向外擴散。"]];
+const enemyStageDescs=[
+'警報響起後，第一批感染學生在教室附近失控攻擊。',
+'迅捷喪屍堵住教學走廊，阻擋小隊前往樓梯間。',
+'餐廳的聲響吸引感染者，牠們正逼近食物與倖存者。',
+'保健室裡的感染者守住藥品區，病歷指向代號 E-01。',
+'感染女王盤據醫務室，操控感染者阻擋小隊並守住門禁卡。',
+'圖書館入口遭感染者包圍，牠們似乎察覺小隊正在查找研究紀錄。',
+'地下生物樣本區的厚重鐵門後傳來撞擊聲，感染警衛封鎖通道。',
+'失控研究員守在地下終端機附近，破碎紀錄揭露禁忌實驗。',
+'實驗艙中的變異感染體突破玻璃，阻擋通往實驗區深處的道路。',
+'E-01 是最早成功完成感染實驗的樣本，能測試病毒控制能力。',
+'初始感染體出現在中庭，牠受到神秘訊號影響，成為小隊必須擊敗的敵人。',
+'感染者闖入女生宿舍，威脅倖存者並封鎖通往天台的出口。',
+'天台求救訊號連接地下研究設施，感染者正阻止小隊發送訊息。',
+'披著破損防護裝備的重裝感染體堵住避難所唯一出口。',
+'校園封鎖線附近爆發激戰，救援頻道警告 E-02 已經進化。',
+'城市街道的感染者正朝研究中心聚集，像是受到核心訊號召喚。',
+'被遺棄的研究中心內，感染者守住核心區入口與最後實驗資料。',
+'E-02 能迅速適應對手攻擊，是遠比 E-01 更危險的進化個體。',
+'病毒核心區的守衛受訊號中樞控制，必須阻止感染訊號持續擴散。',
+'E-00 原初母體啟動全面感染訊號，小隊必須摧毀母體並關閉中樞。'
+];
+const chapter2Stories=[["封鎖線之外","小隊原本準備撤離研究中心，卻在整理研究紀錄時收到校園外圍的緊急求救訊號。研究設施遭到破壞後，部分封鎖系統也隨之失效，大量感染者開始湧向校園周邊。\n\n小隊決定暫緩撤離，重新返回校園救援仍受困的師生。當他們抵達臨時封鎖線時，發現警戒設施已經被突破，感染警衛與感染學生正不斷逼近。"],["失控的教學大樓","小隊突破外圍封鎖線後，收到教學大樓內部的求救訊息。部分師生被困在教室與樓梯間，通往一樓的主要出口已遭感染者堵住。\n\n小隊逐層搜索教學大樓，尋找仍能使用的安全通道。然而，原本負責維持校園秩序的教師與學生也已受到感染，整棟大樓逐漸成為無法控制的危險區域。"],["宿舍求救訊號","校園宿舍傳出斷斷續續的求救訊號，通訊內容顯示仍有學生躲藏在宿舍房間內。小隊沿著宿舍走廊逐層搜索，發現部分房門已被撞破，感染者正在樓層間徘徊。\n\n為了找到倖存者，小隊必須突破宿舍管理區與主要樓梯口的阻擋。隨著搜索深入，他們也發現部分求救訊號已經中斷。"],["圖書館最後防線","小隊抵達圖書館後，發現一群倖存者利用書架、桌椅及鐵門建立臨時防線。圖書館已經成為校園內少數仍能維持秩序的避難地點，但外面的感染者正持續聚集。\n\n倖存者交出一批早期感染事件紀錄，內容顯示校園最初的異常感染並非單純意外。小隊必須守住圖書館入口，確保倖存者能夠安全撤離。"],["體育館屍潮","小隊收到體育館內仍有倖存者的消息，決定前往救援。然而，體育館的大門已被大量感染者包圍，內部的活動場地也成為感染者聚集的區域。\n\n當小隊突破第一道防線時，一名體型與裝備都遠超一般感染者的重裝感染運動員出現，直接阻斷通往觀眾席的道路。小隊必須擊敗這名強化個體，才能打開救援通道。"],["地下停車場","為了運送校園內的倖存者，小隊前往地下停車場尋找仍可使用的車輛。停車場內照明設備大多失效，部分車輛因碰撞而堵住通道，無法直接通行。\n\n引擎聲與金屬碰撞聲不斷吸引感染者靠近。小隊必須在狹窄的車道間尋找通路，同時突破遭感染的駕駛與保全人員。"],["校園便利商店","校園便利商店仍存有部分食物、飲水與醫療用品，但物資短缺已讓倖存者之間出現衝突。小隊抵達時，店內外都已遭感染者包圍，原本的補給點也變得極度危險。\n\n為了確保撤離人員能取得必要物資，小隊必須清除商店周圍的感染者，並重新整理可用的補給品。"],["學生自治中心","小隊在學生自治中心找到校園倖存者的聯絡紀錄。資料顯示，部分學生曾經組織自救行動，並將尚未撤離的人員名單留在中心內部。\n\n然而，自治中心的臨時防線已經失守，感染者佔據辦公室與主要出入口。小隊必須重新取得聯絡資料，確認仍有多少人等待救援。"],["失守的校門","校園主要校門已經完全失去控制，原本設置的路障被撞開，感染者沿著校外道路不斷湧入。小隊必須穿越校門附近的警戒區，重新打通通往外部的道路。\n\n在突破過程中，小隊發現交通管制設施已經失效，原本負責維持秩序的人員也加入感染者行列。這裡將成為校園救援任務最後一道重大阻礙。"],["校園撤離戰","校園內仍有大量倖存者等待撤離，小隊決定在主要道路建立最後防線，掩護撤離車隊離開。此時，大批感染者從不同方向聚集，形成難以突破的屍潮。\n\n屍潮中出現一名能夠帶領感染者集中攻擊的重裝感染指揮者。小隊必須擊敗它並守住撤離點，才能讓倖存者安全離開校園。\n\n校園救援行動終於告一段落，但城市各地同時傳來災情通報。小隊即將面對比校園更加龐大的感染危機。"],["城市第一夜","離開校園後，小隊進入城市邊緣區域。夜幕降臨，街道上的電力與通訊設備陸續中斷，原本的交通秩序已經完全消失。\n\n小隊只能依靠零星的照明與無線電訊號辨識方向。街道上出現大量夜間活動的感染市民與巡邏人員，任何聲響都可能引來更多感染者。"],["便利商店物資戰","城市內的物資供應已經中斷，便利商店成為倖存者爭奪食物與飲水的重要地點。小隊前往商店尋找補給時，發現店內外已經聚集大量感染者。\n\n部分感染者受到聲響刺激後變得更加暴躁，甚至直接衝撞店面。小隊必須在物資被破壞之前清除威脅，帶走能夠支撐後續行動的補給。"],["百貨公司封鎖區","小隊收到百貨公司內部的求救訊息，得知仍有民眾躲藏在樓層與倉庫之中。百貨公司原本的安全門與電梯系統已經失效，各樓層之間只剩下部分樓梯可以通行。\n\n小隊逐層搜索時，發現感染者已經佔據主要通道，部分保全設施也遭到破壞。為了找到倖存者，小隊必須突破樓層間的感染群，尋找通往地下出口的路線。"],["地下捷運月台","城市捷運全面停駛，地下月台內仍有大量乘客等待救援。小隊進入捷運站後，發現部分車廂停在隧道之中，通訊設備無法正常運作。\n\n為了穿越地下區域，小隊必須利用月台維修通道與緊急逃生設施前進。然而，受到感染的乘客與站務人員已經堵住主要道路。"],["醫院緊急救援","城市醫院已經超出負荷，急診區、病房與醫療走廊都充滿等待救援的人員。小隊收到醫護人員的求救訊息，決定進入醫院尋找藥品與仍能行動的醫療人員。\n\n但院內感染情況迅速惡化，部分病患與醫護人員已經變成感染者。當小隊抵達醫療主管辦公區時，一名身著重裝防護設備的感染主管出現，阻斷通往醫療物資庫的道路。"],["警察局防衛線","小隊抵達警察局時，發現仍有警察試圖維持最後的防衛據點。然而，警局外圍已經遭感染者包圍，內部通訊設備與防衛設施也受到嚴重破壞。\n\n小隊協助突破警局周圍的感染者，尋找城市封鎖與撤離紀錄。資料顯示，政府曾經試圖建立多處防線，但部分區域早已失去聯繫。"],["新聞中心的真相","小隊循著警察局取得的線索前往新聞中心，希望找到疫情初期的報導與政府公告。新聞中心內部仍保留大量採訪素材、監視紀錄及未播出的新聞資料。\n\n小隊整理資料後發現，疫情爆發前就曾出現多起異常感染事件，部分警告卻沒有及時公開。這些紀錄也顯示，早期研究機構與後續感染事件之間可能存在尚未釐清的關聯。"],["失控的收容所","城市臨時收容所原本用來安置逃離災區的民眾，但大量人員湧入後，物資與管理能力逐漸崩潰。小隊抵達時，收容所的部分區域已經失守，感染者混入人群之中。\n\n小隊必須突破收容區與工作區的阻礙，尋找仍能安全撤離的倖存者。這裡的失控情況也讓小隊更加確信，城市已經沒有足夠的資源維持原有秩序。"],["跨越城市高架橋","小隊取得新的撤離路線後，必須穿越城市高架橋前往最後的避難區。地面道路已經被廢棄車輛與感染者阻斷，高架橋成為少數仍能通行的路線。\n\n然而，橋面部分結構受損，車輛殘骸也讓通道變得狹窄。小隊必須突破感染駕駛與道路救援人員，同時避免在高架橋上遭到包圍。"],["城市屍潮總攻","小隊終於抵達城市主要防衛區，但大規模感染者正從不同街區朝防線集中。原本負責防守的倖存者與救援人員已經難以支撐，城市最後的撤離走廊隨時可能被突破。\n\n屍潮前方出現一隻體型異常巨大的變異感染者，它的力量足以摧毀臨時防禦設施。小隊必須迎戰這隻巨型變異感染者，守住撤離走廊，取得最後避難區的座標。"],["最後的避難區","城市防衛線暫時穩定後，小隊依照座標抵達最後的大型避難區。這裡聚集了從不同區域撤離的倖存者，醫療人員、警衛與志願者正努力維持基本生活秩序。\n\n然而，避難區的物資與防衛人力都已接近極限。小隊必須協助整理周圍警戒區，確認是否仍有感染者接近，並為後續行動建立安全據點。"],["消防救援行動","避難區收到多處火場與建築物倒塌的求救訊息，部分消防人員仍困在救援現場。小隊決定協助消防隊突破危險區域，尋找被困人員與可用的救援設備。\n\n但火場周圍已經出現受到高溫與感染影響的變異感染者。小隊必須突破消防救援路線上的威脅，避免火勢與感染進一步蔓延。"],["工業區突破","小隊發現最後的避難區缺乏維持防衛設備所需的零件與燃料，因此前往工業區尋找可用物資。工業區內部多數設備已經停擺，部分倉庫與作業區也遭感染者佔據。\n\n當小隊深入工業設施時，發現一名穿著重型工作裝備的感染技師正在控制部分機械設備。小隊必須突破工業區防線，取得所需物資並擊敗這名強化感染者。"],["物資運輸車隊","最後避難區準備組織一支物資運輸車隊，將藥品、燃料與食物送往主要防衛據點。小隊負責協助車隊通過已經失去交通管理的道路，確保運輸工作能夠完成。\n\n沿途不斷出現遭感染的司機與運輸人員，部分重裝感染者甚至利用廢棄車輛堵住道路。小隊必須排除障礙，確保車隊能夠安全抵達目的地。"],["港口封鎖線","小隊接獲消息，港口仍保存部分重要物資與早期研究運輸紀錄。為了確認 N-00\n的來源，小隊前往港口突破封鎖線，尋找尚未被破壞的貨運與研究資料。\n\n港口內部已經遭到感染者佔據，貨櫃區的道路被大量裝卸設備與廢棄車輛阻斷。一名重裝感染主管守在主要倉儲區，阻止小隊接近研究運輸紀錄。"],["政府緊急指揮中心","小隊根據港口取得的運輸紀錄，找到政府緊急指揮中心的位置。這裡曾經負責統整各地疫情資料與緊急命令，但現在已經失去正常運作能力。\n\n小隊進入指揮中心後，發現部分資料仍保存在封存系統中。紀錄顯示，早期感染研究曾涉及一個比\nE 系列更早的樣本代號，而相關資料最後指向 N-00。"],["感染源追查","取得指揮中心的資料後，小隊開始追查 N-00\n的研究紀錄與運輸路線。線索指向一處早期封存設施，該設施在感染爆發前就已經停止對外聯絡。\n\n小隊進入設施後，發現研究人員曾經試圖控制 N-00\n的感染特性，但部分實驗紀錄已遭破壞。設施內仍有研究員與實驗感染者活動，小隊必須突破防線，找到\nN-00 的最終位置。"],["文明崩壞的真相","小隊進一步深入研究設施，終於取得較完整的感染研究紀錄。資料顯示，N-00\n是更早期的零號樣本，E\n系列研究則是在後續計畫中發展出來的不同個體與研究成果。\n\n紀錄也揭露，感染危機並非單一事故造成，而是早期研究失控、樣本管理失誤與後續處置延誤共同累積的結果。小隊終於理解，擊敗\nE-00 並未真正消除感染源頭，N-00 仍然存在。"],["最後撤離通道","小隊確認 N-00\n的位置後，開始前往核心設施。這條路線是最後能夠接近感染母體的通道，同時也是避難區撤離人員必須使用的安全路線。\n\n核心設施周圍仍有大量守衛與重裝變異感染者。小隊必須突破最後一道防線，確保撤離通道不會被感染者佔據，並為最終決戰做好準備。"],["人類最後防線","小隊終於抵達核心設施最深處，發現 N-00\n仍然存活。這個更早期的零號樣本是感染研究的關鍵源頭，其異常感染訊號仍與各地感染者存在關聯。\n\nN-00\n從人形樣本逐漸轉變為完全變異型態，最後進入失去控制的狂暴狀態。小隊必須突破三個階段的攻擊，摧毀\nN-00 的核心，徹底切斷感染擴散訊號。\n\n隨著 N-00\n倒下，核心設施的異常訊號逐漸停止。城市各地的感染者是否能完全恢復仍然未知，但人類終於不再受到同一個感染源頭持續控制。\n\n小隊帶著研究紀錄離開核心設施。文明雖然遭到重創，倖存者仍有機會重新建立生活秩序。"]];
+const stageEnemyRosters=["校園感染學生","迅捷感染者","食堂感染者","護理感染者","巨型感染體","圖書館潛伏者","寄生感染體","實驗型感染者","變異實驗體","E-01 原型體","初始感染體 ×1","宿舍感染學生","飛撲型感染體","裝甲感染體","重裝鎮壓體","城市感染者","研究中心感染者","E-02 進化個體","核心守衛","E-00 原初母體","感染警衛、感染學生。","感染教師、感染學生。","感染宿舍學生、感染宿舍管理員。","感染館員、潛伏感染者。","感染運動員；Boss：重裝感染運動員。","感染駕駛、感染保全。","感染店員、感染顧客。","感染學生幹部、感染行政人員。","感染警衛、感染交通管制人員。","屍潮群；Boss：重裝感染指揮者。","夜間感染市民、感染巡邏員。","感染店員、感染顧客、暴走感染者。","感染保全、感染百貨員工。","感染乘客、感染站務人員。","感染病患、感染醫護人員；Boss：重裝感染醫療主管。","感染警察、感染鎮暴人員。","感染記者、感染攝影人員、感染保全。","感染收容者、感染工作人員。","感染駕駛、感染道路救援人員。","城市屍潮；Boss：巨型變異感染者。","感染避難者、感染巡邏人員。","感染消防員、火場變異感染者。","感染工人、感染保全；Boss：重裝感染技師。","感染司機、感染運輸人員、道路重裝感染者。","感染裝卸人員、感染港口保全；Boss：重裝感染主管。","感染警衛、感染指揮人員。","感染研究員、變異實驗感染者。","研究設施感染者、重度變異感染者。","核心設施守衛、重裝變異感染者。","Boss：N-00 零號母體（Boss階段：人形樣本、完全變異、狂暴型態）。"];
+const chapter2EnemyNames=["封鎖線感染者","教學大樓感染師生","宿舍突襲感染者","圖書館潛伏感染者","體育館重裝感染體","停車場感染駕駛","便利商店感染者","自治中心感染警衛","校門裝甲感染者","校園屍潮指揮體","夜行感染者","物資掠奪感染者","百貨保全感染者","捷運感染乘客","重裝感染護理主管","感染警察","失控感染記者","收容所暴走感染者","高架橋感染司機","城市屍潮領主","避難區重裝感染者","感染消防員","工業區重裝保全","感染運輸司機","港口變異裝卸主管","指揮中心感染特勤","封存設施變異感染體","N-00研究體","撤離通道追擊者","N-00 零號母體"];
+const chapter2SkillNames=["封鎖線衝撞","教室群襲","宿舍突襲","書架伏擊","重裝震擊","車道追撞","物資搶奪","警棍重擊","鐵門破壞","屍潮號令","夜襲撲擊","狂亂撕咬","保全盾擊","月台衝鋒","急診暴走","警盾猛擊","訊號干擾","收容區圍攻","高架飛撲","屍潮咆哮","避難區鎮壓","消防斧重擊","機具撞擊","車隊衝撞","貨櫃砸擊","戰術突擊","封存區污染","核心脈衝","撤離追獵","零號感染波"];
+const chapter2EnemySkills=chapter2SkillNames.map((name,i)=>[{type:i%7===3?'B':i%11===7?'C':'A',name}]);
+function stageKind(n){return n%10===0?'章節 BOSS':n%5===0?'精英 BOSS':'普通關卡'}
+function stageTitle(n){return n<=20?(stageStories[n-1]?.[0]||'校園謎團'):(chapter2Stories[n-21]?.[0]||'未知危機')}
+function stageStory(n){if(Number(n)===1)return '刺耳的警報聲突然響徹校園，原本平靜的教室瞬間陷入混亂。學生接連受到感染，走廊傳來急促的腳步聲與求救聲。感染者正逐漸逼近，小隊必須趁包圍尚未形成，設法突破教室出口。';return n<=20?(stageStories[n-1]?.[1]||'深入校園追查感染真相。'):(chapter2Stories[n-21]?.[1]||'小隊必須突破感染者防線。')}
+function baseReward(n){if(n<=4)return 10;if(n<=8)return 15;if(n<=12)return 20;if(n<=16)return 25;if(n<=19)return 30;if(n<=20)return 50;return 55+Math.floor((n-21)/5)*8}
+function firstClearReward(reward){return Math.ceil(Number(reward)*1.5)}
+function firstBossBonus(n){return n%10===0?30:n%5===0?15:0}
+function replayReward(n){return Math.floor(baseReward(n)*0.2)}
+function replayBossBonus(n){return Math.floor((n%10===0?20:n%5===0?10:0)*0.2)}
+function mainlineClearedStages(){
+ // 與大廳 refreshLobby 完全一致：以主存檔的 mainlineClearedStagesV2 作為唯一通關依據。
+ let main=null;try{const value=JSON.parse(localStorage.getItem('campusCardMiniSave')||'null');if(value&&typeof value==='object'&&!Array.isArray(value))main=value}catch(e){}
+ const proof=Array.isArray(main?.mainlineClearedStagesV2)?main.mainlineClearedStagesV2.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=50):Array.from({length:Math.max(0,Math.min(50,Math.floor(Number(main?.stage)||1)-1))},(_,i)=>i+1);
+ return [...new Set(proof)].sort((a,b)=>a-b);
+}
+function unlockedChallengeStages(){
+ // 主線通關只負責新增解鎖；已解鎖紀錄永久累積，不因主線狀態變動而移除。
+ const key='campusChallengeUnlockedStagesV1';
+ const valid=a=>Array.isArray(a)?a.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=50):[];
+ let stored=[];try{stored=valid(JSON.parse(localStorage.getItem(key)||'[]'))}catch(e){}
+ const previous=valid(state.challengeUnlockedStages);
+ const unlocked=[...new Set([...stored,...previous,...mainlineClearedStages()])].sort((a,b)=>a-b);
+ const changed=JSON.stringify(unlocked)!==JSON.stringify(previous);
+ try{if(JSON.stringify(unlocked)!==JSON.stringify(stored))localStorage.setItem(key,JSON.stringify(unlocked))}catch(e){console.warn('關卡挑戰永久解鎖紀錄保存失敗',e)}
+ if(changed){state.challengeUnlockedStages=unlocked;save()}
+ return unlocked;
+}
+function openStageCenter(){
+ const cleared=clearedSweepStages(),unlocked=unlockedChallengeStages();
+ const opts=a=>a.map(n=>'<option value="'+n+'">第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</option>').join('');
+ const saved=Number(state.stageSweepLastStage),selected=cleared.includes(saved)?saved:(cleared[0]||0),challengeSaved=Number(state.challengeLastStage),challengeSelected=unlocked.includes(challengeSaved)?challengeSaved:(unlocked[0]||0);
+ const stageRows=unlocked.map(n=>{const d=challengeDailyState(n),done=cleared.includes(n),sd=stageSweepDailyState(n);return '<div class="stage-unified-item" data-unified-stage="'+n+'"><div><strong>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</strong><small>'+stageKind(n)+' · 挑戰剩餘 '+d.remaining+'/3 · 掃蕩剩餘 '+sd.remaining+'/3</small></div><div class="stage-unified-actions"><button type="button" class="btn secondary" data-stage-challenge="'+n+'">挑戰</button><button type="button" class="btn primary" data-stage-sweep="'+n+'" '+(!done||sd.remaining<=0?'disabled':'')+'>掃蕩</button></div></div>'}).join('');
+ const html='<div class="stage-center-head"><div><p class="eyebrow">CAMPUS SYSTEM</p><h1>關卡挑戰中心</h1><p class="stage-center-intro">統一管理已解鎖關卡的挑戰與掃蕩。挑戰及掃蕩額度分開計算，每關每日各自最多 3 次，台灣時間每日 00:00 重置。</p></div><button class="btn secondary" id="stageCenterBackBtn" type="button">← 返回遊戲功能</button></div><div class="stage-center-columns"><section class="stage-center-panel"><strong>關卡挑戰／掃蕩列表</strong><p class="muted">挑戰與掃蕩使用獨立額度；未通關關卡不可掃蕩。</p><div class="stage-unified-list">'+(stageRows||'<div class="notice">目前尚無已解鎖關卡。完成第 1 關後即可開啟關卡挑戰。</div>')+'</div></section><section class="stage-center-panel"><strong>掃蕩設定</strong><p class="muted">選擇已通關關卡及掃蕩數量，獎勵會即時更新。</p>'+(cleared.length?'<label for="sweepStage">掃蕩關卡</label><select id="sweepStage">'+opts(cleared)+'</select><div id="sweepPreview" class="notice" aria-live="polite"></div><div id="sweepActions" class="modal-actions"></div>':'<div class="notice">目前沒有符合資格的已通關關卡可供掃蕩。</div>')+'</section></div>';
+ let page=$('stageCenterPage');if(!page){page=document.createElement('main');page.id='stageCenterPage';page.className='stage-center-page';$('lobby').parentNode.insertBefore(page,$('lobby').nextSibling)}
+ page.innerHTML=html;page.style.display='grid';lobby.style.display='none';gameApp.style.display='none';const archive=$('archivePage');if(archive)archive.style.display='none';const summon=$('summonPage');if(summon)summon.style.display='none';modal.hidden=true;document.body.style.overflow='';try{window.history.replaceState({screen:'stage-center'},'','#stage-center')}catch(e){}window.scrollTo(0,0);
+ $('stageCenterBackBtn').onclick=showLobby;
+ page.querySelectorAll('[data-stage-challenge]').forEach(btn=>btn.onclick=()=>{const n=Number(btn.dataset.stageChallenge);if(!unlockedChallengeStages().includes(n))return;state.challengeLastStage=n;save();startSelectedChallenge()});
+ page.querySelectorAll('[data-stage-sweep]').forEach(btn=>btn.onclick=()=>{const n=Number(btn.dataset.stageSweep);if(!clearedSweepStages().includes(n))return;state.stageSweepLastStage=n;const sel=$('sweepStage');if(sel)sel.value=String(n);state.stageSweepSelectedCount=null;updateSweepPreview();$('sweepStage')?.scrollIntoView({behavior:'smooth',block:'center'})});
+ const sweepSelect=$('sweepStage');if(sweepSelect){if(selected)sweepSelect.value=String(selected);sweepSelect.onchange=()=>{state.stageSweepLastStage=Number(sweepSelect.value);state.stageSweepSelectedCount=null;updateSweepPreview()};state.stageSweepLastStage=selected;state.stageSweepSelectedCount=null;updateSweepPreview();}
+}
+function updateChallengeRewardPreview(){
+ const preview=$('challengeRewardPreview');if(!preview)return;
+ preview.style.color='';
+ const available=unlockedChallengeStages();if(!available.length){preview.textContent='目前尚無已通關的主線關卡，完成第 1 關後即可解鎖關卡挑戰。';return}
+ const n=available.includes(Number(state.challengeLastStage))?Number(state.challengeLastStage):available[0],daily=challengeDailyState(n);
+ preview.innerHTML='<strong>第 '+String(n).padStart(2,'0')+' 關｜'+stageTitle(n)+'</strong><br>今日剩餘挑戰／掃蕩次數：<strong>'+daily.remaining+' / 3 次</strong>'+(daily.remaining===0?'<p style="color:#ffd780;margin:7px 0 0">本關今日額度已用完，台灣時間每日 00:00 重置。</p>':'');
+}
+function selectChallengeStage(n){if(!unlockedChallengeStages().includes(Number(n)))return;state.challengeLastStage=Number(n);document.querySelectorAll('[data-challenge-stage]').forEach(b=>{const active=Number(b.dataset.challengeStage)===state.challengeLastStage;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))});updateChallengeRewardPreview();save()}
+
+function startSelectedChallenge(){
+ const n=Number(state.challengeLastStage),available=unlockedChallengeStages();
+ if(!Number.isInteger(n)||!available.includes(n)){
+  openStageCenter();
+  const preview=$('challengeRewardPreview');
+  if(preview)preview.textContent='目前選擇的關卡尚未正確載入可挑戰清單，請重新選擇關卡。';
+  return;
+ }
+ const daily=challengeDailyState(n);
+ if(daily.remaining<=0){updateChallengeRewardPreview();tell('本關今日挑戰次數已用完，台灣時間每日 00:00 重置。');return;}
+ state.challengeDailyUsage[daily.key]=daily.used+1;
+ save();
+ const mainState=cloneChallengeValue(state);
+ try{
+  challengeMainState=cloneChallengeValue(mainState);save();
+  const battle={...defaults(),challengeMainSnapshot:cloneChallengeValue(mainState),coins:Number(mainState.coins)||0,challengeLastStage:n,challengeClearedStages:cloneChallengeValue(mainState.challengeClearedStages||[]),challengeUnlockedStages:cloneChallengeValue(mainState.challengeUnlockedStages||[]),challengeDailyUsage:cloneChallengeValue(mainState.challengeDailyUsage||{}),challengePlayRewardCounts:cloneChallengeValue(mainState.challengePlayRewardCounts||{}),challengeSweepRewardCounts:cloneChallengeValue(mainState.challengeSweepRewardCounts||{}),challengeLastResult:null,challengeMode:true,challengeResultActive:false,challengeReturnStage:Math.max(1,Number(mainState.stage)||1),challengeReplayCompleted:false,stage:n,stage20Phase:0,stage20Rotation:0,stage20BossTurns:0,stage20SpecialPending:false,stage20DebuffTurns:0,stage50Phase:0,stage50Rotation:0,stage50BossTurns:0,stage50SpecialPending:false,stageStorySeen:false};
+  battle.energy=0;battle.enemyEnergy=0;battle.pendingEnemySkill=null;battle.enemySkillNotice=null;battle.bossCharge=false;battle.defendNext=false;battle.guardNext=false;battle.supplyUsedStage=false;battle.potions=1;
+  const col=readCollection(),team=(col.formation||[]).map(id=>roster.find(ch=>ch.id===id)).filter(Boolean);if(!team.length)team.push(roster.find(ch=>ch.id==='yuching'));
+  battle.partyHp={};team.forEach(ch=>{battle.partyHp[ch.id]=maxHp(ch)});battle.activeMember=team[0].id;battle.playerHp=battle.partyHp[battle.activeMember];
+  state=battle;state.enemyHp=enemy().hp;selectedCombatAction=null;skillMenuOpen=false;
+  try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}
+  save();closeModal();showGame();
+ }catch(err){
+  state=mainState;challengeMainState=null;
+  try{localStorage.removeItem('campusChallengeBattleSave')}catch(e){}
+  save();console.error('第'+n+'關挑戰啟動失敗',err);
+  openStageCenter();
+  const message=String(err&&err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  showModal('挑戰啟動失敗','<p>戰鬥初始化發生錯誤，已返回關卡挑戰中心，原本主線進度不會被覆蓋。</p><p style="word-break:break-word">'+message+'</p><div class="modal-actions"><button type="button" class="btn primary" data-modal-action="sweep-close">關閉</button></div>');
  }
 }
 document.getElementById('stageCenterBtn')?.addEventListener('click',openStageCenter);
