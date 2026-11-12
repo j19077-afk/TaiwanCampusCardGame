@@ -1679,7 +1679,7 @@
 <main id="lobby" class="lobby-shell">
 <section class="lobby-hero">
 <div class="hero-copy"><p class="eyebrow">CAMPUS IDOL CHRONICLES · OFFICIAL</p><h2>收藏校園女神，<br><span>開啟冒險旅程</span></h2><p class="hero-text">收集角色卡牌、組建隊伍，展開校園冒險。</p>
-<div class="hero-actions"><button class="btn primary" id="startBtn">⚔️ 開始冒險</button><button class="btn secondary" id="dailyBtn">🎁 領取每日補給</button><button class="btn" id="rtb-entry">🧟 即時戰鬥測試</button></div>
+<div class="hero-actions"><button class="btn primary" id="startBtn">⚔️ 開始冒險</button><button class="btn secondary" id="dailyBtn">🎁 領取每日補給</button><button class="btn" type="button" id="rtb-entry" aria-controls="rtb-screen">🧟 即時戰鬥測試</button></div>
 <div class="daily-note" id="dailyNote">每日登入獎勵：每日台灣時間 00:00 更新，可領取金幣。</div></div>
 <div class="hero-emblem"><div class="hero-portrait-frame" aria-label="校園女神真人角色主視覺"><div class="portrait-orbit orbit-one"></div><div class="portrait-orbit orbit-two"></div><div class="portrait-crest">✦</div><div class="portrait-rarity">CAMPUS IDOL · SSR</div></div><div class="emblem-caption">CAMPUS IDOL<br>CHRONICLES</div></div>
 </section>
@@ -2608,9 +2608,33 @@ function close(){running=false;paused=false;if(raf)cancelAnimationFrame(raf);scr
 $('rtb-pause').addEventListener('click',()=>{if(!running){if(members.every(m=>!m.alive)){members.forEach(m=>{m.hp=m.maxHp;m.alive=true});start()}else{if(stage>=50){message='已完成全部 50 關測試內容！可重新挑戰第 50 關。';$('rtb-message').textContent=message;return}stage=Math.min(50,stage+1);start()}return}paused=!paused;$('rtb-pause').textContent=paused?'▶ 繼續':'⏸ 暫停';if(!paused){last=performance.now();loop(last)}else{cancelAnimationFrame(raf);draw()}});
 $('rtb-speed').addEventListener('click',()=>{speed=speed===1?1.5:speed===1.5?2:1;$('rtb-speed').textContent='速度 ×'+speed;draw()});
 $('rtb-exit').addEventListener('click',close);
-document.getElementById('rtb-entry')?.addEventListener('click',open);
+window.CampusRealtimeBattleStart=open;
+window.CampusRealtimeBattleClose=close;
 window.addEventListener('resize',()=>{if(screen.classList.contains('active'))draw()});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&running&&!paused){paused=true;$('rtb-pause').textContent='▶ 繼續';cancelAnimationFrame(raf)}});
+})();
+</script>
+<script>
+(()=>{'use strict';
+const btn=document.getElementById('rtb-entry');
+const screen=document.getElementById('rtb-screen');
+const note=document.getElementById('rtb-message');
+if(!btn||!screen)return;
+btn.addEventListener('click',function(ev){
+ ev.preventDefault();
+ screen.classList.add('active');
+ screen.setAttribute('aria-hidden','false');
+ try{
+  if(typeof window.CampusRealtimeBattleStart==='function'){
+   window.CampusRealtimeBattleStart();
+  }else if(note){
+   note.textContent='戰鬥引擎初始化失敗：請重新整理測試頁面；若仍發生，請回報此訊息。';
+  }
+ }catch(err){
+  if(note)note.textContent='戰鬥啟動錯誤：'+(err&&err.message?err.message:String(err));
+  console.error('Campus realtime battle startup failed',err);
+ }
+},{capture:true});
 })();
 </script>
 </body></html>
